@@ -7,9 +7,9 @@ type Props = {}
 
 const SiteLayout = ({children}: LayoutProps) => {
   return (
-    <div>
+    <div className="">
         <Header />
-        {children}
+        <div>{children}</div>
         <Footer />
     </div>
   )

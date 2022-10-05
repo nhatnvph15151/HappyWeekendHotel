@@ -11,9 +11,16 @@
   "dependencies": {
     "next": "12.3.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "recharts": "^2.1.14"
   },
   "devDependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.3",
+    "@mui/lab": "latest",
+    "@mui/material": "^5.10.5",
+    "@mui/x-data-grid": "latest",
     "@types/node": "18.7.17",
     "@types/react": "18.0.19",
     "@types/react-dom": "18.0.6",

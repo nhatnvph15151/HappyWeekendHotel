@@ -9,7 +9,7 @@ const SiteLayout = ({children}: LayoutProps) => {
   return (
     <div className="">
         <Header />
-        <div>{children}</div>
+        {children}
         <Footer />
     </div>
   )

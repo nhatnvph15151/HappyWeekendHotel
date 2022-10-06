@@ -11,8 +11,10 @@
   "dependencies": {
     "next": "12.3.0",
     "react": "18.2.0",
+    "react-date-range": "^1.4.0",
     "react-dom": "18.2.0",
-    "recharts": "^2.1.14"
+    "recharts": "^2.1.14",
+    "swiper": "^8.4.3"
   },
   "devDependencies": {
     "@emotion/react": "^11.10.4",
@@ -23,6 +25,7 @@
     "@mui/x-data-grid": "latest",
     "@types/node": "18.7.17",
     "@types/react": "18.0.19",
+    "@types/react-date-range": "^1.4.4",
     "@types/react-dom": "18.0.6",
     "autoprefixer": "^10.4.12",
     "eslint": "8.23.1",

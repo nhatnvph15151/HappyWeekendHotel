@@ -6,14 +6,14 @@ import SiteHeader from './components/SiteHeader'
 
 type Props = {}
 
-const SiteLayout = ({children}: LayoutProps) => {
+const HomePageLayout = ({children}: LayoutProps) => {
   return (
     <div className="">
-        <Header />
+        <SiteHeader />
         {children}
         <Footer />
     </div>
   )
 }
 
-export default SiteLayout
+export default HomePageLayout

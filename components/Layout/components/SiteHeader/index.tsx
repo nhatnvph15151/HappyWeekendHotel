@@ -127,7 +127,7 @@ const SiteHeader = (props: Props) => {
               </div>
             </div>
           </div>
-          <div className={`${!open ? "visible scale-100 opacity-100" : "invisible scale-50 opacity-0"} duration-300 translate-x-[-50%] absolute top-[74px] left-[50%] w-[80%] mx-auto bg-white shadow-xl rounded-xl p-4`}>
+          <div className={`${!open ? "visible scale-100 opacity-100" : "invisible scale-50 opacity-0"} duration-300 translate-x-[-50%] absolute top-[74px] left-[50%] w-full mx-auto bg-white shadow-xl p-4`}>
               <div className="flex justify-center">
                 <button className={`${indexTab == 1 ? 'text-[red] border-b border-[red]' : null} duration-150 hover:text-[red] flex flex-col items-center px-4`} onClick={() => { setIndexTab(1) }}>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

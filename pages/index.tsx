@@ -5,6 +5,7 @@ import SimpleSwiper from '../components/Slide'
 import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from 'swiper'
 import BackToTop from '../components/BackToTop'
 import HomePageLayout from '../components/Layout/HomePageLayout'
+import ActionAreaCard from '../components/Card'
 
 const Home: NextPage = () => {
   const [indexTab, setIndexTab] = useState(1);
@@ -27,6 +28,12 @@ const Home: NextPage = () => {
     { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 4 },
     { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 5 },
   ]
+
+  const newsList = [
+    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 1 },
+    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 2 },
+    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 3 },
+  ]
   const [person, setPerson] = useState(personPerRoom[0].qual)
   const [visible, setVisible] = useState(true);
 
@@ -39,12 +46,14 @@ const Home: NextPage = () => {
       setVisible(true)
     }
   };
+
   const defaultBooking = {
     bookingFrom: "17/10/2022",
     bookingTo: "17/11/2022",
     totalDayBooking: "30",
     personQual: 2,
   }
+
   useEffect(() => {
     window.addEventListener("scroll", toggleVisible)
   }, [])
@@ -121,7 +130,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="w-[80%] mx-auto py-8">
+      <div className="w-[80%] mx-auto pt-8">
         <h1 className='text-3xl font-semibold text-[orange] text-center'>Nhà nghỉ giá tốt</h1>
         <div className="">
           <SimpleSwiper
@@ -130,13 +139,30 @@ const Home: NextPage = () => {
             module={[Navigation, Pagination, Scrollbar, A11y, Autoplay]} />
         </div>
       </div>
-      <div className="w-[80%] mx-auto py-8">
+      <div className="w-[80%] mx-auto pt-8">
         <h1 className='text-3xl font-semibold text-[orange] text-center'>Nhà nghỉ hot</h1>
         <div className="">
           <SimpleSwiper
             slide={nnList}
             quantity="3"
             module={[Navigation, Pagination, Scrollbar, A11y, Autoplay]} />
+        </div>
+      </div>
+      <div className="bg-[#eee] py-8">
+        <div className="w-[80%] mx-auto">
+          <div className="flex justify-between items-center">
+            <h1 className='text-3xl font-semibold text-[orange] pb-4'>Tin Tức</h1>
+            <h1
+              className='text-normal font-semibold text-[orange] pb-4 group hover:opacity-50 duration-300 flex items-center cursor-pointer'> 
+              Xem thêm
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 group-hover:translate-x-[10px] duration-300">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </h1>
+          </div>
+          <div className="flex flex-wrap justify-between">
+            <ActionAreaCard newsList={newsList} />
+          </div>
         </div>
       </div>
       <BackToTop visible={visible} />

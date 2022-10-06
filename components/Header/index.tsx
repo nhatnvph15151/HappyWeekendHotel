@@ -1,26 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link'
-import DatePicker from '../DatePicker'
 import React, { useEffect, useState } from 'react'
 
 type Props = {}
 
 const Header = (props: Props) => {
-  const [visible, setVisible] = useState(false);
-
-  const toggleVisible = () => {
-    const scrolled = document.documentElement.scrollTop;
-    if (scrolled > 250) {
-      setVisible(true)
-    }
-    else if (scrolled <= 250) {
-      setVisible(false)
-    }
-    // console.log(scrolled);
-  };
-  useEffect(() => {
-    window.addEventListener("scroll", toggleVisible)
-  }, [])
   return (
     <header className='shadow-xl sticky top-0 bg-[#fff] z-50'>
       <div className="w-[80%] mx-auto py-2 ">
@@ -85,47 +69,6 @@ const Header = (props: Props) => {
                 </ul>
               </div>
             </span>
-          </div>
-          <div className={`${visible ? "visible scale-100 translate-y-0 opacity-100" : "invisible scale-150 translate-y-10 opacity-0"} duration-300`}>
-            <div className={`border rounded-full relative flex justify-center`}>
-              <DatePicker date={7} />
-              <div className="relative top-[50%] translate-y-[30%]">
-                {/* <div className="flex">
-                  <div className="relative">
-                    <label className='select-none cursor-pointer absolute top-[-30%] left-[5px] text-xs font-semibold flex items-center' htmlFor="inputPersonPerRoom">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-                      </svg>
-                      Khách
-                    </label>
-                    <div className="p-2">
-                      <input
-                        id='inputPersonPerRoom'
-                        value={person}
-                        readOnly
-                        className="outline-none cursor-pointer font-semibold"
-                        onClick={() => setOpen(open => !open)}
-                      />
-                    </div>
-                    <div className={`${open ? "visible" : "invisible"} absolute top-[30%] left-0 flex flex-col p-4 bg-white rounded-xl shadow-xl`}>
-                      {personPerRoom?.map((item, index) => {
-                        return (
-                          <button onClick={(e: any) => {
-                            setPerson(e.target.value)
-                            setOpen(!open)
-                          }} key={index} value={item.qual}>{item.qual}</button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                </div> */}
-              </div>
-              <div className="p-2 bg-[orange] rounded-full text-white cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                </svg>
-              </div>
-            </div>
           </div>
           <div className="flex items-center">
             <Link href="/">

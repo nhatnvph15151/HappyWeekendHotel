@@ -4,6 +4,7 @@ import DatePicker from '../components/DatePicker'
 import SimpleSwiper from '../components/Slide'
 import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from 'swiper'
 import BackToTop from '../components/BackToTop'
+import HomePageLayout from '../components/Layout/HomePageLayout'
 
 const Home: NextPage = () => {
   const [indexTab, setIndexTab] = useState(1);
@@ -13,24 +14,38 @@ const Home: NextPage = () => {
     { id: 2, qual: "1 người lớn" }
   ]
   const slideList = [
-    {src:"http://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/08/slideshow1-1024x512.jpg",price: 150,name: "Nhà nghỉ tình yêu Daimon", decript: "Tốt",id: 1},
-    {src:"https://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/07/multi-slider.jpg",price: 150,name: "Nhà nghỉ tình yêu Daimon", decript: "Tốt",id:2},
-    {src:"http://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/08/slideshow1-1024x512.jpg",price: 150,name: "Nhà nghỉ tình yêu Daimon", decript: "Tốt",id: 3},
-    {src:"http://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/08/slideshow1-1024x512.jpg",price: 150,name: "Nhà nghỉ tình yêu Daimon", decript: "Tốt",id: 4},
+    { src: "http://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/08/slideshow1-1024x512.jpg", price: 150, name: "Nhà nghỉ tình yêu Diamond", decript: "Tốt", id: 1 },
+    { src: "https://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/07/multi-slider.jpg", price: 150, name: "Nhà nghỉ tình yêu Diamond", decript: "Tốt", id: 2 },
+    { src: "http://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/08/slideshow1-1024x512.jpg", price: 150, name: "Nhà nghỉ tình yêu Diamond", decript: "Tốt", id: 3 },
+    { src: "http://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/08/slideshow1-1024x512.jpg", price: 150, name: "Nhà nghỉ tình yêu Diamond", decript: "Tốt", id: 4 },
+  ]
+
+  const nnList = [
+    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 1 },
+    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 2 },
+    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 3 },
+    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 4 },
+    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 5 },
   ]
   const [person, setPerson] = useState(personPerRoom[0].qual)
   const [visible, setVisible] = useState(true);
 
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop;
-    if (scrolled > 200) {
+    if (scrolled > 150) {
       setVisible(false)
     }
-    else if (scrolled <= 200) {
+    else if (scrolled <= 150) {
       setVisible(true)
     }
   };
-  useEffect(()=>{
+  const defaultBooking = {
+    bookingFrom: "17/10/2022",
+    bookingTo: "17/11/2022",
+    totalDayBooking: "30",
+    personQual: 2,
+  }
+  useEffect(() => {
     window.addEventListener("scroll", toggleVisible)
   }, [])
   return (
@@ -106,21 +121,28 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="w-[65%] mx-auto py-8">
+      <div className="w-[80%] mx-auto py-8">
         <h1 className='text-3xl font-semibold text-[orange] text-center'>Nhà nghỉ giá tốt</h1>
         <div className="">
-          <SimpleSwiper 
+          <SimpleSwiper
             slide={slideList}
             quantity="3"
             module={[Navigation, Pagination, Scrollbar, A11y, Autoplay]} />
         </div>
       </div>
       <div className="w-[80%] mx-auto py-8">
-        <h1 className='text-3xl font-semibold text-[orange] text-center'>Các dịch vụ</h1>
+        <h1 className='text-3xl font-semibold text-[orange] text-center'>Nhà nghỉ hot</h1>
+        <div className="">
+          <SimpleSwiper
+            slide={nnList}
+            quantity="3"
+            module={[Navigation, Pagination, Scrollbar, A11y, Autoplay]} />
+        </div>
       </div>
       <BackToTop visible={visible} />
     </div>
   )
 }
 
+Home.Layout = HomePageLayout
 export default Home

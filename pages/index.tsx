@@ -131,7 +131,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="w-[80%] mx-auto pt-8">
-        <h1 className='text-3xl font-semibold text-[orange] text-center'>Nhà nghỉ giá tốt</h1>
+        <h1 className='text-3xl font-semibold text-[orange] text-center'>NHÀ NGHỈ GIÁ TỐT</h1>
         <div className="">
           <SimpleSwiper
             slide={slideList}
@@ -140,7 +140,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="w-[80%] mx-auto pt-8">
-        <h1 className='text-3xl font-semibold text-[orange] text-center'>Nhà nghỉ hot</h1>
+        <h1 className='text-3xl font-semibold text-[orange] text-center'>NHÀ NGHỈ HOT</h1>
         <div className="">
           <SimpleSwiper
             slide={nnList}
@@ -153,7 +153,7 @@ const Home: NextPage = () => {
           <div className="flex justify-between items-center">
             <h1 className='text-3xl font-semibold text-[orange] pb-4'>Tin Tức</h1>
             <h1
-              className='text-normal font-semibold text-[orange] pb-4 group hover:opacity-50 duration-300 flex items-center cursor-pointer'> 
+              className='text-normal font-semibold text-[orange] pb-4 group hover:opacity-50 duration-300 flex items-center cursor-pointer'>
               Xem thêm
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 group-hover:translate-x-[10px] duration-300">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />

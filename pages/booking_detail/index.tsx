@@ -1,7 +1,7 @@
 import React from 'react'
 // import '../node_modules/@fortawesome/fontawesome-svg-core/styles.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faStar, faUtensils, faSpa, faShirt, faShower, faBell, faCar} from '@fortawesome/free-solid-svg-icons'
+import {faStar, faUtensils, faSpa, faShirt, faShower, faBell, faCar, faWifi} from '@fortawesome/free-solid-svg-icons'
 
 type Props = {}
 
@@ -11,7 +11,7 @@ const BookingDetail = (props: Props) => {
         <div className="content-header__booking mt-8 grid grid-cols-2 gap-10">
             <div className="images-booking__total">
                 <div className="images-top__booking">
-                    <img className='rounded-[20px]' src="https://picsum.photos/580/580" alt="" />
+                    <img className='rounded-[20px] w-[100%] h-[100%]' src="https://picsum.photos/580/580" alt="" />
                 </div>
                 <div className="images-bottom__booking flex mt-7 gap-5"> 
                     <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" />
@@ -164,6 +164,156 @@ const BookingDetail = (props: Props) => {
                     <img src="https://picsum.photos/70/70" alt="Mountains" />
                 </div>
             </div> */}
+            <div className="flex gap-20">
+                <div className="mt-[30px]">
+                    <div className="icons flex items-center gap-12">
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faWifi} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Wifi</p>
+                        </div>  
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faBell} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Buffet</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faShower} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Pool</p>
+                        </div> 
+                    </div>
+                    <div className="content-name pt-[5px]">
+                        <h1 className='text-3xl font-semibold'>Double room, one room - “ABC”</h1>
+                    </div>
+                    <div className="flex gap-3 items-center mt-[15px]">
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                    </div>
+                    <div className="pt-[15px]">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sodales erat quis 
+                            condimentum molestie. Sed ex turpis, semper quis augue non, mollis lacinia dolor. 
+                            Aliquam maximus semper placerat. Fusce gravida condimentum volutpat. Aliquam sagittis 
+                            malesuada ultricies. Proin eget tortor a ante cursus pellentesque
+                        </p>
+                    </div>
+                    <div className="pt-[15px] flex justify-between">
+                        <strong>From 20$ a day</strong>
+                        <p className='text-[#FFA500]'><a href="">calculate price</a></p>
+                    </div>
+                </div>
+                {/*  */}
+                <div className="mt-[30px]">
+                    <div className="icons flex items-center gap-12">
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faWifi} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Wifi</p>
+                        </div>  
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faBell} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Buffet</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faShower} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Pool</p>
+                        </div> 
+                    </div>
+                    <div className="content-name pt-[5px]">
+                        <h1 className='text-3xl font-semibold'>Double room, one room - “ABC”</h1>
+                    </div>
+                    <div className="flex gap-3 items-center mt-[15px]">
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                    </div>
+                   <div className="pt-[15px]">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sodales erat quis 
+                            condimentum molestie. Sed ex turpis, semper quis augue non, mollis lacinia dolor. 
+                            Aliquam maximus semper placerat. Fusce gravida condimentum volutpat. Aliquam sagittis 
+                            malesuada ultricies. Proin eget tortor a ante cursus pellentesque
+                        </p>
+                    </div>
+                    <div className="pt-[15px] flex justify-between">
+                        <strong>From 20$ a day</strong>
+                        <p className='text-[#FFA500]'><a href="">calculate price</a></p>
+                    </div>
+                </div>
+            </div>
+            <div className="flex gap-20 mt-[30px]">
+                <div className="mt-[30px]">
+                    <div className="icons flex items-center gap-12">
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faWifi} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Wifi</p>
+                        </div>  
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faBell} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Buffet</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faShower} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Pool</p>
+                        </div> 
+                    </div>
+                    <div className="content-name pt-[5px]">
+                        <h1 className='text-3xl font-semibold'>Double room, one room - “ABC”</h1>
+                    </div>
+                    <div className="flex gap-3 items-center mt-[15px]">
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                    </div>
+                    <div className="pt-[15px]">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sodales erat quis 
+                            condimentum molestie. Sed ex turpis, semper quis augue non, mollis lacinia dolor. 
+                            Aliquam maximus semper placerat. Fusce gravida condimentum volutpat. Aliquam sagittis 
+                            malesuada ultricies. Proin eget tortor a ante cursus pellentesque
+                        </p>
+                    </div>
+                    <div className="pt-[15px] flex justify-between">
+                        <strong>From 20$ a day</strong>
+                        <p className='text-[#FFA500]'><a href="">calculate price</a></p>
+                    </div>
+                </div>
+                {/*  */}
+                <div className="mt-[30px]">
+                    <div className="icons flex items-center gap-12">
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faWifi} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Wifi</p>
+                        </div>  
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faBell} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Buffet</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <FontAwesomeIcon icon={faShower} className='text-[#FFA500] text-xl' />
+                            <p className='text-xl'>Pool</p>
+                        </div> 
+                    </div>
+                    <div className="content-name pt-[5px]">
+                        <h1 className='text-3xl font-semibold'>Double room, one room - “ABC”</h1>
+                    </div>
+                    <div className="flex gap-3 items-center mt-[15px]">
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                        <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
+                    </div>
+                   <div className="pt-[15px]">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sodales erat quis 
+                            condimentum molestie. Sed ex turpis, semper quis augue non, mollis lacinia dolor. 
+                            Aliquam maximus semper placerat. Fusce gravida condimentum volutpat. Aliquam sagittis 
+                            malesuada ultricies. Proin eget tortor a ante cursus pellentesque
+                        </p>
+                    </div>
+                    <div className="pt-[15px] flex justify-between">
+                        <strong>From 20$ a day</strong>
+                        <p className='text-[#FFA500]'><a href="">calculate price</a></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
   )

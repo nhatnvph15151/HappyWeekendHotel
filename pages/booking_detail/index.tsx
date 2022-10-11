@@ -239,7 +239,7 @@ const BookingDetail = (props: Props) => {
                     </div>
                 </div>
             </div>
-            <div className="flex gap-20 mt-[30px]">
+            <div className="flex gap-20 mt-[31px]">
                 <div className="mt-[30px]">
                     <div className="icons flex items-center gap-12">
                         <div className="flex items-center gap-3">

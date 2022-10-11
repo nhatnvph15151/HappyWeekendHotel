@@ -9,6 +9,7 @@ import 'swiper/css/scrollbar';;
 
 // import required modules
 import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from "swiper";
+import Link from "next/link";
 type prop = {
     module: any,
     slide: [],
@@ -34,10 +35,12 @@ export default function App({ module, slide, quantity }: prop) {
                                 <SwiperSlide>
                                     {({ isActive }) => (
                                         <div className={`${isActive ? "w-full h-[550px] shadow-2xl" : "w-[85%] h-[400px]"} duration-300 select-none overflow-hidden border flex flex-col`}>
-                                            <img className="basis-1/2" src={item.src} alt="" />
+                                            <Link href="#">
+                                                <img className="basis-1/2" src={item.src} alt="" />
+                                            </Link>
                                             <div className="relative basis-1/2 p-4">
                                                 <div className=" flex justify-between">
-                                                    <h1 className="font-semibold">{item.name} <br /> <span>{item.decript}</span> </h1>
+                                                    <h1 className="font-semibold">{item.name} <br /> <>{item.decript}</> </h1>
                                                     <p className="text-[green]">{item.price} đ</p>
                                                 </div>
                                                 <div className="">

@@ -9,27 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "axios": "^0.27.2",
-=======
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
     "@fortawesome/free-brands-svg-icons": "^6.2.0",
     "@fortawesome/free-regular-svg-icons": "^6.2.0",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
->>>>>>> 249fa97dd15ce59207a7e79073e119c0a2657a96
+    "axios": "^1.1.2",
     "next": "12.3.0",
     "react": "18.2.0",
     "react-date-range": "^1.4.0",
     "react-dom": "18.2.0",
-<<<<<<< HEAD
-    "react-hook-form": "^7.37.0",
     "recharts": "^2.1.14",
+    "swiper": "^8.4.3",
     "swr": "^1.3.0"
-=======
-    "recharts": "^2.1.14",
-    "swiper": "^8.4.3"
->>>>>>> 249fa97dd15ce59207a7e79073e119c0a2657a96
   },
   "devDependencies": {
     "@emotion/react": "^11.10.4",

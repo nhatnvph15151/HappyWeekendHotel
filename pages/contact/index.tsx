@@ -8,7 +8,7 @@ const ContactPage = (props: Props) => {
     <div className='w-[80%] mx-auto py-2'>
         <ul className="flex py-5">
         <li>
-          <Link href="/" className='text-[#ca9533] no-underline hover:text-[#FFA500]'>Trang chủ</Link>
+          <Link href="/" className='text-black no-underline hover:text-[#FFA500]'>Trang chủ</Link>
         </li>
         <span className="px-3 ">/</span>
         <li>
@@ -27,7 +27,7 @@ const ContactPage = (props: Props) => {
         </div>
         <div className="px-[30px]">
           <h2 className="text-3xl font-bebas">GỬI THÔNG TIN CHO CHÚNG TÔI</h2>
-          <p className='pt-[10px]'>Hãy liên hệ ngay với chúng tôi để nhận được nhiều ưu đãi hấp dẫn dành cho bạn!</p>
+          <p>Hãy liên hệ ngay với chúng tôi để nhận được nhiều ưu đãi hấp dẫn dành cho bạn!</p>
           <p></p>
           <div className="flex items-center my-2">
             <svg
@@ -42,7 +42,7 @@ const ContactPage = (props: Props) => {
               {" "}
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
             </svg>
-            Địa chỉ : Tầng 17 Center Building, Q.Thanh Xuân, Hà Nội
+            Địa chỉ : Tâng 6 toà nhà Ladeco, 266 Đội Cấn, Hà Nội
           </div>
           <div className="flex items-center my-2">
             <svg className="h-4 w-4 text-[#FFA500]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -55,7 +55,7 @@ const ContactPage = (props: Props) => {
             </svg>
             Email:{" "}
             <Link href="/" className="hover:text-[#FFA500]">
-              khointph15388@fpt.edu.vn
+              khoint268@gmail.com
             </Link>
           </div>{" "}
           <div className="flex items-center my-2">
@@ -74,7 +74,7 @@ const ContactPage = (props: Props) => {
               <div>
                 <input
                   type="text"
-                  className=" bg-white border border-gray-300 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-300 placeholder:italic placeholder:uppercase w-96 px-5 py-2 rounded-full outline-none "
+                  className=" bg-white border border-gray-200 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-300 placeholder:italic placeholder:uppercase w-96 px-5 py-2 rounded-full outline-none "
                   placeholder="Họ và tên "
                 />
               </div>
@@ -82,7 +82,7 @@ const ContactPage = (props: Props) => {
               <div>
                 <input
                   type="text"
-                  className=" bg-white border border-gray-300 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-300 placeholder:italic placeholder:uppercase w-96 px-5 py-2 rounded-full outline-none "
+                  className=" bg-white border border-gray-200 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-300 placeholder:italic placeholder:uppercase w-96 px-5 py-2 rounded-full outline-none "
                   placeholder="Email "
                 />
               </div>
@@ -90,7 +90,7 @@ const ContactPage = (props: Props) => {
               <div>
                 <input
                   type="number"
-                  className=" bg-white border border-gray-300 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-300 placeholder:italic placeholder:uppercase w-96 px-5 py-2 rounded-full outline-none "
+                  className=" bg-white border border-gray-200 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-300 placeholder:italic placeholder:uppercase w-96 px-5 py-2 rounded-full outline-none "
                   placeholder="Điện thoại"
                 />
               </div>
@@ -100,7 +100,7 @@ const ContactPage = (props: Props) => {
                   id="message"
                   rows={4}
                   cols={4}
-                  className=" bg-white border border-gray-300 text-black mx-[10px] my-[5px] font-quicksand  placeholder:text-gray-300 placeholder:italic placeholder:uppercase w-96 px-5 py-2 rounded-3xl outline-none  h-[100px]"
+                  className=" bg-white border border-gray-200 text-black mx-[10px] my-[5px] font-quicksand  placeholder:text-gray-300 placeholder:italic placeholder:uppercase w-96 px-5 py-2 rounded-3xl outline-none  h-[100px]"
                   placeholder="Nội dung"
                 ></textarea>
               </div>

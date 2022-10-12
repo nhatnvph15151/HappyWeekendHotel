@@ -6,6 +6,7 @@ import {faStar, faUtensils, faSpa, faShirt, faShower, faBell, faCar, faWifi} fro
 type Props = {}
 
 const BookingDetail = (props: Props) => {
+    const [showModal, setShowModal] = React.useState(false);
   return (
      <div className='w-[80%] mx-auto py-2'>
         <div className="content-header__booking mt-8 grid grid-cols-2 gap-10">
@@ -50,9 +51,81 @@ const BookingDetail = (props: Props) => {
                     at auctor ante consequat sed. Sed aliquam ante ac urna viverra pretium. Sed cursus nisl 
                     consectetur, facilisis quam id, sodales risus. </p>
                 </div>
-                <button className='border-spacing-1 border-[#FFA500] border-[1px] mt-[20px] p-3 w-32 rounded-[20px] bg-[#FFA500] text-[#ffffff] hover:opacity-90 bg-[#FFA500]'>Book</button>
+                {/* <button className='border-spacing-1 border-[#FFA500] border-[1px] mt-[20px] p-3 w-32 rounded-[20px] bg-[#FFA500] text-[#ffffff] hover:opacity-90 bg-[#FFA500]'>
+                    Book
+                </button> */}
+
+        <button
+        className="bg-[#FFA500] mt-[20px] p-3 w-32 rounded-[20px] text-white active:bg-[#FFA500] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button"
+        onClick={() => setShowModal(true)}
+        >
+        Book
+      </button>
+      {showModal ? (
+        <>
+          <div
+            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+          >
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                  <h3 className="text-3xl font-semibold">
+                    Book
+                  </h3>
+                  <button
+                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    onClick={() => setShowModal(false)}
+                  >
+                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                      ×
+                    </span>
+                  </button>
+                </div>
+                {/*body*/}
+                <form action="">
+                    <div className="relative p-[5px] flex-auto">
+                        <input type="text"  className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Name' />
+                    </div>
+                    <div className="relative p-[5px] flex-auto">
+                        <input type="text"  className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Phone' />
+                    </div>
+                    <div className="relative p-[5px] flex-auto">
+                        <input type="text"  className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Email' />
+                    </div>
+                    <div className="relative p-[5px] flex-auto">
+                        <input type="datetime-local"  className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Tổng' />
+                    </div>    
+                {/*footer*/}
+                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                  <button
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Close
+                  </button>
+                  <button
+                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Book
+                  </button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
+
             </div>
         </div>
+
         <div className="service-booking mt-[60px]">
             <h1 className='text-3xl font-semibold text-center'>SERVICE</h1>
             <div className="grid grid-cols-3 mt-[50px]">
@@ -318,5 +391,6 @@ const BookingDetail = (props: Props) => {
     </div>
   )
 }
+
 
 export default BookingDetail

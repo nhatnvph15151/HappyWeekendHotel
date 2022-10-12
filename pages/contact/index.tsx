@@ -27,7 +27,7 @@ const ContactPage = (props: Props) => {
         </div>
         <div className="px-[30px]">
           <h2 className="text-3xl font-bebas">GỬI THÔNG TIN CHO CHÚNG TÔI</h2>
-          <p>Hãy liên hệ ngay với chúng tôi để nhận được nhiều ưu đãi hấp dẫn dành cho bạn!</p>
+          <p className='pt-[10px]'>Hãy liên hệ ngay với chúng tôi để nhận được nhiều ưu đãi hấp dẫn dành cho bạn!</p>
           <p></p>
           <div className="flex items-center my-2">
             <svg

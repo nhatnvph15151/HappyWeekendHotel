@@ -55,7 +55,7 @@ const ContactPage = (props: Props) => {
             </svg>
             Email:{" "}
             <Link href="/" className="hover:text-[#FFA500]">
-              khoint268@gmail.com
+              khointph15388@gmail.com
             </Link>
           </div>{" "}
           <div className="flex items-center my-2">

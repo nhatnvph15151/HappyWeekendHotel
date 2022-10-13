@@ -34,11 +34,7 @@ const BlogPage = (props: Props) => {
         <div className="mt-[50px] flex gap-14 items-start mb-10">
             <div className="">
                 <div className="">
-<<<<<<< HEAD
                     <h2 className='text-2xl font-semibold text-[#FFA500]'>Khách sạn Ruy Sang</h2>
-=======
-                    <h2 className='text-2xl font-semibold text-[#FFA500]'>Khách sạn</h2>
->>>>>>> 1608940 (DATN29-65 upload blog page)
                     <div className="mt-[5px] w-[100%] h-[5px] bg-[#b8b8b8] relative border-spacing-1 border">
                         <div className="absolute top-0 left-0 bottom-0 right-[700px] bg-[#ff6400]"></div>
                     </div>

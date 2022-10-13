@@ -1,9 +1,16 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 
 type Props = {}
 
 const Profile = (props: Props) => {
+
+    const [edit, setEdit] = useState(true);
+
+    const onsubmit = () => {
+        setEdit(!edit)
+    }
+
     return (
         <div className=''>
             <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
@@ -41,7 +48,7 @@ const Profile = (props: Props) => {
                     <div className="flex flex-row justify-between mb-[32px]">
                         <h2 className='text-[40px] font-bold'>Hồ sơ của tôi</h2>
                         <div className=''>
-                            <button className='btn rounded-full border border-gray-700 px-[24px] font-medium py-[10px]'>Chỉnh sửa</button>
+                            <button onClick={onsubmit} className='btn rounded-full border border-gray-700 px-[24px] font-medium py-[10px] '>Chỉnh sửa</button>
                         </div>
                     </div>
                     <form action="">
@@ -54,30 +61,25 @@ const Profile = (props: Props) => {
                         <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Họ và tên<noscript></noscript></label>
-                            <div className="input font-medium ">
-                                Nguyễn Văn Nhật
-                            </div>
+                            <input disabled={edit} className="input font-medium border rounder-full px-3 py-2  " />
                         </div>
                         <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Email</label>
-                            <div className="input font-medium ">
-                                nhatnvph15151@fpt.edu.vn
-                            </div>
+                            <input disabled={edit} className="input font-medium border rounder-full px-3 py-2  " />
+
                         </div>
                         <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Giới tính</label>
-                            <div className="input font-medium ">
-                                Nam
-                            </div>
+                            <input disabled={edit} className="input font-medium border rounder-full px-3 py-2  " />
+
                         </div>
                         <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Địa chỉ</label>
-                            <div className="input font-medium ">
-                                Lỗ Khê - Liên Hà - Đông Anh - Hà Nội
-                            </div>
+                            <input disabled={edit} className="input font-medium border rounder-full px-3 py-2  " />
+
                         </div>
                         <hr className='my-[20px]' />
                     </form>

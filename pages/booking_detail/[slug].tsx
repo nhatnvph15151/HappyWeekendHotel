@@ -1,21 +1,83 @@
 import React from 'react'
-// import '../node_modules/@fortawesome/fontawesome-svg-core/styles.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faStar, faUtensils, faSpa, faShirt, faShower, faBell, faCar, faWifi} from '@fortawesome/free-solid-svg-icons'
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
+import {ProductType} from '../../types/products'
+import { BasicType } from '../../types/basic'
+import {useForm,SubmitHandler} from 'react-hook-form'
+import axios from 'axios'
+import useStatus from '../../hook/use-status'
+import { creatOrder } from '../../api/order'
+import { OrderType } from '../../types/order'
+import { StatusType } from '../../types/statusroom'
+type ProductProps = {
+    product: ProductType
+}
+type Form = {
+    name: string
+    email: string
+    phone: number
+  }
 
-type Props = {}
-
-const BookingDetail = (props: Props) => {
+const BookingDetail = ({ product }: ProductProps) => {
+    const [ckeckin,setckekin] = React.useState('')
+    const [status,setstatus] = React.useState<string>()
+    const [ckeckout,setckekout] = React.useState('')
     const [showModal, setShowModal] = React.useState(false);
+    const {register,handleSubmit,formState:{errors}} = useForm<Form>()
+    const [basics,setbasic] = React.useState<BasicType>()
+    const {creatstatus} = useStatus(setstatus)
+    React.useEffect(()=>{
+        const getbasic = async () =>{
+            const {data} = await axios.get(`http://localhost:4000/api/basic/${product.basic}`)
+            setbasic(data)
+        }
+        getbasic()
+    },[])
+    const hanlechangeckeckin = (e:any) =>{
+        const value = e.target.value
+        console.log(value)
+        setckekin(value)
+    }
+    const hanlechangeckeckout = (e:any) =>{
+        const value = e.target.value
+        console.log(value)
+        setckekout(value)
+    }
+    const on = async () =>{
+        
+    }
+    const onsubmit : SubmitHandler<Form> = async data =>{
+        console.log(data)   
+        const newckeck:any = {
+            checkins:ckeckin,
+            checkouts:ckeckout,
+            room:product._id
+        }
+        console.log(newckeck)
+        creatstatus(newckeck)
+        console.log("dsa",status)
+        const neworder:any = {
+            ...data,
+            room:product._id,
+            statusorder:"0",
+            total:"10000",
+            status:status,
+            checkins:ckeckin,
+            checkouts:ckeckout,   
+        }
+        const {data:neworderss} = await creatOrder(neworder)
+        console.log(neworderss)
+    }
   return (
      <div className='w-[80%] mx-auto py-2'>
         <div className="content-header__booking mt-8 grid grid-cols-2 gap-10">
             <div className="images-booking__total">
                 <div className="images-top__booking">
-                    <img className='rounded-[20px] w-[100%] h-[100%]' src="https://picsum.photos/580/580" alt="" />
+                    <img className='rounded-[20px] w-[100%] h-[100%]' src={`${product.image}`} alt="" />
                 </div>
                 <div className="images-bottom__booking flex mt-7 gap-5"> 
-                    <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" />
+                    {/* <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" /> */}
                     <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" />
                     <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" />
                     <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" />
@@ -26,7 +88,7 @@ const BookingDetail = (props: Props) => {
             <div className="content-text__booking">
                 <div className="new-content__booking">
                     <div className="flex justify-between items-center">
-                        <h1 className='text-[#FFA500] text-2xl font-semibold'>HA LONG BAY RESORT</h1>
+                        <h1 className='text-[#FFA500] text-2xl font-semibold'>{product.name}</h1>
                         <div className="float-left">
                             <FontAwesomeIcon icon={faStar}  className='text-[#FFA500]'/>
                             <FontAwesomeIcon icon={faStar}  className='text-[#FFA500]' />
@@ -35,26 +97,15 @@ const BookingDetail = (props: Props) => {
                             <FontAwesomeIcon icon={faStar} />
                         </div>
                     </div>
-                    <div className="flex"><p className='pt-[10px] text-[17px]'>Ha long bay, 123 Mong Cai</p>
-                    <p className='pt-[10px] pl-[50px] text-[17px]'>24km from airport</p></div>
+                    <div className="flex"><p className='pt-[10px] text-[17px]'>{basics?.address}</p>
+                    <p className='pt-[10px] pl-[50px] text-[17px]'>{basics?.name}</p></div>
                     
                 </div>
                 <div className="bar__booking border-spacing-1 border-[#FFA500] border-[1px] mt-[20px] opacity-40"></div>
                 <div className="content mt-[20px]">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sodales erat quis
-                    condimentum molestie. Sed ex turpis, semper quis augue non, mollis lacinia dolor. 
-                    Aliquam maximus semper placerat. Fusce gravida condimentum volutpat. Aliquam sagittis 
-                    malesuada ultricies. Proin eget tortor a ante cursus pellentesque. Quisque dui lacus, 
-                    convallis at placerat quis, laoreet id nulla. Donec eleifend varius facilisis. Aliquam 
-                    efficitur ligula et purus iaculis, dictum sodales augue euismod. Etiam pellentesque semper 
-                    commodo. Mauris et consectetur lacus, vitae venenatis lectus.Aliquam eleifend interdum dolor, 
-                    at auctor ante consequat sed. Sed aliquam ante ac urna viverra pretium. Sed cursus nisl 
-                    consectetur, facilisis quam id, sodales risus. </p>
+                    <p>{product.description} </p>
                 </div>
-                {/* <button className='border-spacing-1 border-[#FFA500] border-[1px] mt-[20px] p-3 w-32 rounded-[20px] bg-[#FFA500] text-[#ffffff] hover:opacity-90 bg-[#FFA500]'>
-                    Book
-                </button> */}
-
+               
         <button
         className="bg-[#FFA500] mt-[20px] p-3 w-32 rounded-[20px] text-white active:bg-[#FFA500] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
         type="button"
@@ -68,9 +119,7 @@ const BookingDetail = (props: Props) => {
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
           >
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                   <h3 className="text-3xl font-semibold">
                     Book
@@ -85,19 +134,27 @@ const BookingDetail = (props: Props) => {
                   </button>
                 </div>
                 {/*body*/}
-                <form action="">
+                <form action="" onSubmit={handleSubmit(onsubmit)}>
                     <div className="relative p-[5px] flex-auto">
-                        <input type="text"  className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Name' />
+                        <label htmlFor="">Name</label> <br />
+                        <input {...register('name')} type="text"  className="text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[30px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Name' />
                     </div>
                     <div className="relative p-[5px] flex-auto">
-                        <input type="text"  className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Phone' />
+                        <label htmlFor="">Số điện thoại</label> <br />
+                        <input {...register('phone')} type="number"  className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[30px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Phone' />
                     </div>
                     <div className="relative p-[5px] flex-auto">
-                        <input type="text"  className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Email' />
+                        <label htmlFor="">Email</label> <br />
+                        <input type="text" {...register("email")} className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[30px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Email' />
                     </div>
                     <div className="relative p-[5px] flex-auto">
-                        <input type="datetime-local"  className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[50px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Tổng' />
+                        <label htmlFor="">Ckeck In</label> <br />
+                        <input type="datetime-local" onChange={hanlechangeckeckin} className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[30px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Tổng' />
                     </div>    
+                    <div className="relative p-[5px] flex-auto">
+                        <label htmlFor="">Check Out</label> <br />
+                        <input type="datetime-local" onChange={hanlechangeckeckout} className="my-4 text-slate-500 text-lg leading-relaxed w-[500px] bg-white border border-gray-300 text-black h-[30px] mx-[10px] my-[5px] font-quicksand placeholder:text-gray-400 placeholder:italic placeholder:uppercase px-5 py-2 rounded-[20px] outline-none" placeholder='Tổng' />
+                    </div>  
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                   <button
@@ -109,8 +166,8 @@ const BookingDetail = (props: Props) => {
                   </button>
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
+                    type="submit"
+                    onClick={() => {setShowModal(true) ;on()}}
                   >
                     Book
                   </button>
@@ -226,17 +283,7 @@ const BookingDetail = (props: Props) => {
                 <div className="border-spacing-1 border-[#FFA500] border-[1px] mt-[20px] w-[70px]"></div>
                 <h1 className='text-3xl font-semibold pt-[5px]'>AVAILABLE ROOMS</h1>
             </div>
-            {/* <div className="row break-after-auto content-none clear-both table">
-                <div className="column flex w-[33.33%] p-5">
-                    <img src="https://picsum.photos/70/70" alt="Snow" />
-                </div>
-                <div className="column flex w-[33.33%] p-5">
-                    <img src="https://picsum.photos/70/70" alt="Forest" />
-                </div>
-                <div className="column flex w-[33.33%] p-5">
-                    <img src="https://picsum.photos/70/70" alt="Mountains" />
-                </div>
-            </div> */}
+        
             <div className="flex gap-20">
                 <div className="mt-[30px]">
                     <div className="icons flex items-center gap-12">
@@ -390,6 +437,27 @@ const BookingDetail = (props: Props) => {
         </div>
     </div>
   )
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    const data = await (await fetch(`http://localhost:4000/api/rooms`)).json();
+    const paths = data.map((product: any) => (
+        { params: { slug: product.slug } }
+    ))
+    return {
+        paths,
+        fallback: true // blocking or true
+    }
+}
+// server
+export const getStaticProps: GetStaticProps<ProductProps> = async (context: GetStaticPropsContext) => {
+    console.log('context', context);
+    const product = await (await fetch(`http://localhost:4000/api/rooms/${context.params?.slug}`)).json();
+    return {
+        props: { product },
+        revalidate: 5
+    }
+
 }
 
 

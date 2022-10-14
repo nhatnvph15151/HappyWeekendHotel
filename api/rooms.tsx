@@ -7,7 +7,11 @@ export const remove = (_id:number) => {
     return instance.delete(url)
 }
 
-export const getAll = (slug: any | undefined) => {
+export const getAll = () => {
+    const url = `rooms`;
+    return instance.get(url);
+}
+export const getone = (slug: any | undefined) => {
     const url = `rooms/${slug}`;
     return instance.get(url);
 }

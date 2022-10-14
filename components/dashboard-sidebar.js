@@ -34,12 +34,12 @@ const items = [
     title: 'Rooms'
   },
   {
-    href: '/admin/order',
-    icon: (<CogIcon fontSize="small" />),
-    title: 'Order'
+    href: '/admin/basic',
+    icon: (<BedroomParentIcon fontSize="small" />),
+    title: 'Basic'
   },
   {
-    href: '/404',
+    href: '/admin/404',
     icon: (<XCircleIcon fontSize="small" />),
     title: 'Error'
   }

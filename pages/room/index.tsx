@@ -4,7 +4,14 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Props } from 'next/script';
+import Checkbox from '@mui/material/Checkbox';
 import styles from '../../styles/room.module.css'
+import Slider from '@mui/material/Slider';
+
+function valuetext(value: number) {
+    return `${value}°C`;
+}
+
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -16,44 +23,133 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
+
 const RoomPage = (props: Props) => {
 
     const [open, setOpen] = React.useState(false);
+    const [open2, setOpen2] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const handleOpen2 = () => setOpen2(true);
+    const handleClose2 = () => setOpen2(false);
+
+    const [value, setValue] = React.useState<number[]>([0, 100]);
+
+    const handleChange = (event: Event, newValue: number | number[]) => {
+        setValue(newValue as number[]);
+    };
+
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     return (
         <div className={styles.scroll}>
             <div className='container w-[80%] mx-[auto] flex flex-col'>
                 <div className="search-filter flex justify-between">
                     <div className="search"></div>
-                    <div className="filter my-[10px]"><Button onClick={handleOpen}><a className='border-current  px-2 py-1 text-[black] my-[auto] rounded-2 bg-[#f2f2f7] rounded-lg'>
+                    <div className="filter my-[10px]"><Button onClick={handleOpen2}><a className='border-current hover:text-orange-400 px-2 py-1 text-[black] my-[auto] rounded-2 bg-[#f2f2f7] rounded-lg'>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className=" inline w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
-                        </svg>
-
-                        Bộ lọc</a></Button>
+                        </svg>Bộ lọc</a></Button>
                         <Modal
                             keepMounted
-                            open={open}
-                            onClose={handleClose}
+                            open={open2}
+                            onClose={handleClose2}
                             aria-labelledby="keep-mounted-modal-title"
                             aria-describedby="keep-mounted-modal-description"
 
                         >
-                            <Box sx={style}>
-                                <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-                                    Text in a modal
+                            <Box sx={style} className={styles.box}>
+                                <Typography className='text-center font-bold ' id="keep-mounted-modal-title" variant="h6" component="h2">
+                                    Bộ lọc
+                                    <hr className='mt-2' />
                                 </Typography>
                                 <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                                    <div className="container p-5 flex flex-col">
+
+                                        <div className="sort border-b border-[#d1d1d6] mb-5 pb-5">
+                                            <h2 className='text-2xl font-bold'>Sắp xếp</h2>
+                                            <p>
+                                                <ul className='flex justify-between mt-3'>
+                                                    <li className='p-3 text-lg text-[#464648] cursor-pointer'>Giá từ cao đến thấp</li>
+                                                    <li className='p-3 text-lg text-[#464648] cursor-pointer' >Giá từ thấp đến cao</li>
+                                                </ul>
+                                            </p>
+                                        </div>
+                                        <div className="price border-b border-[#d1d1d6]  mb-5 pb-5">
+                                            <h2 className='text-2xl font-bold mb-6'>Khoảng giá</h2>
+                                            <Box className='w-[100%]'>
+                                                <Slider
+                                                    getAriaLabel={() => 'Temperature range'}
+                                                    value={value}
+                                                    onChange={handleChange}
+                                                    valueLabelDisplay="auto"
+                                                    getAriaValueText={valuetext}
+                                                />
+                                            </Box>
+                                        </div>
+                                        <div className="utility ">
+                                            <h2 className='text-2xl font-bold'>Tiện ích</h2>
+                                            <div className="list-utility">
+                                                <ul className='flex flex-wrap'>
+                                                    <li className='w-[50%]'>
+                                                        <Checkbox {...label} defaultChecked />
+                                                        <span>Wi-Fi miễn phí</span>
+                                                    </li>
+                                                    <li className='w-[50%]'>
+                                                        <Checkbox {...label} defaultChecked />
+                                                        <span>Ghế tình yêu</span>
+                                                    </li>
+                                                    <li className='w-[50%]'>
+                                                        <Checkbox {...label} defaultChecked />
+                                                        <span>Lễ tân 24/24</span>
+                                                    </li>
+                                                    <li className='w-[50%]'>
+                                                        <Checkbox {...label} defaultChecked />
+                                                        <span>Thang máy</span>
+                                                    </li>
+                                                    <li className='w-[50%]'>
+                                                        <Checkbox {...label} defaultChecked />
+                                                        <span>Dịch vụ dọn phòng mỗi ngày</span>
+                                                    </li>
+                                                    <li className='w-[50%]'>
+                                                        <Checkbox {...label} defaultChecked />
+                                                        <span>Tiện nghi là/ủi</span>
+                                                    </li>
+                                                    <li className='w-[50%]'>
+                                                        <Checkbox {...label} defaultChecked />
+                                                        <span>Dịch vụ lưu trữ/bảo quản hành lý </span>
+                                                    </li>
+                                                    <li className='w-[50%]'>
+                                                        <Checkbox {...label} defaultChecked />
+                                                        <span>Bồn tắm</span>
+                                                    </li>
+                                                    <li className='w-[50%]'>
+                                                        <Checkbox {...label} defaultChecked />
+                                                        <span>Smart TV</span>
+                                                    </li>
+                                                    <li className='w-[50%]'>
+                                                        <Checkbox {...label} defaultChecked />
+                                                        <span>Điều hoà</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <footer className='sticky w-[100%] h-[80px] bg-[white] border-t left-0 bottom-0 '>
+                                        <ul className='flex justify-between px-5 items-center text-center my-auto h-[100%] '>
+                                            <li><a className='cursor-pointer hover:decoration hover:underline hover:text-[#1c1c1e] hover:opacity-70'>Xóa tất cả</a></li>
+                                            <li><button className='px-12 font-bold py-3 bg-orange-500 rounded-lg text-white'>Lọc</button></li>
+                                        </ul>
+                                    </footer>
                                 </Typography>
                             </Box>
                         </Modal>
-                        <Button onClick={handleOpen}><a className=' border-current  px-2 py-1 text-[black] my-[auto] rounded-2 bg-[#f2f2f7] rounded-lg'>
+                        <Button onClick={handleOpen}><a className=' border-current hover:text-orange-400 px-2 py-1 text-[black] my-[auto] rounded-2 bg-[#f2f2f7] rounded-lg'>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="inline w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
                             </svg>
                             Sắp xếp</a></Button>
+                        {/* model popup */}
                         <Modal
                             keepMounted
                             open={open}
@@ -63,10 +159,10 @@ const RoomPage = (props: Props) => {
                         >
                             <Box sx={style}>
                                 <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-                                    Text in a modal
+                                    Đây là phần sắp xếp
                                 </Typography>
                                 <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                                    Đây là phần nội dung sắp xếp
                                 </Typography>
                             </Box>
                         </Modal></div>

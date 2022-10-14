@@ -226,7 +226,7 @@ const SiteHeader = (props: Props) => {
               </Button>
               <div className=''>
                 <Menu
-                  className='mt-[5px] left-[-150px] w-[500px]  '
+                  className='mt-[5px] left-[-150px]   '
                   id="basic-menu"
                   anchorEl={anchorEl}
                   open={open1}
@@ -236,8 +236,8 @@ const SiteHeader = (props: Props) => {
                   }}
 
                 >
-                  <MenuItem className='w-[240px]' onClick={handleClose}>Đăng ký</MenuItem>
-                  <MenuItem className='w-[240px]' onClick={handleClose}>Đăng nhâp</MenuItem>
+                  <MenuItem className='w-[240px]' onClick={handleClose}><Link href={'/signup'}  ><a className='w-[100%] block'>Đăng ký</a></Link></MenuItem>
+                  <MenuItem className='w-[240px]' onClick={handleClose}><Link href={'/signin'}  ><a className='w-[100%] block'>Đăng nhâp</a></Link></MenuItem>
                 </Menu>
               </div>
             </div>

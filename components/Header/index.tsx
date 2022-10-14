@@ -106,7 +106,7 @@ const Header = (props: Props) => {
               </Button>
               <div className=''>
                 <Menu
-                  className='mt-[5px] left-[-150px] w-[500px]  '
+                  className='mt-[7px] left-[-150px] w-[500px]  '
                   id="basic-menu"
                   anchorEl={anchorEl}
                   open={open}
@@ -114,10 +114,9 @@ const Header = (props: Props) => {
                   MenuListProps={{
                     'aria-labelledby': 'basic-button',
                   }}
-                  
                 >
-                  <MenuItem className='w-[240px]' onClick={handleClose}>Đăng ký</MenuItem>
-                  <MenuItem className='w-[240px]' onClick={handleClose}>Đăng nhâp</MenuItem>
+                  <MenuItem className='w-[240px]' onClick={handleClose}><Link href={'/signup'}  ><a className='w-[100%] block'>Đăng ký</a></Link></MenuItem>
+                  <MenuItem className='w-[240px]' onClick={handleClose}><Link href={'/signin'}  ><a className='w-[100%] block'>Đăng nhâp</a></Link></MenuItem>
                 </Menu>
               </div>
             </div>

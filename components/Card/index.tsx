@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -6,23 +7,21 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
 type props = {
-  newsList: any
+  newsList: any,
+  qualPerRow: any
 }
 
-export default function ActionAreaCard({ newsList }: props) {
+export default function ActionAreaCard({ newsList, qualPerRow }: props) {
   return (
-    <>
-      {newsList.map((item:any, index:any) => {
+    <div className={`grid grid-cols-${qualPerRow} gap-4 place-content-center `}>
+      {newsList.map((item: any, index: any) => {
         return (
           <Card sx={{ maxWidth: 345 }} key={index}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                height="140"
-                image={item.src}
-                alt="green iguana"
-              />
-              <CardContent>
+            <CardActionArea sx={{ display: "flex", flexDirection: "column", alignContent: "space-between", justifyContent:"space-between" }}>
+              <div className="overflow-hidden w-[345px] h-[200px]">
+                <img src={item.src} className="w-full h-full" alt="" />
+              </div>
+              <CardContent component="div">
                 <Typography gutterBottom variant="h5" component="div">
                   {item.name}
                 </Typography>
@@ -35,6 +34,6 @@ export default function ActionAreaCard({ newsList }: props) {
           </Card>
         )
       })}
-    </>
+    </div>
   );
 }

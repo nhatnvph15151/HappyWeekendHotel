@@ -5,8 +5,8 @@ type Props = {}
 const Signin = (props: Props) => {
   return (
     <div>
-      <div className='container px-[40px] bg flex justify-between'>
-        <div className='maskgroup relative  mt-[50px] w-[366px] h-[668px] shadow-2xl shadow-[#ffd79a] bg-[#fed496] overflow-hidden rounded-[30px] '>
+      <div className='container px-[90px] bg flex justify-between pb-[90px]'>
+        <div className='maskgroup relative  mt-[50px] w-[366px] h-[620px] shadow-2xl shadow-[#ffd79a] bg-[#fed496] overflow-hidden rounded-[30px] '>
           <div className="a bg-[#efce90] h-[70%] rounded-bl-[108px]"><h2 className='pt-[300px] font-bold text-[50px] leading-[53px] pl-[15px] text-white'>Happy <p className='pl-[20px]'>Weekend</p></h2></div>
           <div className="b absolute top-[-50px] right-[-60px] w-[196px] h-[187px] bg-[#fbf1cf] overflow-hidden rounded-tl-[200px] rounded-bl-[200px]">a</div>
           <div className="c absolute bottom-[-50px] left-[-20px] w-[196px] h-[187px] rounded-tr-[108px] rounded-br-[20px]  bg-[#fbf1cf]  ">b</div>

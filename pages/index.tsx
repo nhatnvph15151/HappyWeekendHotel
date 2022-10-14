@@ -16,7 +16,7 @@ const Home: NextPage = () => {
   ]
   const slideList = [
     { src: "http://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/08/slideshow1-1024x512.jpg", price: 150, name: "Nhà nghỉ tình yêu Diamond", decript: "Tốt", id: 1 },
-    { src: "https://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/07/multi-slider.jpg", price: 150, name: "Nhà nghỉ tình yêu Diamond", decript: "Tốt", id: 2 },
+    { src: "https://res.cloudinary.com/djsbi0bma/image/upload/v1657873025/g6zcna28nuqndres4sei.jpg", price: 150, name: "Nhà nghỉ tình yêu Diamond", decript: "Tốt", id: 2 },
     { src: "http://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/08/slideshow1-1024x512.jpg", price: 150, name: "Nhà nghỉ tình yêu Diamond", decript: "Tốt", id: 3 },
     { src: "http://mauweb.monamedia.net/dogotaynguyen/wp-content/uploads/2018/08/slideshow1-1024x512.jpg", price: 150, name: "Nhà nghỉ tình yêu Diamond", decript: "Tốt", id: 4 },
   ]
@@ -26,12 +26,12 @@ const Home: NextPage = () => {
     { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 2 },
     { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 3 },
     { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 4 },
-    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 5 },
   ]
 
   const newsList = [
     { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 1 },
     { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 2 },
+    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 3 },
     { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', price: 170, name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 3 },
   ]
   const [person, setPerson] = useState(personPerRoom[0].qual)
@@ -132,21 +132,21 @@ const Home: NextPage = () => {
       </div>
       <div className="w-[80%] mx-auto pt-8">
         <h1 className='text-3xl font-semibold text-[orange] text-center'>NHÀ NGHỈ GIÁ TỐT</h1>
-        <div className="">
+        <>
           <SimpleSwiper
-            slide={slideList}
-            quantity="3"
+            newsList={slideList}
+            qualPerRow="3"
             module={[Navigation, Pagination, Scrollbar, A11y, Autoplay]} />
-        </div>
+        </>
       </div>
       <div className="w-[80%] mx-auto pt-8">
         <h1 className='text-3xl font-semibold text-[orange] text-center'>NHÀ NGHỈ HOT</h1>
-        <div className="">
+        <>
           <SimpleSwiper
-            slide={nnList}
-            quantity="3"
+            newsList={nnList}
+            qualPerRow="3"
             module={[Navigation, Pagination, Scrollbar, A11y, Autoplay]} />
-        </div>
+        </>
       </div>
       <div className="bg-[#eee] py-8">
         <div className="w-[80%] mx-auto">
@@ -160,9 +160,7 @@ const Home: NextPage = () => {
               </svg>
             </h1>
           </div>
-          <div className="flex flex-wrap justify-between">
-            <ActionAreaCard newsList={newsList} />
-          </div>
+          <ActionAreaCard qualPerRow={3} newsList={newsList} />
         </div>
       </div>
       <BackToTop visible={visible} />

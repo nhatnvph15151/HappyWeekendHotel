@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import { DashboardLayout } from '../../../components/dashboard-layout'
 import layoutAdmin from '../../../components/Layout/layoutAdmin'
 import useProducts from '../../../hook/use-product'
 
@@ -106,7 +107,7 @@ const ProductsAdmin = (props: Props) => {
 }
   
 
-ProductsAdmin.Layout = layoutAdmin
+ProductsAdmin.Layout = DashboardLayout
 export default ProductsAdmin
 
 

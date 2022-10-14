@@ -12,50 +12,113 @@ export default function HorizontalLinearStepper() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
 
-    const isStepOptional = (step: any) => {
-        return step === 1;
-    };
+        const isStepOptional = (step: any) => {
+            return step === 1;
+        };
 
-    const isStepSkipped = (step: any) => {
-        return skipped.has(step);
-    };
+        const isStepSkipped = (step: any) => {
+            return skipped.has(step);
+        };
 
-    const handleNext = () => {
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values());
-            newSkipped.delete(activeStep);
-        }
+        const handleNext = () => {
+            let newSkipped = skipped;
+            if (isStepSkipped(activeStep)) {
+                newSkipped = new Set(newSkipped.values());
+                newSkipped.delete(activeStep);
+            }
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
-    };
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setSkipped(newSkipped);
+        };
 
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
+        const handleBack = () => {
+            setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        };
 
-    const handleSkip = () => {
-        if (!isStepOptional(activeStep)) {
-            // You probably want to guard against something like this,
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
-        }
+        const handleSkip = () => {
+            if (!isStepOptional(activeStep)) {
+                // You probably want to guard against something like this,
+                // it should never occur unless someone's actively trying to break something.
+                throw new Error("You can't skip a step that isn't optional.");
+            }
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped((prevSkipped) => {
-            const newSkipped = new Set(prevSkipped.values());
-            newSkipped.add(activeStep);
-            return newSkipped;
-        });
-    };
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            setSkipped((prevSkipped) => {
+                const newSkipped = new Set(prevSkipped.values());
+                newSkipped.add(activeStep);
+                return newSkipped;
+            });
+        };
 
-    const handleReset = () => {
-        setActiveStep(0);
-    };
+        const handleReset = () => {
+            setActiveStep(0);
+        };
+
+    const ConfirmInfo = () => {
+        return (
+            <div className='w-[80%] h-[500px] mx-auto'>
+                <h1 className='text-2xl font-bold'>Kiểm tra đặt phòng của bạn</h1>
+                <div className="border rounded-xl flex justify-between ">
+                    <div className="border-r p-4 basis-1/2">
+                        <label htmlFor="inputStartDate">Nhận phòng</label>
+                        <p>11/10/2022</p>
+                        <p>21:00</p>
+                    </div>
+
+                    <div className="p-4">
+                        <label htmlFor="inputStartDate">Nhận phòng</label>
+                        <p>11/10/2022</p>
+                        <p>21:00</p>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    const ConfirmOrder = () => {
+        return (
+            <div className='w-[80%] h-[500px] mx-auto'>
+                <h1 className='text-2xl font-bold'>Đặt phòng thành công</h1>
+                <div className="border rounded-xl flex justify-between ">
+                    <div className="border-r p-4 basis-1/2">
+                        <label htmlFor="inputStartDate">Nhận phòng</label>
+                        <p>11/10/2022</p>
+                        <p>21:00</p>
+                    </div>
+
+                    <div className="p-4">
+                        <label htmlFor="inputStartDate">Nhận phòng</label>
+                        <p>11/10/2022</p>
+                        <p>21:00</p>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    const ConfirmPayment = () => {
+        return (
+            <div className='w-[80%] h-[500px] mx-auto'>
+                <h1 className='text-2xl font-bold'>Thanh toán</h1>
+                <div className="border rounded-xl flex justify-between ">
+                    <div className="border-r p-4 basis-1/2">
+                        <label htmlFor="inputStartDate">Nhận phòng</label>
+                        <p>11/10/2022</p>
+                        <p>21:00</p>
+                    </div>
+
+                    <div className="p-4">
+                        <label htmlFor="inputStartDate">Nhận phòng</label>
+                        <p>11/10/2022</p>
+                        <p>21:00</p>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 
     return (
-        <Box sx={{ width: '80%', margin: "auto", padding: "10px", boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)", marginBlock: "15px", borderRadius: "15px"}}>
+        <Box sx={{ width: '80%', margin: "auto", padding: "15px", boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)", marginBlock: "15px", borderRadius: "15px" }}>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const stepProps = {};
@@ -87,7 +150,11 @@ export default function HorizontalLinearStepper() {
                 </>
             ) : (
                 <>
-                    <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 17}</Typography>
+                    <>
+                        <Typography sx={{ mt: 2, mb: 1 }}> {activeStep == 0 ? <ConfirmInfo /> : ""} </Typography>
+                        <Typography sx={{ mt: 2, mb: 1 }}> {activeStep == 1 ? <ConfirmPayment/> : ""} </Typography>
+                        <Typography sx={{ mt: 2, mb: 1 }}> {activeStep == 2 ? <ConfirmOrder/> : ""} </Typography>
+                    </>
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Button
                             color="inherit"

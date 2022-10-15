@@ -9,53 +9,16 @@ import 'swiper/css/scrollbar';;
 
 // import required modules
 import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from "swiper";
+import Link from "next/link";
+import ActionAreaCard from "../Card";
 type prop = {
     module: any,
-    slide: [],
-    quantity: any
+    newsList: [],
+    quantity: any,
+    qualPerRow: any
 }
-export default function App({ module, slide, quantity }: prop) {
+export default function App({ module, newsList, quantity, qualPerRow }: prop) {
     return (
-        <div className="py-8">
-            <Swiper
-                navigation
-                autoplay
-                modules={module}
-                className="mySwiper"
-                loop
-                loopFillGroupWithBlank
-                slidesPerView={quantity}
-                centeredSlides
-            >
-                {
-                    slide.map((item: any, index: any) => {
-                        return (
-                            <div key={index} className="">
-                                <SwiperSlide>
-                                    {({ isActive }) => (
-                                        <div className={`${isActive ? "w-full h-[550px] shadow-2xl" : "w-[85%] h-[400px]"} duration-300 select-none overflow-hidden border flex flex-col`}>
-                                            <img className="basis-1/2" src={item.src} alt="" />
-                                            <div className="relative basis-1/2 p-4">
-                                                <div className=" flex justify-between">
-                                                    <h1 className="font-semibold">{item.name} <br /> <span>{item.decript}</span> </h1>
-                                                    <p className="text-[green]">{item.price} đ</p>
-                                                </div>
-                                                <div className="">
-                                                    ⭐⭐⭐⭐⭐
-                                                </div>
-                                                <div className="">
-                                                    <button className={`${isActive ? "bg-[orange] text-white px-8 py-4 shadow-2xl" : "border border-[orange] text-[orange] px-4 py-2"} absolute bottom-5 left-[50%] min-w-[80%] translate-x-[-50%] hover:opacity-50 duration-150`}>Đặt phòng</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                </SwiperSlide>
-                            </div>
-                        )
-                    })
-                }
-            </Swiper>
-        </div>
+        <ActionAreaCard qualPerRow={qualPerRow} newsList={newsList} />
     );
 }

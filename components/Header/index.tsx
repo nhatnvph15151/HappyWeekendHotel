@@ -37,7 +37,7 @@ const Header = (props: Props) => {
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
               </svg>
-              <div className="absolute w-[100%] top-[75px] duration-300 opacity-0 left-[0] invisible p-2 bg-[#fff] drop-shadow rounded shadow-xl group-hover:opacity-100 group-hover:top-[55px] group-hover:visible after:content-[''] after:absolute after:w-[100%] after:h-full after:top-[-30px] after:left-0">
+              <div className="absolute top-[75px] duration-300 opacity-0 left-[0] invisible bg-[#fff] drop-shadow rounded shadow-xl group-hover:opacity-100 group-hover:top-[55px] group-hover:visible after:content-[''] after:absolute after:w-[100%] after:h-full after:top-[-30px] after:left-0">
                 <ul>
                   <li className=''>
                     <Link href="/">

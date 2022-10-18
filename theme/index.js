@@ -155,10 +155,9 @@ export const theme = createTheme({
       default: '#F9FAFC',
       paper: '#FFFFFF'
     },
-    divider: '#E6E8F0',
     primary: {
-      main: '#5048E5',
-      light: '#828DF8',
+      main: '#ffa500',
+      light: '#ffa555',
       dark: '#3832A0',
       contrastText: '#FFFFFF'
     },

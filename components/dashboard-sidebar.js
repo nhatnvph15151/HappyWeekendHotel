@@ -29,9 +29,9 @@ const items = [
     title: 'Users'
   },
   {
-    href: '/admin/product',
+    href: '/admin/room',
     icon: (<BedroomParentIcon fontSize="small" />),
-    title: 'Products'
+    title: 'Rooms'
   },
   {
     href: '/admin/404',

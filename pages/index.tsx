@@ -6,8 +6,11 @@ import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from 'swiper'
 import BackToTop from '../components/BackToTop'
 import HomePageLayout from '../components/Layout/HomePageLayout'
 import ActionAreaCard from '../components/Card'
+import useProducts from '../hook/use-product'
 
 const Home: NextPage = () => {
+  const room = useProducts()
+  
   const [indexTab, setIndexTab] = useState(1);
   const [open, setOpen] = useState(false);
   const personPerRoom = [
@@ -135,9 +138,9 @@ const Home: NextPage = () => {
         <h1 className='text-3xl font-semibold text-[orange] text-center'>NHÀ NGHỈ GIÁ TỐT</h1>
         <>
           <SimpleSwiper
-            newsList={slideList}
+            newsList={room.data}
             qualPerRow="3"
-            module={[Navigation, Pagination, Scrollbar, A11y, Autoplay]} />
+          />
         </>
       </div>
       <div className="w-[80%] mx-auto pt-8">
@@ -146,7 +149,7 @@ const Home: NextPage = () => {
           <SimpleSwiper
             newsList={nnList}
             qualPerRow="3"
-            module={[Navigation, Pagination, Scrollbar, A11y, Autoplay]} />
+          />
         </>
       </div>
       <div className="bg-[#eee] py-8">

@@ -5,12 +5,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import Category_admin_detail from './Category_admin_detail';
-import { Alert, Button, IconButton, Tooltip } from '@mui/material';
+import { Button, IconButton, Tooltip } from '@mui/material';
 import { DashboardLayout } from '../../../components/dashboard-layout';
 import useCategory from '../../../hook/useCategory';
-import axios from 'axios';
 import Head from 'next/head';
-
+import Swal from 'sweetalert2'
 function CategoryAdmin() {
     const e = useCategory();
 
@@ -31,14 +30,26 @@ function CategoryAdmin() {
             refDetail.current.update(item, type)
         },
         remove: (item: any) => {
-            console.log(item);
-            e.dele(item)
-                .then(() => {
-                    alert("Remove success")
-                })
-                .catch(()=>{
-                    alert("Remove fail")
-                })
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result: any) => {
+                if (result.isConfirmed) {
+                    e.dele(item)
+                        .then(() => {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                        })
+                }
+            })
         }
     }
 
@@ -53,25 +64,30 @@ function CategoryAdmin() {
 
     const columns = React.useMemo(
         () => [
-            { field: '_id', type: 'string', width: 70, headerName: "#" },
+            { field: '_id', type: 'string', width: 150, headerName: "#" },
             { field: 'name', type: 'number' },
             {
                 field: 'dayprice',
                 type: 'number',
-                width: 120,
+                width: 150,
             },
             {
                 field: 'image',
                 type: 'string',
-                width: 120,
+                width: 350,
                 renderCell: (params: any) => {
                     return <img src={params.value} alt={"anh"} />
                 }
             },
             {
+                field: 'dayprice',
+                type: 'number',
+                width: 150,
+            },
+            {
                 field: 'actions',
                 type: 'actions',
-                width: 80,
+                width: 150,
                 getActions: (params: any) => [
                     <GridActionsCellItem
                         key={1}
@@ -82,7 +98,7 @@ function CategoryAdmin() {
                                 </IconButton>
                             </Tooltip>}
                         label="Edit"
-                        onClick={() => actionCrud.update(params.id, params)}
+                        onClick={() => actionCrud.update(params.row, params)}
                     />,
                     <GridActionsCellItem
                         key={2}

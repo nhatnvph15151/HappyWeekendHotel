@@ -1,11 +1,14 @@
 import axios from "axios";
+import { useRouter } from "next/router";
 import useSWR from "swr";
-import { creat, remove, } from "../api/rooms";
+import { creat, remove, update, } from "../api/rooms";
 import { ProductType } from "../types/products";
 
 const useProducts = () => {
+    const router = useRouter();
+    const { id } = router.query
     const fetcher = (args: string) => axios.get(args).then(res => res.data)
-    const { data, error, mutate } = useSWR("http://localhost:4000/api/rooms", fetcher);
+    const { data, error, mutate } = useSWR(id ? `http://localhost:4000/api/room/${id}` : "http://localhost:4000/api/rooms", fetcher);
 
     // create
     const add = async (item: ProductType) => {
@@ -17,15 +20,15 @@ const useProducts = () => {
         mutate (data.filter((item: { _id: any; }) => item._id !== id ));    
     };
 
-    // const edit = async (item: ProductType) => {
-    //     const {data : products} = await update(item);
-    //     return data;
-    // };
+    const edit = async (item: ProductType) => {
+        await update(item);
+        mutate();
+    };
 
 
 
     return {
-        // edit,
+        edit,
         add,
         dele,
         data,

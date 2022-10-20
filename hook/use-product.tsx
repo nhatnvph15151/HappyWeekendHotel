@@ -1,11 +1,10 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { creat, remove, update, } from "../api/rooms";
+import { creat, remove, searchRoom, update, } from "../api/rooms";
 import { ProductType } from "../types/products";
 
 const useProducts = (slug: any) => {
-    const router = useRouter();
     
     const fetcher = (args: string) => axios.get(args).then(res => res.data)
     const { data, error, mutate } = useSWR(slug ? `http://localhost:4000/api/rooms/${slug}` : "http://localhost:4000/api/rooms", fetcher);

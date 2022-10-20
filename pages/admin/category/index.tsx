@@ -1,72 +1,139 @@
+/* eslint-disable @next/next/no-img-element */
 import * as React from 'react';
-import { GridActionsCellItem } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import Category_admin_detail from './Category_admin_detail';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
+import { Button, IconButton, Tooltip } from '@mui/material';
 import { DashboardLayout } from '../../../components/dashboard-layout';
-import StickyHeadTable from '../../../components/Table';
-
-const initialRows = [
-    {
-        id: 1,
-        name: 'Damien',
-        age: 25,
-        dateCreated: "17/10/2002",
-        lastLogin: "17/10/2022",
-        isAdmin: true,
-        country: 'Spain',
-        discount: '',
-    },
-    {
-        id: 2,
-        name: 'Nicolas',
-        age: 36,
-        dateCreated: "17/10/2002",
-        lastLogin: "17/10/2022",
-        isAdmin: false,
-        country: 'France',
-        discount: '',
-    },
-    {
-        id: 3,
-        name: 'Kate',
-        age: 19,
-        dateCreated: "17/10/2002",
-        lastLogin: "17/10/2022",
-        isAdmin: false,
-        country: 'Brazil',
-        discount: 'junior',
-    },
-];
-
-type ref = {
-    create: any,
-    update: any
-}
-
-type Row = typeof initialRows[number];
-
+import useCategory from '../../../hook/useCategory';
+import Head from 'next/head';
+import Swal from 'sweetalert2'
 function CategoryAdmin() {
-    const [rows, setRows] = React.useState<Row[]>(initialRows);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const e = useCategory();
+
+    const [rows, setRows] = React.useState([{ _id: 1, name: null }]);
     const refDetail = React.useRef();
-    const create = (item: any, type: any) => {
-        refDetail.current.create(item, type)
+
+    React.useEffect(() => {
+        if (e.data) {
+            setRows(e.data)
+        }
+    }, [e.data])
+
+    const actionCrud = {
+        create: (item: any, type: any) => {
+            refDetail.current.create(item, type)
+        },
+        update: (item: any, type: any) => {
+            refDetail.current.update(item, type)
+        },
+        remove: (item: any) => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result: any) => {
+                if (result.isConfirmed) {
+                    e.dele(item)
+                        .then(() => {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                        })
+                }
+            })
+        }
     }
-    const update = (item: any, type: any) => {
-        refDetail.current.update(item, type)
-    }
+
+    const deleteUser = React.useCallback(
+        (id: any) => () => {
+            setTimeout(() => {
+                setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+            });
+        },
+        [],
+    )
+
+    const columns = React.useMemo(
+        () => [
+            { field: '_id', type: 'string', width: 150, headerName: "#" },
+            { field: 'name', type: 'number' },
+            {
+                field: 'dayprice',
+                type: 'number',
+                width: 150,
+            },
+            {
+                field: 'image',
+                type: 'string',
+                width: 350,
+                renderCell: (params: any) => {
+                    return <img src={params.value} alt={"anh"} />
+                }
+            },
+            {
+                field: 'dayprice',
+                type: 'number',
+                width: 150,
+            },
+            {
+                field: 'actions',
+                type: 'actions',
+                width: 150,
+                getActions: (params: any) => [
+                    <GridActionsCellItem
+                        key={1}
+                        icon={
+                            <Tooltip title="Edit">
+                                <IconButton>
+                                    <EditIcon />
+                                </IconButton>
+                            </Tooltip>}
+                        label="Edit"
+                        onClick={() => actionCrud.update(params.row, params)}
+                    />,
+                    <GridActionsCellItem
+                        key={2}
+                        icon={
+                            <Tooltip title="Delete">
+                                <IconButton>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>}
+                        label="Delete"
+                        onClick={() => actionCrud.remove(params.id)}
+                    />
+                ],
+            },
+        ],
+        [deleteUser],
+    );
 
     return (
         <div style={{ width: '100%', padding: "15px" }}>
-            <Button variant='contained' sx={{ color: "orange" }} onClick={() => create(1, "CREATE")}>
+            <Head>
+                <title>
+                    Customers
+                </title>
+            </Head>
+            <Button variant='text' sx={{ color: "orange" }} onClick={() => actionCrud.create(1, "CREATE")}>
                 <AddIcon /> Thêm mới
             </Button>
             <Category_admin_detail ref={refDetail} />
-            <StickyHeadTable />
+            <div className="h-[600px]">
+                <DataGrid
+                    columns={columns}
+                    rows={rows}
+                    getRowId={(row) => row._id} />
+            </div>
         </div>
     );
 }

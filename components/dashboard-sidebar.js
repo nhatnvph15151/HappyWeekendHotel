@@ -3,18 +3,14 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { Box, Button, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { ChartBar as ChartBarIcon } from '../icons/chart-bar';
-import { Cog as CogIcon } from '../icons/cog';
-import { Lock as LockIcon } from '../icons/lock';
 import { Selector as SelectorIcon } from '../icons/selector';
-import { ShoppingBag as ShoppingBagIcon } from '../icons/shopping-bag';
-import { User as UserIcon } from '../icons/user';
-import { UserAdd as UserAddIcon } from '../icons/user-add';
-import { Users as UsersIcon } from '../icons/users';
 import { XCircle as XCircleIcon } from '../icons/x-circle';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
+import CategoryIcon from '@mui/icons-material/Category';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import BedroomParentIcon from '@mui/icons-material/BedroomParent';
 
 const items = [
   {
@@ -24,16 +20,21 @@ const items = [
   },
   {
     href: '/admin/category',
-    icon: (<UsersIcon fontSize="small" />),
-    title: 'Customers'
+    icon: (<CategoryIcon fontSize="small" />),
+    title: 'Category'
   },
   {
-    href: '/admin/product',
-    icon: (<ShoppingBagIcon fontSize="small" />),
-    title: 'Products'
+    href: '/admin/user',
+    icon: (<PeopleAltIcon fontSize="small" />),
+    title: 'Users'
   },
   {
-    href: '/404',
+    href: '/admin/room',
+    icon: (<BedroomParentIcon fontSize="small" />),
+    title: 'Rooms'
+  },
+  {
+    href: '/admin/404',
     icon: (<XCircleIcon fontSize="small" />),
     title: 'Error'
   }

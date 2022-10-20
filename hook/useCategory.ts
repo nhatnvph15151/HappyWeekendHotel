@@ -21,7 +21,7 @@ const useCategory = () => {
 
     const dele = async (id: any) => {
         await remove(id);
-        mutate(data.filter((item: any) => item.id !== id))
+        mutate(data.filter((item: any) => item._id !== id))
     }
 
 

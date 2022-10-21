@@ -151,14 +151,16 @@ export const theme = createTheme({
       disabledBackground: 'rgba(55, 65, 81, 0.12)',
       disabled: 'rgba(55, 65, 81, 0.26)'
     },
+    button: {
+      primary: "#ffa500"
+    },
     background: {
-      default: '#F9FAFC',
+      default: '#ffa500',
       paper: '#FFFFFF'
     },
-    divider: '#E6E8F0',
     primary: {
-      main: '#5048E5',
-      light: '#828DF8',
+      main: '#ffa500',
+      light: '#ffa555',
       dark: '#3832A0',
       contrastText: '#FFFFFF'
     },

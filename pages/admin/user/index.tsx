@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import { DashboardLayout } from '../../../components/dashboard-layout'
 import layoutAdmin from '../../../components/Layout/layoutAdmin'
 import userUser from '../../../hook/use-user'
 
@@ -58,7 +59,7 @@ const UserAdmin = (props: Props) => {
                                   </tr>
                               </thead>
                               <tbody>
-                              {data?.map((item, index) => (
+                              {data?.map((item: any, index:any) => (
                                   <tr key={item._id}>
                                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <p className="text-gray-900 whitespace-no-wrap">
@@ -141,7 +142,7 @@ const UserAdmin = (props: Props) => {
 }
   
 
-UserAdmin.Layout = layoutAdmin
+UserAdmin.Layout = DashboardLayout
 export default UserAdmin
 
 

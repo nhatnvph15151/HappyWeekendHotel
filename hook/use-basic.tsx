@@ -1,17 +1,14 @@
 import axios from "axios";
-import { useRouter } from "next/router";
 import useSWR from "swr";
-import { creat, remove, update, } from "../api/rooms";
-import { ProductType } from "../types/products";
+import { creat, remove, update } from "../api/basic";
 
-const useProducts = (slug: any) => {
-    const router = useRouter();
+const useBasic = (slug: any) => {
     
     const fetcher = (args: string) => axios.get(args).then(res => res.data)
-    const { data, error, mutate } = useSWR(slug ? `http://localhost:4000/api/rooms/${slug}` : "http://localhost:4000/api/rooms", fetcher);
+    const { data, error, mutate } = useSWR(slug ? `http://localhost:4000/api/basic/${slug}` : "http://localhost:4000/api/basic", fetcher);
 
     // create
-    const add = async (item: ProductType) => {
+    const add = async (item: any) => {
         const products = await creat(item);
         mutate ([...data, products]);
     };
@@ -20,10 +17,10 @@ const useProducts = (slug: any) => {
         mutate (data.filter((item: { _id: any; }) => item._id !== id ));    
     };
 
-    const edit = async (item: ProductType) => {
+    const edit = async (item: any) => {
         await update(item);
         mutate();
-    };
+    };    
 
     return {
         edit,
@@ -34,4 +31,4 @@ const useProducts = (slug: any) => {
     };
 };
 
-export default useProducts;
+export default useBasic;

@@ -13,13 +13,16 @@ type props = {
 }
 
 export default function ActionAreaCard({ newsList, qualPerRow }: props) {
+  function createMarkup(item: any) {
+    return { __html: item };
+  }
   return (
     <div className={`grid grid-cols-${qualPerRow} gap-4 place-content-center `}>
       {newsList?.map((item: any, index: any) => {
         return (
           <Link href={`/booking_detail/${item.slug}`} key={index}>
             <Card sx={{ maxWidth: 345 }}>
-              <CardActionArea sx={{ display: "flex", flexDirection: "column", alignContent: "space-between", justifyContent:"space-between" }}>
+              <CardActionArea sx={{ display: "flex", flexDirection: "column", alignContent: "space-between", justifyContent: "space-between" }}>
                 <div className="overflow-hidden w-[345px] h-[200px]">
                   <img src={item.src || item.image} className="w-full h-full" alt="" />
                 </div>
@@ -28,6 +31,7 @@ export default function ActionAreaCard({ newsList, qualPerRow }: props) {
                     {item.name}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
+                    {/* <p dangerouslySetInnerHTML={createMarkup(item.description || "cvjkncjsnvjsjihvbcn skbsdicsjdcdncbhsdbcdscjancs cjksbcskcbsjh vj")}></p> */}
                     {item.description || "cvjkncjsnvjsjihvbcn skbsdicsjdcdncbhsdbcdscjancs cjksbcskcbsjh vj"}
                   </Typography>
                 </CardContent>

@@ -22,6 +22,6 @@ export const creat = (product: any) => {
 }
 
 export const update = (product: any) => {
-    const url = `basic/${product._id}`;
+    const url = `basic/${product._id}/edit`;
     return instance.put(url, product)
 }

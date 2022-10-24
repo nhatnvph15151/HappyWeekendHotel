@@ -20,6 +20,6 @@ export const creat = (product: any) => {
 }
 
 export const update = (id:any ,product: any) => {
-    const url = `category/${id}`;
+    const url = `category/${id}/edit`;
     return instance.put(url, product)
 }

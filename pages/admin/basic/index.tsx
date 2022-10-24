@@ -4,15 +4,15 @@ import Link from 'next/link'
 import React from 'react'
 import { DashboardLayout } from '../../../components/dashboard-layout'
 import AddIcon from '@mui/icons-material/Add';
-import useProducts from '../../../hook/use-product'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Swal from 'sweetalert2'
+import useBasic from '../../../hook/use-basic';
 
 type Props = {}
 
 const ProductsAdmin = (props: Props) => {
-    const { data, error, dele } = useProducts()
+    const { data, error, dele } = useBasic()
     const [page, setPage] = React.useState(2);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -57,7 +57,7 @@ const ProductsAdmin = (props: Props) => {
                     <title>Rooms</title>
                 </head>
                 <div className="">
-                    <Link href={'/admin/room/add'}>
+                    <Link href={'/admin/basic/add'}>
                         <button type="button" className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900">
                             Tạo phòng mới <AddIcon />
                         </button>
@@ -74,13 +74,7 @@ const ProductsAdmin = (props: Props) => {
                                             Name
                                         </th>
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            price
-                                        </th>
-                                        <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            image
-                                        </th>
-                                        <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            description
+                                            address
                                         </th>
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
                                         </th>
@@ -105,21 +99,11 @@ const ProductsAdmin = (props: Props) => {
                                             </td>
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
-                                                    {item.price}
+                                                    {item.address}
                                                 </p>
                                             </td>
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
-                                                    <img src={item.image ? item.image : "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80"} className="w-[100px] h-[100px]" alt="" />
-                                                </div>
-                                            </td>
-                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                <p className="text-gray-900 whitespace-no-wrap">
-                                                    {item.description}
-                                                </p>
-                                            </td>
-                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                <Link href={`/admin/room/${item.slug}`}>
+                                                <Link href={`/admin/basic/${item._id}`}>
                                                     <Tooltip title="Chỉnh sửa">
                                                         <Button variant="text" startIcon={<EditIcon />}>
                                                             Edit

@@ -34,6 +34,11 @@ const items = [
     title: 'Rooms'
   },
   {
+    href: '/admin/basic',
+    icon: (<BedroomParentIcon fontSize="small" />),
+    title: 'Basic'
+  },
+  {
     href: '/admin/404',
     icon: (<XCircleIcon fontSize="small" />),
     title: 'Error'

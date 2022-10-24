@@ -147,7 +147,7 @@ const Home: NextPage = () => {
         <h1 className='text-3xl font-semibold text-[orange] text-center'>NHÀ NGHỈ HOT</h1>
         <>
           <SimpleSwiper
-            newsList={nnList}
+            newsList={room.data}
             qualPerRow="3"
           />
         </>

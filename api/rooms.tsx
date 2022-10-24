@@ -22,7 +22,7 @@ export const creat = (product: ProductType) => {
 }
 
 export const update = (product: ProductType) => {
-    const url = `rooms/${product._id}`;
+    const url = `rooms/${product._id}/edit`;
     return instance.put(url, product)
 }
 

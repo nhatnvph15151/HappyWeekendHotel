@@ -1,29 +1,22 @@
-import React, { useEffect, useRef } from "react";
-export default function CKeditor({ onChange, editorLoaded, name, value }) {
-    const editorRef = useRef();
-    const { CKEditor, ClassicEditor } = editorRef.current || {};
-    useEffect(() => {
-        editorRef.current = {
-            CKEditor: require("@ckeditor/ckeditor5-react").CKEditor,
-            ClassicEditor: require("@ckeditor/ckeditor5-build-classic")
-        };
-    }, []);
-    return (
-        <>
-            {editorLoaded ? (
+import React, { Component } from 'react';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+class App extends Component {
+    render() {
+        return (
+            <div className="App">
                 <CKEditor
-                    type=""
-                    name={name}
                     editor={ClassicEditor}
-                    data={value}
+                    data={this.props?.getDesc()}
                     onChange={(event, editor) => {
                         const data = editor.getData();
-                        onChange(data);
+                        this.props.parentCallBack(data)
                     }}
                 />
-            ) : (
-                <div>Editor loading</div>
-            )}
-        </>
-    )
+            </div>
+        );
+    }
 }
+
+export default App;

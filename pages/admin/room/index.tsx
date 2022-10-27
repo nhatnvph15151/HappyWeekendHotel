@@ -12,7 +12,7 @@ import Swal from 'sweetalert2'
 type Props = {}
 
 const ProductsAdmin = (props: Props) => {
-    const { data, error, dele } = useProducts()
+    const { data, error, dele } = useProducts("")
     const [page, setPage] = React.useState(2);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -29,25 +29,23 @@ const ProductsAdmin = (props: Props) => {
 
     function remove(id: any) {
         return Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: 'Chắc chắn xóa?',
+            text: "Xóa sẽ mất toàn bộ dữ liệu phòng này!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: "Hủy"
         }).then((result: any) => {
             if (result.isConfirmed) {
                 dele(id)
                     .then(() => {
                         Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
+                            'Đã xóa!',
+                            'Phòng này đã xóa thành công'
                         )
-                    })
-            }
-        })
+        })}})
     }
 
     return (
@@ -58,7 +56,7 @@ const ProductsAdmin = (props: Props) => {
                 </head>
                 <div className="">
                     <Link href={'/admin/room/add'}>
-                        <button type="button" className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900">
+                        <button type="button" className="text-white bg-[#111827] hover:bg-[#1118276b] focus:outline-none focus:ring-4 focus:ring-[#111827] font-medium rounded-xl text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-[#111827]">
                             Tạo phòng mới <AddIcon />
                         </button>
                     </Link>
@@ -87,7 +85,7 @@ const ProductsAdmin = (props: Props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data?.map((item, index) => (
+                                    {data?.map((item: any, index: any) => (
                                         <tr key={item._id} className="cursor-pointer select-none">
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
@@ -109,7 +107,7 @@ const ProductsAdmin = (props: Props) => {
                                                 </p>
                                             </td>
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
+                                                <div className="w-[50px] h-[50px] rounded-xl overflow-hidden shadow-xl">
                                                     <img src={item.image ? item.image : "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80"} className="w-[100px] h-[100px]" alt="" />
                                                 </div>
                                             </td>
@@ -120,14 +118,14 @@ const ProductsAdmin = (props: Props) => {
                                             </td>
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <Link href={`/admin/room/${item.slug}`}>
-                                                    <Tooltip title="Chỉnh sửa">
-                                                        <Button variant="text" startIcon={<EditIcon />}>
+                                                    <Tooltip title={`Chỉnh sửa ${item.name}`}>
+                                                        <Button className='text-[#111827]' variant="text" startIcon={<EditIcon />}>
                                                             Edit
                                                         </Button>
                                                     </Tooltip>
                                                 </Link>
-                                                <Tooltip title="Xóa">
-                                                    <Button onClick={() => { remove(item._id) }} variant="text" startIcon={<DeleteIcon />}>
+                                                <Tooltip title={`Xóa ${item.name}`}>
+                                                    <Button onClick={() => { remove(item._id) }} className='text-[red]' variant="text" startIcon={<DeleteIcon />}>
                                                         Delete
                                                     </Button>
                                                 </Tooltip>

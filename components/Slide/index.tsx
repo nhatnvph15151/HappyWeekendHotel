@@ -10,11 +10,10 @@ import 'swiper/css/scrollbar';;
 // import required modules
 import ActionAreaCard from "../Card";
 type prop = {
-    newsList: [],
-    qualPerRow: any
+    newsList: []
 }
-export default function App({ newsList, qualPerRow }: prop) {
+export default function App({ newsList }: prop) {
     return (
-        <ActionAreaCard qualPerRow={qualPerRow} newsList={newsList} />
+        <ActionAreaCard newsList={newsList} />
     );
 }

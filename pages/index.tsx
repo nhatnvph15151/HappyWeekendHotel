@@ -126,5 +126,5 @@ const Home: NextPage = () => {
   )
 }
 
-Home.Layout = HomePageLayout
+Home.Layout = HomePageLayout 
 export default Home

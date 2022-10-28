@@ -37,6 +37,8 @@ const BookingDetail = ({ product }: ProductProps) => {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
+        console.log(open);
+        
         setOpen(true);
     };
 

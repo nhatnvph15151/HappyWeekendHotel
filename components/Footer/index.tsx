@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react'
+import Link from 'next/link'
 
 type Props = {}
 
@@ -32,10 +33,15 @@ const Footer = (props: Props) => {
             <h2 className="mb-6 text-normal font-bold text-[black] uppercase dark:text-gray-400">Giới thiệu</h2>
             <ul className="text-[black] dark:text-gray-400">
               <li className="mb-4">
-                <a href="#" className="hover:underline text-sm">Về chúng tôi</a>
+                <Link href="/introduce" className="hover:underline text-sm" >
+                  Về chúng tôi
+                </Link>
               </li>
               <li className="mb-4">
-                <a href="#" className="hover:underline text-sm">Trang blog</a>
+              <Link href="/blog" className="hover:underline text-sm" >
+                Trang blog
+                </Link>
+                {/* <a href="#" className="hover:underline text-sm">Trang blog</a> */}
               </li>
               <li className="mb-4">
                 <a href="#" className="hover:underline text-sm">Qui chế hoạt động website</a>

@@ -1,182 +1,166 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import Link from 'next/link'
+import React, { useState } from 'react'
 
-const steps = ['Xác nhận thông tin', 'Tiến hành thanh toán', 'Đặt phòng thành công'];
+type Props = {}
 
-export default function HorizontalLinearStepper() {
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set());
-
-        const isStepOptional = (step: any) => {
-            return step === 1;
-        };
-
-        const isStepSkipped = (step: any) => {
-            return skipped.has(step);
-        };
-
-        const handleNext = () => {
-            let newSkipped = skipped;
-            if (isStepSkipped(activeStep)) {
-                newSkipped = new Set(newSkipped.values());
-                newSkipped.delete(activeStep);
-            }
-
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            setSkipped(newSkipped);
-        };
-
-        const handleBack = () => {
-            setActiveStep((prevActiveStep) => prevActiveStep - 1);
-        };
-
-        const handleSkip = () => {
-            if (!isStepOptional(activeStep)) {
-                // You probably want to guard against something like this,
-                // it should never occur unless someone's actively trying to break something.
-                throw new Error("You can't skip a step that isn't optional.");
-            }
-
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            setSkipped((prevSkipped) => {
-                const newSkipped = new Set(prevSkipped.values());
-                newSkipped.add(activeStep);
-                return newSkipped;
-            });
-        };
-
-        const handleReset = () => {
-            setActiveStep(0);
-        };
-
-    const ConfirmInfo = () => {
-        return (
-            <div className='w-[80%] h-[500px] mx-auto'>
-                <h1 className='text-2xl font-bold'>Kiểm tra đặt phòng của bạn</h1>
-                <div className="border rounded-xl flex justify-between ">
-                    <div className="border-r p-4 basis-1/2">
-                        <label htmlFor="inputStartDate">Nhận phòng</label>
-                        <p>11/10/2022</p>
-                        <p>21:00</p>
-                    </div>
-
-                    <div className="p-4">
-                        <label htmlFor="inputStartDate">Nhận phòng</label>
-                        <p>11/10/2022</p>
-                        <p>21:00</p>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    const ConfirmOrder = () => {
-        return (
-            <div className='w-[80%] h-[500px] mx-auto'>
-                <h1 className='text-2xl font-bold'>Đặt phòng thành công</h1>
-                <div className="border rounded-xl flex justify-between ">
-                    <div className="border-r p-4 basis-1/2">
-                        <label htmlFor="inputStartDate">Nhận phòng</label>
-                        <p>11/10/2022</p>
-                        <p>21:00</p>
-                    </div>
-
-                    <div className="p-4">
-                        <label htmlFor="inputStartDate">Nhận phòng</label>
-                        <p>11/10/2022</p>
-                        <p>21:00</p>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    const ConfirmPayment = () => {
-        return (
-            <div className='w-[80%] h-[500px] mx-auto'>
-                <h1 className='text-2xl font-bold'>Thanh toán</h1>
-                <div className="border rounded-xl flex justify-between ">
-                    <div className="border-r p-4 basis-1/2">
-                        <label htmlFor="inputStartDate">Nhận phòng</label>
-                        <p>11/10/2022</p>
-                        <p>21:00</p>
-                    </div>
-
-                    <div className="p-4">
-                        <label htmlFor="inputStartDate">Nhận phòng</label>
-                        <p>11/10/2022</p>
-                        <p>21:00</p>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
+const index = (props: Props) => {
+    const [indextext, setindextex] = useState(1)
     return (
-        <Box sx={{ width: '80%', margin: "auto", padding: "15px", boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)", marginBlock: "15px", borderRadius: "15px" }}>
-            <Stepper activeStep={activeStep}>
-                {steps.map((label, index) => {
-                    const stepProps = {};
-                    const labelProps = {};
-                    if (isStepOptional(index)) {
-                        labelProps.optional = (
-                            <Typography variant="caption">Optional (Nếu bạn thanh toán trực tiếp tại nhà nghỉ)</Typography>
-                        );
-                    }
-                    if (isStepSkipped(index)) {
-                        stepProps.completed = false;
-                    }
-                    return (
-                        <Step key={label} {...stepProps}>
-                            <StepLabel {...labelProps}>{label}</StepLabel>
-                        </Step>
-                    );
-                })}
-            </Stepper>
-            {activeStep === steps.length ? (
-                <>
-                    <Typography sx={{ mt: 2, mb: 1 }}>
-                        All steps completed - you&apos;re finished
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                        <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleReset}>Reset</Button>
-                    </Box>
-                </>
-            ) : (
-                <>
-                    <>
-                        <Typography sx={{ mt: 2, mb: 1 }}> {activeStep == 0 ? <ConfirmInfo /> : ""} </Typography>
-                        <Typography sx={{ mt: 2, mb: 1 }}> {activeStep == 1 ? <ConfirmPayment/> : ""} </Typography>
-                        <Typography sx={{ mt: 2, mb: 1 }}> {activeStep == 2 ? <ConfirmOrder/> : ""} </Typography>
-                    </>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                        <Button
-                            color="inherit"
-                            disabled={activeStep === 0}
-                            onClick={handleBack}
-                            sx={{ mr: 1 }}
-                        >
-                            Back
-                        </Button>
-                        <Box sx={{ flex: '1 1 auto' }} />
-                        {isStepOptional(activeStep) && (
-                            <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                                Skip
-                            </Button>
-                        )}
+        <div>
+            <div className='max-w-6xl m-auto py-[50px]'>
+                <h1 className='text-[30px] font-bold'>Payment Options</h1>
+                <div>
+                    <ul className='flex my-[20px]'>
+                        <li className='pr-[35px] text-[15px]'>Creadit card</li>
+                        <li className='pr-[35px] text-[15px]'>Online banking</li>
+                        <li className='pr-[35px] text-[15px]'>Payment Partners</li>
+                    </ul>
+                </div>
+                <div className='flex my-[50px]'>
+                    <div className='w-3/5 mr-[50px]'>
+                        <div className='flex'>
+                            <Link href={`/payment`}>
+                                <button className='pr-[35px]' onClick={() => { setindextex(1) }} >
+                                    <img width={87} className={`${indextext == 1 ? 'text-[red] border-b-[2px] border-[red] py-[17px]' : "py-[17px]"}`} src='https://res.cloudinary.com/dkrifqhuk/image/upload/v1665730160/asm/1920px-Visa_2021.svg_ymj3ep.png' alt="" />
+                                </button>
+                            </Link>
+                            <Link href={`/payment`}>
+                                <button className='pl-[65px]' onClick={() => { setindextex(2) }} >
+                                    <img width={120} className={`${indextext == 2 ? 'text-[red]  border-b-[2px] border-[red] py-[15px]' : "py-[15px]"}`} src='https://res.cloudinary.com/dkrifqhuk/image/upload/v1665730465/asm/PayPal_logo_pmzltf.svg' alt="" />
+                                </button>
+                            </Link>
 
-                        <Button onClick={handleNext}>
-                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                        </Button>
-                    </Box>
-                </>
-            )}
-        </Box>
-    );
+                        </div>
+                        {/* Form Payment */}
+                        <div>
+                            <div className="mt-[50px]">
+                                {/* <div className="md:col-span-1">
+                                    <div className="px-4 sm:px-0">
+                                        <h3 className="text-lg font-medium leading-6 text-gray-900">Personal Information</h3>
+                                        <p className="mt-1 text-sm text-gray-600">Use a permanent address where you can receive mail.</p>
+                                    </div>
+                                </div> */}
+                                <div className="mt-5 md:col-span-2 md:mt-[30px]">
+                                    <form action="#" method="POST">
+                                        <div className="overflow-hidden shadow sm:rounded-md">
+                                            <div className="bg-white px-4 py-5 sm:p-6">
+                                                <div className="grid grid-cols-6 gap-6">
+                                                    <div className="col-span-6 sm:col-span-3">
+                                                        <label className="block text-sm font-medium text-gray-700">First name</label>
+                                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                                    </div>
+
+                                                    <div className="col-span-6 sm:col-span-3">
+                                                        <label className="block text-sm font-medium text-gray-700">Last name</label>
+                                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                                    </div>
+
+                                                    <div className="col-span-6 sm:col-span-4">
+                                                        <label className="block text-sm font-medium text-gray-700">Email address</label>
+                                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                                    </div>
+
+                                                    <div className="col-span-6 sm:col-span-3">
+                                                        <label className="block text-sm font-medium text-gray-700">Country</label>
+                                                        <select id="country" name="country" className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                                                            <option>United States</option>
+                                                            <option>Canada</option>
+                                                            <option>Mexico</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div className="col-span-6">
+                                                        <label className="block text-sm font-medium text-gray-700">Street address</label>
+                                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+
+                                                    </div>
+
+                                                    <div className="col-span-6 sm:col-span-6 lg:col-span-2">
+                                                        <label className="block text-sm font-medium text-gray-700">City</label>
+                                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                                    </div>
+
+                                                    <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+                                                        <label className="block text-sm font-medium text-gray-700">State / Province</label>
+                                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                                    </div>
+
+                                                    <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+                                                        <label className="block text-sm font-medium text-gray-700">ZIP / Postal code</label>
+                                                        <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+                                                <button type="submit" className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {/* </div> */}
+                    </div>
+                    <div className='bg-gray-400 w-[2px] h-[600px] mx-[50px]'></div>
+                    <div>
+                        <h1 className='text-[25px] font-bold'>Booking Samary</h1>
+                        <div className='w-[270px] w-full mt-[50px]'>
+                            <div className='flex py-[5px]'>
+                                <p className=' w-2/3  float-left'>
+                                    <span className='font-medium text-gray-500'>Hotel fee - 2 adiut</span>
+
+                                </p>
+                                <p className='float-right w-1/3 '>
+                                    <span className='float-right font-medium  text-gray-500 font-serif'>00$</span>
+                                </p>
+                            </div>
+                            <div className='flex py-[5px]'>
+                                <p className=' w-2/3  float-left'>
+                                    <span className='font-medium  text-gray-500'>Taxes and fees</span>
+
+                                </p>
+                                <p className='float-right w-1/3 '>
+                                    <span className='float-right font-medium  text-gray-500 font-serif'>00$</span>
+                                </p>
+                            </div>
+                            <div className='flex py-[15     px]'>
+                                <p className=' w-2/3  float-left'>
+                                    <span className=' font-bold text-[18px] text-orange-500'>Subtotal</span>
+
+                                </p>
+                                <p className='float-right w-1/3'>
+                                    <span className='float-right font-bold text-[18px] font-serif text-orange-500'>00$</span>
+                                </p>
+                            </div>
+                            <div className='flex'>
+                                <p className='w-2/3  float-left'>
+                                    <span className='font-medium  text-gray-500'>Service tax</span>
+
+                                </p>
+                                <p className='float-right w-1/3'>
+                                    <span className='float-right font-serif font-medium  text-gray-500'>00$</span>
+                                </p>
+
+                            </div>
+                            <div className='flex pt-[50px]'>
+                                <p className=' w-2/3  float-left '>
+                                    <span className='font-bold text-[18px] text-orange-500'>Total</span>
+
+                                </p>
+                                <p className='float-right w-1/3 '>
+                                    <span className='float-right font-serif font-bold text-[18px] font-serif text-orange-500'>00$</span>
+                                </p>
+                            </div>
+                        </div>
+                        <button className='float-none py-[5px] px-[15px] bg-orange-500 text-white font-medium rounded-lg mt-[30px]'>Pay now</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    )
 }
+
+export default index

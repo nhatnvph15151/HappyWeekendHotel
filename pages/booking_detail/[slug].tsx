@@ -8,8 +8,6 @@ import {useForm,SubmitHandler} from 'react-hook-form'
 import axios from 'axios'
 import useStatus from '../../hook/use-status'
 import { creatOrder } from '../../api/order'
-import { OrderType } from '../../types/order'
-import { StatusType } from '../../types/statusroom'
 type ProductProps = {
     product: ProductType
 }

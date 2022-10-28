@@ -33,6 +33,11 @@ const items = [
     title: 'Products'
   },
   {
+    href: '/admin/order',
+    icon: (<CogIcon fontSize="small" />),
+    title: 'Order'
+  },
+  {
     href: '/404',
     icon: (<XCircleIcon fontSize="small" />),
     title: 'Error'

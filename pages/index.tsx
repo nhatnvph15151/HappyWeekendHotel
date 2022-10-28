@@ -100,7 +100,7 @@ const Home: NextPage = () => {
       <div className="w-[80%] mx-auto pt-2">
         <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ HOT</h1>
         <>
-          <SimpleSwiper
+          <SimpJleSwiper
             newsList={room.data}
           />
         </>

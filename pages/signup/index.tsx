@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 import AuthLayout from '../../components/Layout/AuthLayout'
 
@@ -5,7 +6,8 @@ type Props = {}
 
 const Signin = (props: Props) => {
     return (
-        <div>
+        <div className='overflow-hidden h-[100vh]'>
+            <Link href={'/'}><button className='relative top-[50px] left-[100px] border bg-[#fac26f] hover:bg-[#fed496] px-6 py-2 rounded-full text-white'>Trở về</button></Link>
             <div className='flex items-center h-[100vh] justify-center'>
                 <div className="w-[70%] h-[600px] shadow-2xl rounded-xl mx-auto container flex justify-between items-center">
                     <div className='maskgroup relative  w-[366px] h-[600px] shadow-2xl shadow-[#ffd79a] bg-[#fed496] overflow-hidden rounded-[30px] '>

@@ -48,6 +48,8 @@ const BookingDetail = ({ product }: ProductProps) => {
     }), []
 
     const handleClickOpen = () => {
+        console.log(open);
+        
         setOpen(true);
     };
 

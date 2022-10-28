@@ -10,7 +10,7 @@ import useProducts from '../hook/use-product'
 import Link from 'next/link'
 
 const Home: NextPage = () => {
-  const room = useProducts()
+  const room = useProducts("")
 
   const [indexTab, setIndexTab] = useState(1);
   const [open, setOpen] = useState(false);

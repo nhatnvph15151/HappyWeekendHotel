@@ -9,12 +9,10 @@ import useBasic from '../../../hook/use-basic'
 import { useRouter } from 'next/router'
 import CKeditor from '../../../components/CkEditor'
 import App from '../../../components/CkEditor'
-import e from 'express'
 
 type Props = {}
 
 type formInput = {
-  basic: string,
   category: string,
   description: string,
   image: string,

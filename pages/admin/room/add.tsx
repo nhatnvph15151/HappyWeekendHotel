@@ -5,9 +5,9 @@ import { DashboardLayout } from '../../../components/dashboard-layout'
 import useProducts from '../../../hook/use-product'
 import useCategory from '../../../hook/useCategory'
 import Head from 'next/head'
-import useBasic from '../../../hook/use-basic'
 // import App from '../../../components/CkEditor'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 
 const App = dynamic(() => import('../../../components/CkEditor'), {
   ssr: false
@@ -25,8 +25,8 @@ type formInput = {
 }
 
 const AddRoom = (props: Props) => {
+  const router = useRouter();
   const room = useProducts("")
-  const basic = useBasic("")
   const category = useCategory()
   const [loading, setLoading] = React.useState(true)
   const [editorLoaded, setEditorLoaded] = React.useState(false);
@@ -38,9 +38,9 @@ const AddRoom = (props: Props) => {
     setdesc(child)
     return child
   }
-  
-  function getDesc () {
-    
+
+  function getDesc() {
+
   }
 
   React.useEffect(() => {
@@ -67,9 +67,11 @@ const AddRoom = (props: Props) => {
       try {
         room.add(data).then(() => {
           setLoading(true)
+          router.push("/admin/room")
         }
         )
       } catch (error) {
+        
         console.log(error);
       }
     })
@@ -93,27 +95,15 @@ const AddRoom = (props: Props) => {
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" htmlFor="file_input">Ảnh phòng</label>
             <input name="image" {...register('image')} className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file" />
           </div>
-          <div className="grid md:grid-cols-2 md:gap-6">
-            <div className="relative z-0 mb-6 w-full group">
-              <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Chọn một loại phòng</label>
-              <select {...register('category')} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {category.data?.map((item: any, index: any) => {
-                  return (
-                    <option key={index} value={item._id}>{item?.name}</option>
-                  )
-                })}
-              </select>
-            </div>
-            <div className="relative z-0 mb-6 w-full group">
-              <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Chọn một Basic</label>
-              <select {...register('basic')} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {basic.data?.map((item: any, index: any) => {
-                  return (
-                    <option key={index} value={item._id}>{item?.name}</option>
-                  )
-                })}
-              </select>
-            </div>
+          <div className="relative z-0 mb-6 w-full group">
+            <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Chọn một loại phòng</label>
+            <select {...register('category')} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              {category.data?.map((item: any, index: any) => {
+                return (
+                  <option key={index} value={item._id}>{item?.name}</option>
+                )
+              })}
+            </select>
           </div>
 
           <div className="relative z-0 mb-6 w-full group">

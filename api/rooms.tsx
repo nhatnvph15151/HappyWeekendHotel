@@ -26,3 +26,7 @@ export const update = (product: ProductType) => {
     return instance.put(url, product)
 }
 
+export const searchRoom = () => {
+    const url = `room/`;
+    return instance.get(url)
+}

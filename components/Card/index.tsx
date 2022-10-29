@@ -8,16 +8,13 @@ import { CardActionArea } from '@mui/material';
 import Link from 'next/link';
 
 type props = {
-  newsList: any,
-  qualPerRow: any
+  newsList: any
 }
 
-export default function ActionAreaCard({ newsList, qualPerRow }: props) {
-  function createMarkup(item: any) {
-    return { __html: item };
-  }
+export default function ActionAreaCard({ newsList }: props) {
+
   return (
-    <div className={`grid grid-cols-${qualPerRow} gap-4 place-content-center `}>
+    <div className={`grid grid-cols-3 gap-4 place-content-center `}>
       {newsList?.map((item: any, index: any) => {
         return (
           <Link href={`/booking_detail/${item.slug}`} key={index}>
@@ -26,15 +23,19 @@ export default function ActionAreaCard({ newsList, qualPerRow }: props) {
                 <div className="overflow-hidden w-[345px] h-[200px]">
                   <img src={item.src || item.image} className="w-full h-full" alt="" />
                 </div>
-                <CardContent component="div">
-                  <Typography gutterBottom variant="h5" component="div">
-                    {item.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {/* <p dangerouslySetInnerHTML={createMarkup(item.description || "cvjkncjsnvjsjihvbcn skbsdicsjdcdncbhsdbcdscjancs cjksbcskcbsjh vj")}></p> */}
-                    {item.description || "cvjkncjsnvjsjihvbcn skbsdicsjdcdncbhsdbcdscjancs cjksbcskcbsjh vj"}
-                  </Typography>
-                </CardContent>
+                <div className='p-2 flex justify-between items-center w-full'>
+                  <div>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {item.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      <p dangerouslySetInnerHTML={{ __html: item.description || "desc" }}></p>
+                    </Typography>
+                  </div>
+                  <div>
+                    <p className='text-[green] text-md font-semibold'>{item?.price ? `${item.price} VND` : ""} </p>
+                  </div>
+                </div>
               </CardActionArea>
             </Card>
           </Link>

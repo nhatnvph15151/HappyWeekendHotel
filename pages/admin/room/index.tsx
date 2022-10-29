@@ -60,8 +60,8 @@ const ProductsAdmin = (props: Props) => {
                             Tạo phòng mới <AddIcon />
                         </button>
                     </Link>
-                    <div className="inline-block sm:min-w-full w-[900px] shadow-xl rounded-xl h-[600px] overflow-y-auto relative overflow-x-auto">
-                        <div className="">
+                    <div className="inline-block sm:min-w-full w-[900px] shadow-xl rounded-xl h-[600px] relative border">
+                        <div className="h-full overflow-y-auto overflow-x-auto pb-[50px]">
                             <table className="table-auto w-full border">
                                 <thead className='sticky top-0 shadow z-50'>
                                     <tr>

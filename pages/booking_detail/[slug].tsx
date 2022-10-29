@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faUtensils, faSpa, faShirt, faShower, faBell, faCar, faWifi } from '@fortawesome/free-solid-svg-icons'
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
@@ -17,6 +17,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Swal from 'sweetalert2'
+
 type ProductProps = {
     product: ProductType
 }
@@ -35,10 +37,13 @@ const BookingDetail = ({ product }: ProductProps) => {
     // const [basics, setbasic] = React.useState<BasicType>()
     const { creatstatus } = useStatus(setstatus)
     const [open, setOpen] = React.useState(false);
+    const [desc, setDesc] = React.useState("");
+
+    useEffect(()=>{
+        setDesc(product.description)
+    }), []
 
     const handleClickOpen = () => {
-        console.log(open);
-        
         setOpen(true);
     };
 
@@ -77,25 +82,24 @@ const BookingDetail = ({ product }: ProductProps) => {
             checkins: ckeckin,
             checkouts: ckeckout,
         }
-        const { data: neworderss } = await creatOrder(neworder)
-        console.log(neworderss)
+        await creatOrder(neworder)
+            .then(() => {
+                Swal.fire(
+                    'Đặt phòng thành công',
+                    'Thông tin chi tiết sẽ được gửi tới email của bạn.',
+                    'success'
+                )
+            })
+            .catch(() => {
+                Swal.fire({
+                    title: 'Có lỗi gì đó.',
+                    icon: 'error'
+                })
+            })
     }
     return (
         <div className='w-[80%] mx-auto py-2'>
-            <div className="content-header__booking mt-8 grid grid-cols-2 gap-10">
-                <div className="images-booking__total">
-                    <div className="images-top__booking">
-                        <img className='rounded-[20px] w-[100%] h-[100%]' src={`${product.image}`} alt="" />
-                    </div>
-                    <div className="images-bottom__booking flex mt-7 gap-5">
-                        {/* <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" /> */}
-                        <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" />
-                        <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" />
-                        <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" />
-                        <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" />
-                        <img className='rounded-[20px]' src="https://picsum.photos/70/70" alt="" />
-                    </div>
-                </div>
+            <div className="content-header__booking mt-8">
                 <div className="content-text__booking">
                     <div className="new-content__booking">
                         <div className="flex justify-between items-center">
@@ -113,71 +117,73 @@ const BookingDetail = ({ product }: ProductProps) => {
 
                     </div>
                     <div className="bar__booking border-spacing-1 border-[#FFA500] border-[1px] mt-[20px] opacity-40"></div>
-                    <div className="content mt-[20px]">
-                        <p>{product.description} </p>
+                </div>
+                <div className="mx-auto mt-6 max-w-2xl lg:grid lg:max-w-full lg:grid-cols-3 lg:gap-x-8">
+                    <div className="aspect-w-3 aspect-h-4 hidden overflow-hidden rounded-lg lg:block">
+                        <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg" alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
                     </div>
+                    <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
+                        <div className="aspect-w-3 aspect-h-2 overflow-hidden rounded-lg">
+                            <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg" alt="Model wearing plain black basic tee." className="h-full w-full object-cover object-center" />
+                        </div>
+                        <div className="aspect-w-3 aspect-h-2 overflow-hidden rounded-lg">
+                            <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg" alt="Model wearing plain gray basic tee." className="h-full w-full object-cover object-center" />
+                        </div>
+                    </div>
+                    <div className="aspect-w-4 aspect-h-5 sm:overflow-hidden sm:rounded-lg lg:aspect-w-3 lg:aspect-h-4">
+                        <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg" alt="Model wearing plain white basic tee." className="h-full w-full object-cover object-center" />
+                    </div>
+                </div>
+                <p className="content mt-[20px]" dangerouslySetInnerHTML={{ __html: desc || "desc" }}>
+                </p>
 
-                    <div>
-                        <button className='bg-[orange] px-4 py-2 rounded-md' onClick={handleClickOpen}>
+                <div>
+                    <button className='bg-[orange] px-4 py-2 rounded-md' onClick={handleClickOpen}>
                         Đặt phòng
-                        </button>
-                        <Dialog open={open} onClose={handleClose}>
-                            <DialogTitle>Subscribe</DialogTitle>
-                            <DialogContent>
-                                <DialogContentText>
-                                    To subscribe to this website, please enter your email address here. We
-                                    will send updates occasionally.
-                                </DialogContentText>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id="name"
-                                    label="Email Address"
-                                    type="email"
-                                    fullWidth
-                                    variant="standard"
-                                />
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleClose}>Cancel</Button>
-                                <Button onClick={handleClose}>Subscribe</Button>
-                            </DialogActions>
-                        </Dialog>
-                    </div>
+                    </button>
+                    <Dialog open={open} onClose={handleClose}>
+                        <DialogTitle>Thông tin đặt phòng</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Những thông tin này sẽ giúp chúng tôi liên hệ và trợ giúp bạn dễ dàng hơn
+                            </DialogContentText>
+                            <form action="" onSubmit={handleSubmit(onsubmit)}>
+                                <div className="mb-6">
+                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Họ và tên</label>
+                                    <input {...register('name')} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                </div>
+                                <div className="mb-6">
+                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Số điện thoại</label>
+                                    <input {...register('phone')} type="number" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                </div>
+                                <div className="mb-6">
+                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</label>
+                                    <input {...register('email')} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                </div>
+                                <div className="mb-6">
+                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thời gian nhận</label>
+                                    <input {...register('name')} onChange={hanlechangeckeckin} type="datetime-local" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                </div>
+                                <div className="mb-6">
+                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thời gian trả</label>
+                                    <input {...register('name')} onChange={hanlechangeckeckout} type="datetime-local" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                </div>
+                                {/*footer*/}
+                                <div className="flex items-center justify-end border-t border-solid border-slate-200 rounded-b">
+                                    <DialogActions>
+                                        <Button onClick={handleClose}>Hủy</Button>
+                                        <Button
+                                            type="submit"
+                                            onClick={() => { setShowModal(true); on(); handleClose() }}
+                                        >Đặt phòng</Button>
+                                    </DialogActions>
+                                </div>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
 
-            <div className="service-booking mt-[60px]">
-                <h1 className='text-3xl font-semibold text-center'>SERVICE</h1>
-                <div className="grid grid-cols-3 mt-[50px]">
-                    <div className="flex justify-center items-center gap-3">
-                        <FontAwesomeIcon icon={faUtensils} className='text-[#FFA500] text-4xl' />
-                        <p className='text-2xl'>Buffet breakfast</p>
-                    </div>
-                    <div className="flex justify-center items-center gap-3">
-                        <FontAwesomeIcon icon={faSpa} className='text-[#FFA500] text-4xl' />
-                        <p className='text-2xl'>Spa Service</p>
-                    </div>
-                    <div className="flex justify-center items-center gap-3">
-                        <FontAwesomeIcon icon={faShirt} className='text-[#FFA500] text-4xl' />
-                        <p className='text-2xl'>Laundry Service</p>
-                    </div>
-                </div>
-                <div className="grid grid-cols-3 mt-10">
-                    <div className="flex justify-center items-center gap-3">
-                        <FontAwesomeIcon icon={faShower} className='text-[#FFA500] text-4xl' />
-                        <p className='text-2xl'>Swimming Pool</p>
-                    </div>
-                    <div className="flex justify-center items-center gap-3">
-                        <FontAwesomeIcon icon={faBell} className='text-[#FFA500] text-4xl' />
-                        <p className='text-2xl'>Room Service</p>
-                    </div>
-                    <div className="flex justify-center items-center gap-3">
-                        <FontAwesomeIcon icon={faCar} className='text-[#FFA500] text-4xl' />
-                        <p className='text-2xl'>Car rentals</p>
-                    </div>
-                </div>
-            </div>
             <div className="mt-[60px]">
                 <div className="">
                     <div className="border-spacing-1 border-[#FFA500] border-[1px] mt-[20px] w-[70px]"></div>

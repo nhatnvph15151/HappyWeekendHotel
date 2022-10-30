@@ -5,5 +5,7 @@ export type ProductType = {
     category:string,
     price:number,
     basic:string,
-    _id: any
+    _id: any,
+    coc: boolean,
+    status: number
 }

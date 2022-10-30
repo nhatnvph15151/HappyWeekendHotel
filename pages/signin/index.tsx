@@ -1,4 +1,5 @@
 import React from 'react'
+import AuthLayout from '../../components/Layout/AuthLayout'
 
 type Props = {}
 
@@ -52,4 +53,6 @@ const Signin = (props: Props) => {
     </div>
   )
 }
+
+Signin.Layout = AuthLayout
 export default Signin;

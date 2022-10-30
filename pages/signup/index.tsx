@@ -14,7 +14,7 @@ const Signin = (props: Props) => {
                         <div className="c absolute bottom-[-50px] left-[-20px] w-[196px] h-[187px] rounded-tr-[108px] rounded-br-[20px]  bg-[#fbf1cf]  ">b</div>
                     </div>
                     <div className='form mx-[auto]  w-[50%]'>
-                        <h3 className='text-5xl font-bold my-[40px]'>Sign In</h3>
+                        <h3 className='text-5xl font-bold my-[40px]'>Sign Up</h3>
                         <form className="mt-8 space-y-6" action="#" method="POST">
                             <input type="hidden" name="remember" defaultValue="true" />
                             <div className="-space-y-px rounded-md shadow-sm">

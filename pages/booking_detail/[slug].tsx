@@ -18,6 +18,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Swal from 'sweetalert2'
+import { useRouter } from 'next/router'
+import useProducts from '../../hook/use-product'
 
 type ProductProps = {
     product: ProductType
@@ -34,12 +36,14 @@ const BookingDetail = ({ product }: ProductProps) => {
     const [ckeckout, setckekout] = React.useState('')
     const [showModal, setShowModal] = React.useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<Form>()
-    // const [basics, setbasic] = React.useState<BasicType>()
     const { creatstatus } = useStatus(setstatus)
     const [open, setOpen] = React.useState(false);
     const [desc, setDesc] = React.useState("");
+    const router = useRouter();
 
-    useEffect(()=>{
+    const room = useProducts("");
+
+    useEffect(() => {
         setDesc(product.description)
     }), []
 
@@ -64,15 +68,13 @@ const BookingDetail = ({ product }: ProductProps) => {
 
     }
     const onsubmit: SubmitHandler<Form> = async data => {
-        console.log(data)
+        console.log(product)
         const newckeck: any = {
             checkins: ckeckin,
             checkouts: ckeckout,
             room: product._id
         }
-        console.log(newckeck)
         creatstatus(newckeck)
-        console.log("dsa", status)
         const neworder: any = {
             ...data,
             room: product._id,
@@ -84,11 +86,14 @@ const BookingDetail = ({ product }: ProductProps) => {
         }
         await creatOrder(neworder)
             .then(() => {
-                Swal.fire(
-                    'Đặt phòng thành công',
-                    'Thông tin chi tiết sẽ được gửi tới email của bạn.',
-                    'success'
-                )
+                product.status = 0
+                room.edit(product).then(() => {
+                    Swal.fire(
+                        'Đặt phòng thành công',
+                        'Thông tin chi tiết sẽ được gửi tới email của bạn.',
+                        'success'
+                    )
+                })
             })
             .catch(() => {
                 Swal.fire({
@@ -120,66 +125,84 @@ const BookingDetail = ({ product }: ProductProps) => {
                 </div>
                 <div className="mx-auto mt-6 max-w-2xl lg:grid lg:max-w-full lg:grid-cols-3 lg:gap-x-8">
                     <div className="aspect-w-3 aspect-h-4 hidden overflow-hidden rounded-lg lg:block">
-                        <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg" alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
+                        <img src={product.image} alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
                     </div>
                     <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
                         <div className="aspect-w-3 aspect-h-2 overflow-hidden rounded-lg">
-                            <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg" alt="Model wearing plain black basic tee." className="h-full w-full object-cover object-center" />
+                            <img src={product.image} alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
                         </div>
                         <div className="aspect-w-3 aspect-h-2 overflow-hidden rounded-lg">
-                            <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg" alt="Model wearing plain gray basic tee." className="h-full w-full object-cover object-center" />
+                            <img src={product.image} alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
                         </div>
                     </div>
                     <div className="aspect-w-4 aspect-h-5 sm:overflow-hidden sm:rounded-lg lg:aspect-w-3 lg:aspect-h-4">
-                        <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg" alt="Model wearing plain white basic tee." className="h-full w-full object-cover object-center" />
+                        <img src={product.image} alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
                     </div>
                 </div>
-                <p className="content mt-[20px]" dangerouslySetInnerHTML={{ __html: desc || "desc" }}>
-                </p>
+                {/* <p className="content mt-[20px]" dangerouslySetInnerHTML={{ __html: desc || "desc" }}>
+                </p> */}
 
                 <div>
                     <button className='bg-[orange] px-4 py-2 rounded-md' onClick={handleClickOpen}>
                         Đặt phòng
                     </button>
                     <Dialog open={open} onClose={handleClose}>
-                        <DialogTitle>Thông tin đặt phòng</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText>
-                                Những thông tin này sẽ giúp chúng tôi liên hệ và trợ giúp bạn dễ dàng hơn
-                            </DialogContentText>
-                            <form action="" onSubmit={handleSubmit(onsubmit)}>
-                                <div className="mb-6">
-                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Họ và tên</label>
-                                    <input {...register('name')} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                </div>
-                                <div className="mb-6">
-                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Số điện thoại</label>
-                                    <input {...register('phone')} type="number" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                </div>
-                                <div className="mb-6">
-                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</label>
-                                    <input {...register('email')} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                </div>
-                                <div className="mb-6">
-                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thời gian nhận</label>
-                                    <input {...register('name')} onChange={hanlechangeckeckin} type="datetime-local" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                </div>
-                                <div className="mb-6">
-                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thời gian trả</label>
-                                    <input {...register('name')} onChange={hanlechangeckeckout} type="datetime-local" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                </div>
-                                {/*footer*/}
-                                <div className="flex items-center justify-end border-t border-solid border-slate-200 rounded-b">
-                                    <DialogActions>
-                                        <Button onClick={handleClose}>Hủy</Button>
-                                        <Button
-                                            type="submit"
-                                            onClick={() => { setShowModal(true); on(); handleClose() }}
-                                        >Đặt phòng</Button>
-                                    </DialogActions>
-                                </div>
-                            </form>
-                        </DialogContent>
+                        {product.coc
+                            ? <div className='flex justify-center flex-col items-center'>
+                                <DialogTitle>Yêu cầu thanh toán trước</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText>
+                                        Phòng đặc biệt này phải đặt cọc để giữ phòng
+                                    </DialogContentText>
+                                    <div className="flex flex-col">
+                                        <button onClick={() => { router.push("/payment") }}>Ok</button>
+                                        <button autoFocus onClick={handleClose}>
+                                            Hủy
+                                        </button>
+                                    </div>
+                                </DialogContent>
+                            </div>
+                            : <>
+                                <DialogTitle>Thông tin đặt phòng</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText>
+                                        Những thông tin này sẽ giúp chúng tôi liên hệ và trợ giúp bạn dễ dàng hơn
+                                    </DialogContentText>
+                                    <form action="" onSubmit={handleSubmit(onsubmit)}>
+                                        <div className="mb-6">
+                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Họ và tên</label>
+                                            <input {...register('name')} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                        </div>
+                                        <div className="mb-6">
+                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Số điện thoại</label>
+                                            <input {...register('phone')} type="number" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                        </div>
+                                        <div className="mb-6">
+                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</label>
+                                            <input {...register('email')} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                        </div>
+                                        <div className="mb-6">
+                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thời gian nhận</label>
+                                            <input {...register('name')} onChange={hanlechangeckeckin} type="datetime-local" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                        </div>
+                                        <div className="mb-6">
+                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thời gian trả</label>
+                                            <input {...register('name')} onChange={hanlechangeckeckout} type="datetime-local" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                        </div>
+                                        {/*footer*/}
+                                        <div className="flex items-center justify-end border-t border-solid border-slate-200 rounded-b">
+                                            <DialogActions>
+                                                <Button onClick={handleClose}>Hủy</Button>
+                                                <Button
+                                                    type="submit"
+                                                    onClick={() => { setShowModal(true); on(); handleClose() }}
+                                                >Đặt phòng</Button>
+                                            </DialogActions>
+                                        </div>
+                                    </form>
+                                </DialogContent>
+                            </>
+                        }
                     </Dialog>
                 </div>
             </div>

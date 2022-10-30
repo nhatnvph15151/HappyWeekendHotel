@@ -2,7 +2,6 @@ import type { NextPage } from 'next'
 import React, { useEffect, useState } from "react"
 import DatePicker from '../components/DatePicker'
 import SimpleSwiper from '../components/Slide'
-import { A11y, Autoplay, Navigation, Pagination, Scrollbar } from 'swiper'
 import BackToTop from '../components/BackToTop'
 import HomePageLayout from '../components/Layout/HomePageLayout'
 import ActionAreaCard from '../components/Card'
@@ -13,7 +12,6 @@ const Home: NextPage = () => {
   const room = useProducts("")
 
   const [indexTab, setIndexTab] = useState(1);
-  const [open, setOpen] = useState(false);
   const personPerRoom = [
     { id: 1, qual: "2 người lớn" },
     { id: 2, qual: "1 người lớn" }
@@ -25,7 +23,6 @@ const Home: NextPage = () => {
     { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 3 },
     { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 3 },
   ]
-  const [person, setPerson] = useState(personPerRoom[0].qual)
   const [visible, setVisible] = useState(true);
 
   const toggleVisible = () => {
@@ -81,38 +78,6 @@ const Home: NextPage = () => {
             {indexTab == 1 ? <DatePicker date={7} /> : ""}
             {indexTab == 2 ? <DatePicker date={1} /> : ""}
             {indexTab == 3 ? <DatePicker date={28} /> : ""}
-            <div className="relative top-[50%] translate-y-[30%]">
-              <div className="flex">
-                <div className="relative ">
-
-                  <label className='select-none cursor-pointer absolute top-[-30%] left-[5px] text-xs font-semibold flex items-center' htmlFor="inputPersonPerRoom">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-                    </svg>
-                    Khách
-                  </label>
-                  <div className="p-2">
-                    <input
-                      id='inputPersonPerRoom'
-                      value={person}
-                      readOnly
-                      className="outline-none cursor-pointer font-semibold"
-                      onClick={() => setOpen(open => !open)}
-                    />
-                  </div>
-                  <div className={`${open ? "visible" : "invisible"} absolute top-[30%] left-0 flex flex-col p-4 bg-white rounded-xl shadow-xl`}>
-                    {personPerRoom?.map((item, index) => {
-                      return (
-                        <button onClick={(e: any) => {
-                          setPerson(e.target.value)
-                          setOpen(!open)
-                        }} key={index} value={item.qual}>{item.qual}</button>
-                      )
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
             <Link href="/search?status=1">
               <div className="flex px-4 py-2 bg-[orange] rounded-full text-white cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -124,16 +89,16 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="w-[80%] mx-auto pt-8">
-        <h1 className='text-3xl font-semibold text-[orange] text-center'>NHÀ NGHỈ GIÁ TỐT</h1>
+      <div className="w-[80%] mx-auto pt-2">
+        <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1>
         <>
           <SimpleSwiper
             newsList={room.data}
           />
         </>
       </div>
-      <div className="w-[80%] mx-auto pt-8">
-        <h1 className='text-3xl font-semibold text-[orange] text-center'>NHÀ NGHỈ HOT</h1>
+      <div className="w-[80%] mx-auto pt-2">
+        <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ HOT</h1>
         <>
           <SimpleSwiper
             newsList={room.data}

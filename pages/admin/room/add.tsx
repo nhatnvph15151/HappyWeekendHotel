@@ -21,7 +21,8 @@ type formInput = {
   description: string,
   image: string,
   name: string,
-  price: number
+  price: number,
+  status: number
 }
 
 const AddRoom = (props: Props) => {
@@ -63,6 +64,7 @@ const AddRoom = (props: Props) => {
       }, data: formData,
     }).then((res) => {
       data.image = res.data.url
+      data.status=1
       data.description = desc
       try {
         room.add(data).then(() => {

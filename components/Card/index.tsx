@@ -14,11 +14,11 @@ type props = {
 export default function ActionAreaCard({ newsList }: props) {
 
   return (
-    <div className={`grid grid-cols-3 gap-4 place-content-center `}>
+    <div className={`flex justify-between flex-wrap`}>
       {newsList?.map((item: any, index: any) => {
         return (
-          <Link href={`/booking_detail/${item.slug}`} key={index}>
-            <Card sx={{ maxWidth: 345 }}>
+          <div className='mb-4' key={index}>
+            <Link href={`/booking_detail/${item.slug}`}>
               <CardActionArea sx={{ display: "flex", flexDirection: "column", alignContent: "space-between", justifyContent: "space-between" }}>
                 {/* <div className="overflow-hidden w-[345px] h-[200px]">
                   <img src={item.src || item.image} className="w-full h-full" alt="" />
@@ -41,9 +41,9 @@ export default function ActionAreaCard({ newsList }: props) {
                     <img className="rounded-t-lg " src={item.src || item.image} alt="" />
                   </div>
                   <div className="p-5">
-                    <div className="flex justify-between items-center">
-                      <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{item.name}</h5>
-                      <p className='text-[green] font-semibold'>{item.price ? `${item.price} VND` : ""}</p>
+                    <div className="flex justify-between items-start">
+                      <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{item.name}</h5>
+                      <p className='text-[green] font-semibold basis-1/4 flex justify-end'>{item.price ? `${item.price} VND` : ""}</p>
                     </div>
                     <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
                     <a href="#" className="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -53,8 +53,8 @@ export default function ActionAreaCard({ newsList }: props) {
                   </div>
                 </div>
               </CardActionArea>
-            </Card>
-          </Link>
+            </Link>
+          </div>
         )
       })}
     </div>

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faUtensils, faSpa, faShirt, faShower, faBell, faCar, faWifi } from '@fortawesome/free-solid-svg-icons'
@@ -20,6 +21,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 import useProducts from '../../hook/use-product'
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Mousewheel, Pagination } from "swiper";
+import "swiper/css";
+import "swiper/css/pagination";
 
 type ProductProps = {
     product: ProductType
@@ -38,6 +43,7 @@ const BookingDetail = ({ product }: ProductProps) => {
     const { register, handleSubmit, formState: { errors } } = useForm<Form>()
     const { creatstatus } = useStatus(setstatus)
     const [open, setOpen] = React.useState(false);
+    const [open2, setOpen2] = React.useState(false);
     const [desc, setDesc] = React.useState("");
     const router = useRouter();
 
@@ -50,9 +56,15 @@ const BookingDetail = ({ product }: ProductProps) => {
     const handleClickOpen = () => {
         setOpen(true);
     };
-
+    const handleClickOpen2 = () => {
+        setOpen2(true);
+    };
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleClose2 = () => {
+        setOpen2(false);
     };
     const hanlechangeckeckin = (e: any) => {
         const value = e.target.value
@@ -123,7 +135,7 @@ const BookingDetail = ({ product }: ProductProps) => {
                     </div>
                     <div className="bar__booking border-spacing-1 border-[#FFA500] border-[1px] mt-[20px] opacity-40"></div>
                 </div>
-                <div className="mx-auto mt-6 max-w-2xl lg:grid lg:max-w-full lg:grid-cols-3 lg:gap-x-8">
+                <div className="relative mx-auto mt-6 max-w-2xl lg:grid lg:max-w-full lg:grid-cols-3 lg:gap-x-8">
                     <div className="aspect-w-3 aspect-h-4 hidden overflow-hidden rounded-lg lg:block">
                         <img src={product.image} alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
                     </div>
@@ -138,7 +150,82 @@ const BookingDetail = ({ product }: ProductProps) => {
                     <div className="aspect-w-4 aspect-h-5 sm:overflow-hidden sm:rounded-lg lg:aspect-w-3 lg:aspect-h-4">
                         <img src={product.image} alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
                     </div>
+                    <div onClick={() => {
+                        handleClickOpen2()
+                    }} className="absolute bottom-[20px] right-[20px] bg-white shadow-xl p-2 rounded-full cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+                        </svg>
+                    </div>
                 </div>
+
+                <>
+                    <Dialog
+                        fullWidth
+                        maxWidth="md"
+                        open={open2}
+                        onClose={handleClose2}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <button className='absolute top-[20px] right-[20px] p-2 rounded-full bg-[white] z-50 shadow-xl' onClick={() => {
+                            handleClose2()
+                        }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        <>
+                            <Swiper
+                                direction={"vertical"}
+                                slidesPerView={1}
+                                spaceBetween={30}
+                                mousewheel={true}
+                                autoHeight={true}
+                                pagination={{
+                                    clickable: true,
+                                }}
+                                modules={[Mousewheel, Pagination]}
+                                className="mySwiper"
+                            >
+                                <SwiperSlide>
+                                    <img className="h-full w-full" src={product.image} alt="Two each of gray, white, and black shirts laying flat." />
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <img className="h-full w-full" src={product.image} alt="Two each of gray, white, and black shirts laying flat." />
+
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <img className="h-full w-full" src={product.image} alt="Two each of gray, white, and black shirts laying flat." />
+
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <img className="h-full w-full" src={product.image} alt="Two each of gray, white, and black shirts laying flat." />
+
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <img className="h-full w-full" src={product.image} alt="Two each of gray, white, and black shirts laying flat." />
+
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <img className="h-full w-full" src={product.image} alt="Two each of gray, white, and black shirts laying flat." />
+
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <img className="h-full w-full" src={product.image} alt="Two each of gray, white, and black shirts laying flat." />
+
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <img className="h-full w-full" src={product.image} alt="Two each of gray, white, and black shirts laying flat." />
+
+                                </SwiperSlide>
+                                <SwiperSlide>
+                                    <img className="h-full w-full" src={product.image} alt="Two each of gray, white, and black shirts laying flat." />
+                                </SwiperSlide>
+                            </Swiper>
+                        </>
+                    </Dialog>
+                </>
                 {/* <p className="content mt-[20px]" dangerouslySetInnerHTML={{ __html: desc || "desc" }}>
                 </p> */}
 
@@ -454,4 +541,4 @@ export const getStaticProps: GetStaticProps<ProductProps> = async (context: GetS
 }
 
 
-export default BookingDetail
+export default BookingDetail 

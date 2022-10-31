@@ -90,15 +90,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="w-[80%] mx-auto pt-2">
-        <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1>
-        <>
-          <SimpleSwiper
-            newsList={room.data}
-          />
-        </>
-      </div>
-      <div className="w-[80%] mx-auto pt-2">
-        <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ HOT</h1>
+        {/* <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1> */}
         <>
           <SimpleSwiper
             newsList={room.data}

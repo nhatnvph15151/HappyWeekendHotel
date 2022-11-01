@@ -6,7 +6,7 @@ type Props = {}
 const ContactPage = (props: Props) => {
   return (
     <div className='w-[80%] mx-auto py-2'>
-        <ul className="flex py-5">
+      <ul className="flex py-5">
         <li>
           <Link href="/" className='text-[#ca9533] no-underline hover:text-[#FFA500]'>Trang chủ</Link>
         </li>
@@ -39,6 +39,83 @@ const ContactPage = (props: Props) => {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
               {" "}
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /> <circle cx="12" cy="10" r="3" />
             </svg>

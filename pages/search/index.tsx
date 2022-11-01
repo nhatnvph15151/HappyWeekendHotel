@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
@@ -9,6 +9,8 @@ import styles from '../../styles/room.module.css'
 import Slider from '@mui/material/Slider';
 import useProducts from '../../hook/use-product';
 import useBasic from '../../hook/use-basic';
+import { searchRoom } from '../../api/rooms';
+import Link from 'next/link';
 
 function valuetext(value: number) {
     return `${value}°C`;
@@ -28,8 +30,15 @@ const style = {
 
 const RoomPage = (props: Props) => {
 
-    const room = useProducts('')
-    const basic = useBasic('')
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        const getData = async () => {
+            const data = await searchRoom();
+            setData(data)
+        }
+        getData()
+    }, [])
 
     const [open, setOpen] = React.useState(false);
     const [open2, setOpen2] = React.useState(false);
@@ -175,10 +184,10 @@ const RoomPage = (props: Props) => {
                 <div className="main bg-[#f2f2f7]  mb-[20px] flex justify-between">
                     <div className={styles.content_left}>
                         {
-                            room.data?.map((item: any, index: any) => {
+                            data?.map((item: any, index: any) => {
                                 return (
-                                    <>
-                                        <div className="card  m-3 bg-[white] object-cover border rounded-lg ">
+                                    <Link href={`/booking_detail/${item.slug}`} key={index}>
+                                        <div className="card cursor-pointer m-3 bg-[white] object-cover border rounded-lg ">
                                             <div className="box h-[224px] p-2 flex ">
                                                 <div className="img  w-[33%]  mr-[10px] rounded-lg overflow-hidden ">
                                                     <img className='object-cover h-[100%]' src={item.image || 'https://s3.go2joy.vn/1000w/hotel/12563/2848_1656662865_62beab51c14f8.jpg'} alt="" />
@@ -223,7 +232,7 @@ const RoomPage = (props: Props) => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </>
+                                    </Link>
                                 )
                             }
                             )

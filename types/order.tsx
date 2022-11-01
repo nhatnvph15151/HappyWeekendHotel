@@ -3,7 +3,7 @@ export type OrderType = {
     name:string,
     email:string ,
     phone:number ,
-    statusorder:string,
+    statusorder:number,
     total:number,
     room:string,
     user:string,

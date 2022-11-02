@@ -1,8 +1,29 @@
-import React from 'react'
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { signin } from '../../api/users';
 
 type Props = {}
-
+type form = {
+  email: string,
+  password: string,
+}
 const Signin = (props: Props) => {
+  
+
+  const { register, handleSubmit, formState: { errors } } = useForm<form>();
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<form> = data => {
+    // console.log(data)
+    signin(data).then((res: any) => {
+      localStorage.setItem('user', JSON.stringify(res.user))
+      router.push('/')
+    })
+  }
+
+
   return (
     <div className='overflow-hidden h-[100vh]'>
       <Link href={'/'}><button className='relative top-[50px] left-[100px] border bg-[#fac26f] hover:bg-[#fed496] px-6 py-2 rounded-full text-white'>Trở về</button></Link>
@@ -15,20 +36,16 @@ const Signin = (props: Props) => {
           </div>
           <div className='form mx-[auto]  w-[50%]'>
             <h3 className='text-5xl font-bold my-[40px]'>Sign In</h3>
-            <form className="mt-8 space-y-6" action="#" method="POST">
+            <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
               <input type="hidden" name="remember" defaultValue="true" />
               <div className="-space-y-px rounded-md shadow-sm">
                 <div className='pt-[30px]'>
-                  <label htmlFor="password" className='mt-[30px]' >Name</label>
-                  <input id="text" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
-                </div>
-                <div className='pt-[30px]'>
                   <label htmlFor="password" className='mt-[30px]' >Email</label>
-                  <input id="text" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                  <input {...register('email')} id="text" name="email" type="text" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
                 </div>
                 <div className='pt-[30px]'>
                   <label htmlFor="password" className='mt-[30px]' >Password</label>
-                  <input id="password" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                  <input {...register('password')} id="password" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
                 </div>
               </div>
               <div className="flex items-center justify-between">

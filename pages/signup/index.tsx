@@ -1,12 +1,58 @@
+import axios from 'axios'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { mutate } from 'swr'
+import { signup } from '../../api/users'
 import AuthLayout from '../../components/Layout/AuthLayout'
 
-type Props = {}
 
+type Props = {}
+type form = {
+    name: string,
+    email: string,
+    password: string,
+    phone: number,
+    avatar: string,
+    role: number,
+}
 const Signin = (props: Props) => {
+
+    const { register, handleSubmit, formState: { errors } } = useForm<form>();
+    const router = useRouter();
+    const onSubmit: SubmitHandler<form> = data => {
+        console.log(data);
+        const newdata = { ...data, role: 0 }
+        const file = newdata.avatar[0]
+        const formData = new FormData()
+
+        formData.append('file', file)
+        formData.append("upload_preset", "mi59v8ju")
+
+        axios({
+            url: "https://api.cloudinary.com/v1_1/dkrifqhuk/image/upload",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-formendcoded",
+            }, data: formData,
+        }).then((res) => {
+            newdata.avatar = res.data.url
+            console.log(newdata.avatar)
+            // mutate(creat(data).then(() => router.push('/admin/products')))
+            
+            mutate(signup(newdata))
+            router.push('/signin')
+        })
+
+        //toastr.success("Đăng ký thành công")
+
+    }
+
     return (
-        <div>
-            <div className='flex items-center h-[100vh] justify-center'>
+        <div className='overflow-hidden h-[100vh]'>
+            <Link href={'/'}><button className='relative top-[50px] left-[100px] border bg-[#fac26f] hover:bg-[#fed496] px-6 py-2 rounded-full text-white'>Trở về</button></Link>
+            <div className='flex items-center h-[auto] justify-center'>
                 <div className="w-[70%] h-[600px] shadow-2xl rounded-xl mx-auto container flex justify-between items-center">
                     <div className='maskgroup relative  w-[366px] h-[600px] shadow-2xl shadow-[#ffd79a] bg-[#fed496] overflow-hidden rounded-[30px] '>
                         <div className="a bg-[#efce90] h-[70%] rounded-bl-[108px]"><h2 className='pt-[300px] font-bold text-[50px] leading-[53px] pl-[15px] text-white'>Happy <p className='pl-[20px]'>Weekend</p></h2></div>
@@ -15,20 +61,28 @@ const Signin = (props: Props) => {
                     </div>
                     <div className='form mx-[auto]  w-[50%]'>
                         <h3 className='text-5xl font-bold my-[40px]'>Sign Up</h3>
-                        <form className="mt-8 space-y-6" action="#" method="POST">
+                        <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
                             <input type="hidden" name="remember" defaultValue="true" />
                             <div className="-space-y-px rounded-md shadow-sm">
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >Name</label>
-                                    <input id="text" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                                    <input {...register('name')} id="name" name="name" type="text" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Name" />
                                 </div>
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >Email</label>
-                                    <input id="text" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                                    <input {...register('email')} id="email" name="email" type="email" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email" />
                                 </div>
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >Password</label>
-                                    <input id="password" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                                    <input {...register('password')} id="password" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                                </div>
+                                <div className='pt-[30px]'>
+                                    <label htmlFor="password" className='mt-[30px]' >avatar</label>
+                                    <input {...register('avatar')} id="avatar" name="avatar" type="file" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Avatar" />
+                                </div>
+                                <div className='pt-[30px]'>
+                                    <label htmlFor="password" className='mt-[30px]' >phone</label>
+                                    <input  {...register('phone')} id="phone" name="phone" type="number" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Phone" />
                                 </div>
                             </div>
                             <div className="flex items-center justify-between">
@@ -48,7 +102,7 @@ const Signin = (props: Props) => {
                                             <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
                                         </svg>
                                     </span>
-                                    Sign in
+                                    Sign Up
                                 </button>
                             </div>
                         </form>

@@ -10,7 +10,10 @@ const Profile = (props: Props) => {
     const onsubmit = () => {
         setEdit(!edit)
     }
-
+    const get = () => {
+        const reslut = localStorage.getItem(JSON.stringify('user') as string)
+        console.log(reslut)
+    }
     return (
         <div className=''>
             <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">

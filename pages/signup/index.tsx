@@ -40,7 +40,7 @@ const Signin = (props: Props) => {
             newdata.avatar = res.data.url
             console.log(newdata.avatar)
             // mutate(creat(data).then(() => router.push('/admin/products')))
-            
+
             mutate(signup(newdata))
             router.push('/signin')
         })
@@ -66,23 +66,47 @@ const Signin = (props: Props) => {
                             <div className="-space-y-px rounded-md shadow-sm">
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >Name</label>
-                                    <input {...register('name')} id="name" name="name" type="text" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Name" />
+                                    <input {...register('name', { required: true, minLength: { value: 1, message: "Không được để trống" } })} id="name" name="name" type="text" autoComplete="current-password" className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Name" />
+                                    {Object.keys(errors).length !== 0 && (
+                                        <ul>
+                                            {errors.name?.type == 'required' && (<li className='text-[red] '>Không được để trống</li>)}
+                                            {errors.name?.message && <p className='text-[red] '>Phải lớn hơn 3 ký tự</p>}
+                                        </ul>
+                                    )}
                                 </div>
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >Email</label>
-                                    <input {...register('email')} id="email" name="email" type="email" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email" />
+                                    <input {...register('email', { required: true, minLength: { value: 1, message: "Không được để trống" } })} required id="email" name="email" type="email" autoComplete="current-password" className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email" />
+                                    {Object.keys(errors).length !== 0 && (
+                                        <ul>
+                                            {errors.email?.type == 'required' && (<li className='text-[red] '>Không được để trống</li>)}
+                                            {errors.email?.message && <p className='text-[red] '>Phải lớn hơn 6 ký tự</p>}
+                                        </ul>
+                                    )}
                                 </div>
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >Password</label>
-                                    <input {...register('password')} id="password" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                                    <input {...register('password', { required: true, minLength: { value: 6, message: "Không được nhập dưới 6 ký tự" } })} id="password" name="password" type="password" autoComplete="current-password" className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                                    {Object.keys(errors).length !== 0 && (
+                                        <ul>
+                                            {errors.password?.type == 'required' && (<li className='text-[red] '>Không được để trống</li>)}
+                                            {errors.password?.message && <p className='text-[red] '>Phải lớn hơn 6 ký tự</p>}
+                                        </ul>
+                                    )}
                                 </div>
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >avatar</label>
-                                    <input {...register('avatar')} id="avatar" name="avatar" type="file" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Avatar" />
+                                    <input {...register('avatar')} id="avatar" name="avatar" type="file" autoComplete="current-password" className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Avatar" />
                                 </div>
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >phone</label>
-                                    <input  {...register('phone')} id="phone" name="phone" type="number" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Phone" />
+                                    <input  {...register('phone', { required: true, minLength: { value: 10, message: "Số điện thoại chưa đúng" }, maxLength: { value: 11, message: "Số điện thọa chưa đúng" } })} id="phone" name="phone" type="number" autoComplete="current-password" className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Phone" />
+                                    {Object.keys(errors).length !== 0 && (
+                                        <ul>
+                                            {errors.phone?.type == 'required' && (<li className='text-[red] '>Không được để trống</li>)}
+                                            {errors.phone?.message && <p className='text-[red] '>Số điện thoại chưa đúng</p>}
+                                        </ul>
+                                    )}
                                 </div>
                             </div>
                             <div className="flex items-center justify-between">

@@ -135,7 +135,7 @@ const Header = (props: Props) => {
                     >
                       <Link href={'/profile'}>
                         <MenuItem>
-                          <img src="https://go2joy.vn/images/icons/user-placeholder.svg" alt="" />
+                          <div className='contents'><img width={50} className="rounded-full h-[50px] w-[50px] object-cover border-current" src={user.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
                           <div className="flex-col pl-3 w-[100%] items-start">
                             <p>+{user.phone}</p>
                             <p className='text-left'>xem hồ sơ</p>

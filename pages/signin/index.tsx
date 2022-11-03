@@ -3,6 +3,9 @@ import { useRouter } from 'next/router';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { signin } from '../../api/users';
+import AuthLayout from '../../components/Layout/AuthLayout';
+import toastr from "toastr"
+import 'toastr/build/toastr.min.css'
 
 type Props = {}
 type form = {
@@ -11,7 +14,6 @@ type form = {
 }
 const Signin = (props: Props) => {
 
-
   const { register, handleSubmit, formState: { errors } } = useForm<form>();
   const router = useRouter();
 
@@ -19,6 +21,7 @@ const Signin = (props: Props) => {
     // console.log(data)
     signin(data).then((res: any) => {
       localStorage.setItem('user', JSON.stringify(res.user))
+      toastr.success("chào mừng bạn quay trở lại")
       router.push('/')
     })
   }
@@ -87,4 +90,5 @@ const Signin = (props: Props) => {
     </div>
   )
 }
+Signin.Layout = AuthLayout
 export default Signin;

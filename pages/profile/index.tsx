@@ -1,19 +1,29 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import userUser from '../../hook/use-user'
+
+
 
 type Props = {}
 
 const Profile = (props: Props) => {
+    const [ edit, setEdit] = useState(true);
 
-    const [edit, setEdit] = useState(true);
 
     const onsubmit = () => {
         setEdit(!edit)
     }
-    const get = () => {
-        const reslut = localStorage.getItem(JSON.stringify('user') as string)
-        console.log(reslut)
-    }
+    // const get = () => {
+    //     const reslut = localStorage.getItem(JSON.stringify('user') as string)
+    //     console.log(reslut)
+    // }
+    const [user , setUser] = useState({})
+    useEffect (() => {
+        const getUser = JSON.parse(localStorage.getItem('user') as string)
+         console.log(getUser)  
+         setUser(getUser)
+    },[])
+
     return (
         <div className=''>
             <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
@@ -22,7 +32,7 @@ const Profile = (props: Props) => {
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[90px] h-[90px] mx-auto mb-[10px]">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <div className='text-center font-medium text-2xl'>+(84) 984341249</div>
+                        <div className='text-center font-medium text-2xl'>{user.phone}</div>
                     </div>
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='#' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
@@ -46,47 +56,68 @@ const Profile = (props: Props) => {
                     </svg>
                         <span className='pl-[10px] font-normal text-lg'>Đăng Xuất</span></a></div>
 
-                </div>
+                </div>            
                 <div className="profile_account relative w-[768px]">
                     <div className="flex flex-row justify-between mb-[32px]">
                         <h2 className='text-[40px] font-bold'>Hồ sơ của tôi</h2>
                         <div className=''>
                             <button onClick={onsubmit} className='btn rounded-full border border-gray-700 px-[24px] font-medium py-[10px] '>Chỉnh sửa</button>
                         </div>
-                    </div>
-                    <form action="">
+                   </div> 
+                              
+                    <div>
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Số điện thoại</label>
                             <div className="input font-medium ">
-                                +(84) 984341249
+                                {user.phone}
                             </div>
                         </div>
                         <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
-                            <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Họ và tên<noscript></noscript></label>
-                            <input disabled={edit} className="input font-medium border rounder-full px-3 py-2  " />
+                            <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Họ và Tên</label>
+                            <div className="input font-medium ">
+                                {user.name}
+                            </div>
                         </div>
                         <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Email</label>
-                            <input disabled={edit} className="input font-medium border rounder-full px-3 py-2  " />
-
+                            <div className="input font-medium ">
+                               {user.email}
+                            </div>
+                        </div>
+                        <hr className='my-[20px]' />
+                        <div className="form_item flex flex-row items-center">
+                            <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Ngày sinh</label>
+                            <div className="input font-medium ">
+                                chưa cung cấp
+                            </div>
                         </div>
                         <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Giới tính</label>
-                            <input disabled={edit} className="input font-medium border rounder-full px-3 py-2  " />
-
+                            <div className="input font-medium ">
+                            chưa cung cấp
+                            </div>
                         </div>
                         <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Địa chỉ</label>
-                            <input disabled={edit} className="input font-medium border rounder-full px-3 py-2  " />
-
+                            <div className="input font-medium ">
+                            chưa cung cấp
+                            </div>
                         </div>
-                        <hr className='my-[20px]' />
-                    </form>
-                </div>
+                        <hr className='my-[20px]' />  
+                        <div className="form_item flex flex-row items-center">
+                            <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Tài khoản liên kết</label>
+                            <div className="input font-medium ">
+                            chưa cung cấp
+                            </div>
+                        </div>
+                            
+                    </div>
+            
+                </div>         
             </div>
         </div>
     )

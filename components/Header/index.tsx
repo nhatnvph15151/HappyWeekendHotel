@@ -133,7 +133,7 @@ const Header = (props: Props) => {
                         'aria-labelledby': 'basic-button',
                       }}
                     >
-                      <Link href={'/profile'}>
+                      <Link href={'/profile/${_id}'}>
                         <MenuItem>
                           <img src="https://go2joy.vn/images/icons/user-placeholder.svg" alt="" />
                           <div className="flex-col pl-3 w-[100%] items-start">

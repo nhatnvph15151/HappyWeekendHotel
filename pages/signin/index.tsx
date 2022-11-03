@@ -3,6 +3,9 @@ import { useRouter } from 'next/router';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { signin } from '../../api/users';
+import AuthLayout from '../../components/Layout/AuthLayout';
+import toastr from "toastr"
+import 'toastr/build/toastr.min.css'
 
 type Props = {}
 type form = {
@@ -10,7 +13,6 @@ type form = {
   password: string,
 }
 const Signin = (props: Props) => {
-  
 
   const { register, handleSubmit, formState: { errors } } = useForm<form>();
   const router = useRouter();
@@ -19,6 +21,7 @@ const Signin = (props: Props) => {
     // console.log(data)
     signin(data).then((res: any) => {
       localStorage.setItem('user', JSON.stringify(res.user))
+      toastr.success("chào mừng bạn quay trở lại")
       router.push('/')
     })
   }
@@ -41,11 +44,23 @@ const Signin = (props: Props) => {
               <div className="-space-y-px rounded-md shadow-sm">
                 <div className='pt-[30px]'>
                   <label htmlFor="password" className='mt-[30px]' >Email</label>
-                  <input {...register('email')} id="text" name="email" type="text" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                  <input {...register('email', { required: true, minLength: { value: 1, message: "Không được để trống" } })} id="email" name="email" type="text" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                  {Object.keys(errors).length !== 0 && (
+                    <ul>
+                      {errors.email?.type == 'required' && (<li className='text-[red] '>Không được để trống</li>)}
+                      {errors.email?.message && <p className='text-[red] '>Không được để trống</p>}
+                    </ul>
+                  )}
                 </div>
                 <div className='pt-[30px]'>
                   <label htmlFor="password" className='mt-[30px]' >Password</label>
-                  <input {...register('password')} id="password" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                  <input {...register('password', { required: true, minLength: { value: 1, message: "Không được để trống" } })} id="password" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                  {Object.keys(errors).length !== 0 && (
+                    <ul>
+                      {errors.password?.type == 'required' && (<li className='text-[red] '>Không được để trống</li>)}
+                      {errors.password?.message && <p className='text-[red] '>Không được để trống</p>}
+                    </ul>
+                  )}
                 </div>
               </div>
               <div className="flex items-center justify-between">
@@ -75,4 +90,5 @@ const Signin = (props: Props) => {
     </div>
   )
 }
+Signin.Layout = AuthLayout
 export default Signin;

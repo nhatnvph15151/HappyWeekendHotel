@@ -6,7 +6,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { mutate } from 'swr'
 import { signup } from '../../api/users'
 import AuthLayout from '../../components/Layout/AuthLayout'
-
+import toastr from "toastr"
+import 'toastr/build/toastr.min.css'
 
 type Props = {}
 type form = {
@@ -17,7 +18,7 @@ type form = {
     avatar: string,
     role: number,
 }
-const Signin = (props: Props) => {
+const Signup = (props: Props) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<form>();
     const router = useRouter();
@@ -40,9 +41,11 @@ const Signin = (props: Props) => {
             newdata.avatar = res.data.url
             console.log(newdata.avatar)
             // mutate(creat(data).then(() => router.push('/admin/products')))
-            
+
             mutate(signup(newdata))
             router.push('/signin')
+            toastr.success("Bạn đã đăng ký thành công")
+
         })
 
         //toastr.success("Đăng ký thành công")
@@ -53,36 +56,60 @@ const Signin = (props: Props) => {
         <div className='overflow-hidden h-[100vh]'>
             <Link href={'/'}><button className='relative top-[50px] left-[100px] border bg-[#fac26f] hover:bg-[#fed496] px-6 py-2 rounded-full text-white'>Trở về</button></Link>
             <div className='flex items-center h-[auto] justify-center'>
-                <div className="w-[70%] h-[600px] shadow-2xl rounded-xl mx-auto container flex justify-between items-center">
-                    <div className='maskgroup relative  w-[366px] h-[600px] shadow-2xl shadow-[#ffd79a] bg-[#fed496] overflow-hidden rounded-[30px] '>
+                <div className="w-[70%] h-[90vh] shadow-2xl rounded-xl mx-auto container flex justify-between">
+                    <div className='maskgroup relative  w-[366px] h-[auto] shadow-2xl shadow-[#ffd79a] bg-[#fed496] overflow-hidden rounded-[30px] '>
                         <div className="a bg-[#efce90] h-[70%] rounded-bl-[108px]"><h2 className='pt-[300px] font-bold text-[50px] leading-[53px] pl-[15px] text-white'>Happy <p className='pl-[20px]'>Weekend</p></h2></div>
                         <div className="b absolute top-[-50px] right-[-60px] w-[196px] h-[187px] bg-[#fbf1cf] overflow-hidden rounded-tl-[200px] rounded-bl-[200px]">a</div>
                         <div className="c absolute bottom-[-50px] left-[-20px] w-[196px] h-[187px] rounded-tr-[108px] rounded-br-[20px]  bg-[#fbf1cf]  ">b</div>
                     </div>
                     <div className='form mx-[auto]  w-[50%]'>
-                        <h3 className='text-5xl font-bold my-[40px]'>Sign Up</h3>
-                        <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                        <h3 className='text-5xl font-bold '>Sign Up</h3>
+                        <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
                             <input type="hidden" name="remember" defaultValue="true" />
                             <div className="-space-y-px rounded-md shadow-sm">
-                                <div className='pt-[30px]'>
+                                <div>
                                     <label htmlFor="password" className='mt-[30px]' >Name</label>
-                                    <input {...register('name')} id="name" name="name" type="text" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Name" />
+                                    <input {...register('name', { required: true, minLength: { value: 1, message: "Không được để trống" } })} id="name" name="name" type="text" autoComplete="current-password" className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Name" />
+                                    {Object.keys(errors).length !== 0 && (
+                                        <ul>
+                                            {errors.name?.type == 'required' && (<li className='text-[red] '>Không được để trống</li>)}
+                                            {errors.name?.message && <p className='text-[red] '>Phải lớn hơn 3 ký tự</p>}
+                                        </ul>
+                                    )}
                                 </div>
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >Email</label>
-                                    <input {...register('email')} id="email" name="email" type="email" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email" />
+                                    <input {...register('email', { required: true, minLength: { value: 1, message: "Không được để trống" } })} required id="email" name="email" type="email" autoComplete="current-password" className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Email" />
+                                    {Object.keys(errors).length !== 0 && (
+                                        <ul>
+                                            {errors.email?.type == 'required' && (<li className='text-[red] '>Không được để trống</li>)}
+                                            {errors.email?.message && <p className='text-[red] '>Phải lớn hơn 6 ký tự</p>}
+                                        </ul>
+                                    )}
                                 </div>
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >Password</label>
-                                    <input {...register('password')} id="password" name="password" type="password" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                                    <input {...register('password', { required: true, minLength: { value: 6, message: "Không được nhập dưới 6 ký tự" } })} id="password" name="password" type="password" autoComplete="current-password" className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Password" />
+                                    {Object.keys(errors).length !== 0 && (
+                                        <ul>
+                                            {errors.password?.type == 'required' && (<li className='text-[red] '>Không được để trống</li>)}
+                                            {errors.password?.message && <p className='text-[red] '>Phải lớn hơn 6 ký tự</p>}
+                                        </ul>
+                                    )}
                                 </div>
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >avatar</label>
-                                    <input {...register('avatar')} id="avatar" name="avatar" type="file" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Avatar" />
+                                    <input {...register('avatar')} id="avatar" name="avatar" type="file" autoComplete="current-password" className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Avatar" />
                                 </div>
                                 <div className='pt-[30px]'>
                                     <label htmlFor="password" className='mt-[30px]' >phone</label>
-                                    <input  {...register('phone')} id="phone" name="phone" type="number" autoComplete="current-password" required className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Phone" />
+                                    <input  {...register('phone', { required: true, minLength: { value: 10, message: "Số điện thoại chưa đúng" }, maxLength: { value: 11, message: "Số điện thọa chưa đúng" } })} id="phone" name="phone" type="number" autoComplete="current-password" className="relative  block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Phone" />
+                                    {Object.keys(errors).length !== 0 && (
+                                        <ul>
+                                            {errors.phone?.type == 'required' && (<li className='text-[red] '>Không được để trống</li>)}
+                                            {errors.phone?.message && <p className='text-[red] '>Số điện thoại chưa đúng</p>}
+                                        </ul>
+                                    )}
                                 </div>
                             </div>
                             <div className="flex items-center justify-between">
@@ -113,5 +140,5 @@ const Signin = (props: Props) => {
     )
 }
 
-Signin.Layout = AuthLayout
-export default Signin
+Signup.Layout = AuthLayout
+export default Signup

@@ -1,13 +1,34 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import userUser from '../../hook/use-user'
 
+
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 
 
 type Props = {}
-
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 const Profile = (props: Props) => {
     const [ edit, setEdit] = useState(true);
+
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
 
     const onsubmit = () => {
@@ -58,9 +79,76 @@ const Profile = (props: Props) => {
                 <div className="profile_account relative w-[768px]">
                     <div className="flex flex-row justify-between mb-[32px]">
                         <h2 className='text-[40px] font-bold'>Hồ sơ của tôi</h2>
-                        <div className=''>
-                            <button onClick={onsubmit} className='btn rounded-full border border-gray-700 px-[24px] font-medium py-[10px] '>Chỉnh sửa</button>
-                        </div>
+                        <div >
+                        <div className='border border-gray-700 rounded-full'>
+                                <Button onClick={handleOpen} className='btn rounded-full border border-gray-700 px-[24px] font-medium py-[10px] '>Chỉnh sửa</Button>
+                                <Modal
+                                    aria-labelledby="transition-modal-title"
+                                    aria-describedby="transition-modal-description"
+                                    open={open}
+                                    onClose={handleClose}
+                                    closeAfterTransition
+                                    BackdropComponent={Backdrop}
+                                    BackdropProps={{
+                                        timeout: 500,
+                                    }}
+                                >
+                                    <Fade in={open}>
+                                        <Box sx={style}>
+                                            <Typography id="transition-modal-title" variant="h6" component="h2">
+                                                <Box
+                                                    component="form"
+                                                    sx={{
+                                                        '& > :not(style)': { m: 1, width: '25ch' },
+                                                    }}
+                                                    noValidate
+                                                    autoComplete="off"
+                                                >
+                                                    <TextField
+                                                        required
+                                                        id="outlined-required"
+                                                        label="số điện thoại"
+                                                        defaultValue={user.phone}
+                                                    />
+                                                     <TextField
+                                                        required
+                                                        id="outlined-required"
+                                                        label="họ và tên"
+                                                        defaultValue={user.name}
+                                                    />
+                                                      <TextField
+                                                        required
+                                                        id="outlined-required"
+                                                        label="email"
+                                                        defaultValue= {user.email}
+                                                    />
+                                                     <TextField
+                                                        required
+                                                        id="outlined-required"
+                                                        label="Ngày sinh"
+                                                        defaultValue=""
+                                                    />
+                                                     <TextField
+                                                        required
+                                                        id="outlined-required"
+                                                        label="Giới tính"
+                                                        defaultValue=""
+                                                    />
+                                                     <TextField
+                                                        required
+                                                        id="outlined-required"
+                                                        label="Địa chỉ"
+                                                        defaultValue=""
+                                                    />
+                                                </Box>
+                                            </Typography>
+                                            <Typography id="transition-modal-description" sx={{ mt: 2 ,}}>
+                                                   <Button variant="outlined">Primary</Button>
+                                            </Typography>
+                                        </Box>
+                                    </Fade>
+                                </Modal>
+                            </div>                       </div>
                    </div> 
                               
                     <div>

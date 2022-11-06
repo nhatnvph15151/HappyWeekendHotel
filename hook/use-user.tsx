@@ -1,6 +1,6 @@
 import axios from "axios";
 import useSWR from "swr";
-import {  remove, } from "../api/users";
+import {  remove, signin, } from "../api/users";
 import { UserType } from "../types/user";
 
 const userUser = () => {
@@ -12,6 +12,9 @@ const userUser = () => {
         mutate (data.filter((item: { _id: any; }) => item._id !== id ));    
     };
 
+  
+    
+
     // const edit = async (item: ProductType) => {
     //     const {data : products} = await update(item);
     //     return data;
@@ -22,6 +25,7 @@ const userUser = () => {
     return {
         // edit,
         // add,
+     
         dele,
         data,
         error

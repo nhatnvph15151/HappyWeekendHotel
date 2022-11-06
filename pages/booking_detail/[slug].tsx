@@ -54,6 +54,8 @@ const BookingDetail = ({ product }: ProductProps) => {
     }), []
 
     const handleClickOpen = () => {
+        console.log(open);
+        
         setOpen(true);
     };
     const handleClickOpen2 = () => {
@@ -76,9 +78,8 @@ const BookingDetail = ({ product }: ProductProps) => {
         console.log(value)
         setckekout(value)
     }
-    const on = async () => {
+    const on = async () => {  }
 
-    }
     const onsubmit: SubmitHandler<Form> = async data => {
         console.log(product)
         const newckeck: any = {

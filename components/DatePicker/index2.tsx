@@ -13,6 +13,7 @@ type props = {
 
 export default function DateBooked({ id, getDate, label }: props) {
   const [dataDate, setDataDate] = useState([])
+  const [value, setValue] = React.useState<any>(null);
   useEffect(() => {
     const getData = async () => {
       const data = await fetch('http://localhost:4000/api/dateBooked').then((res) => res.json())
@@ -21,7 +22,6 @@ export default function DateBooked({ id, getDate, label }: props) {
     getData()
   }, [])
 
-  const [value, setValue] = React.useState<any>(null);
   getDate(value?.$d)
   const bookedDates: any[] = []
 

@@ -7,6 +7,7 @@ import HomePageLayout from '../components/Layout/HomePageLayout'
 import ActionAreaCard from '../components/Card'
 import useProducts from '../hook/use-product'
 import Link from 'next/link'
+import DateBooked from '../components/DatePicker/index2'
 
 const Home: NextPage = () => {
   const room = useProducts("")
@@ -17,12 +18,6 @@ const Home: NextPage = () => {
     { id: 2, qual: "1 người lớn" }
   ]
 
-  const newsList = [
-    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 1 },
-    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 2 },
-    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 3 },
-    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 3 },
-  ]
   const [visible, setVisible] = useState(true);
 
   const toggleVisible = () => {
@@ -34,13 +29,6 @@ const Home: NextPage = () => {
       setVisible(true)
     }
   };
-
-  const defaultBooking = {
-    bookingFrom: "17/10/2022",
-    bookingTo: "17/11/2022",
-    totalDayBooking: "30",
-    personQual: 2,
-  }
 
   useEffect(() => {
     window.addEventListener("scroll", toggleVisible)
@@ -90,15 +78,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="w-[80%] mx-auto pt-2">
-        <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1>
-        <>
-          <SimpleSwiper
-            newsList={room.data}
-          />
-        </>
-      </div>
-      <div className="w-[80%] mx-auto pt-2">
-        <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ HOT</h1>
+        {/* <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1> */}
         <>
           <SimpleSwiper
             newsList={room.data}
@@ -118,7 +98,34 @@ const Home: NextPage = () => {
               </svg>
             </h1>
           </div>
-          <ActionAreaCard newsList={newsList} />
+          <ActionAreaCard newsList={[
+            [
+              {
+                "_id": "63613e3ec5b015dc3665246c",
+                "name": "ThanhntOk",
+                "slug": "thanhntok",
+                "image": {
+                  "_id": "63613e50c5b015dc3665246f",
+                  "image": [
+                    "https://a0.muscache.com/im/pictures/beec3be2-ad2b-423b-a9a5-75070f905d0b.jpg?im_w=720",
+                    "https://a0.muscache.com/im/pictures/235d56fe-4241-4267-a24c-c70fdb4f8711.jpg?im_w=1200"
+                  ],
+                  "room": "63613e3ec5b015dc3665246c",
+                  "createdAt": "2022-11-01T15:42:08.949Z",
+                  "updatedAt": "2022-11-01T15:48:25.010Z",
+                  "__v": 0
+                },
+                "price": 150,
+                "description": "<p>ABCLGVSBDKVBSDLVHOSBDVSBDIUSDIUCBSDHVSDIYFVDS</p>",
+                "coc": true,
+                "category": "6352172dcdb05980122fdcb0",
+                "date": "635e9b7c5dee23ec01e8f4e6",
+                "createdAt": "2022-11-01T15:41:50.511Z",
+                "updatedAt": "2022-11-01T15:46:43.167Z",
+                "__v": 0
+              }
+            ]
+          ]} />
         </div>
       </div>
       <BackToTop visible={visible} />

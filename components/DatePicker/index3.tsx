@@ -23,6 +23,7 @@ export default function DateBooked2({ id, getDate, label }: props) {
 
   const [value, setValue] = React.useState<any>(null);
   getDate(value?.$d)
+  
   const bookedDates: any[] = []
 
   const getBookedDates = () => {

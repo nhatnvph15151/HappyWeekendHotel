@@ -29,6 +29,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import DateBooked2 from '../../components/DatePicker/index3'
 import { creat } from '../../api/bookedDate'
+import BasicDateRangePicker from '../../components/DatePicker/index4'
 
 type ProductProps = {
     product: ProductType
@@ -66,8 +67,6 @@ const BookingDetail = ({ product }: ProductProps) => {
     }
 
     const handleClickOpen = () => {
-        console.log(open);
-        
         setOpen(true);
     };
     const handleClickOpen2 = () => {
@@ -81,15 +80,13 @@ const BookingDetail = ({ product }: ProductProps) => {
     };
     const hanlechangeckeckin = (e: any) => {
         const value = e.target.value
-        console.log(value)
         setckekin(value)
     }
     const hanlechangeckeckout = (e: any) => {
         const value = e.target.value
-        console.log(value)
         setckekout(value)
     }
-    const on = async () => {  }
+    const on = async () => { }
 
     const onsubmit: SubmitHandler<Form> = async data => {
         const newckeck: any = {
@@ -305,6 +302,10 @@ const BookingDetail = ({ product }: ProductProps) => {
                                         <div className="mb-6">
                                             <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thời gian trả <span>*</span></label>
                                             <DateBooked getDate={getDateTo} label="Thời gian trả" id={product._id ? product._id : ''} />
+                                        </div>
+                                        <div className="mb-6">
+                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thời gian trả <span>*</span></label>
+                                            <BasicDateRangePicker id={product._id ? product._id : ''} />
                                         </div>
                                         {/*footer*/}
                                         <div className="flex items-center justify-end border-t border-solid border-slate-200 rounded-b">

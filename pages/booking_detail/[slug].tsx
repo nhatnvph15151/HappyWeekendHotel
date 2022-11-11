@@ -30,6 +30,8 @@ import ImageListItem from '@mui/material/ImageListItem';
 import DateBooked2 from '../../components/DatePicker/index3'
 import { creat } from '../../api/bookedDate'
 import BasicDateRangePicker from '../../components/DatePicker/index4'
+import DialogConfirm from '../../components/Dialog'
+
 
 type ProductProps = {
     product: ProductType
@@ -45,6 +47,9 @@ type Form = {
 const BookingDetail = ({ product }: ProductProps) => {
     const room = useProducts("")
     const [ckeckin, setckekin] = React.useState('')
+    const [datebook, setdatebook] = React.useState({})
+    const [dataorder, setdataorder] = React.useState({})
+    const [dialong, setdialog] = React.useState(false)
     const [status, setstatus] = React.useState<string>()
     const [ckeckout, setckekout] = React.useState('')
     const [showModal, setShowModal] = React.useState(false);
@@ -94,7 +99,8 @@ const BookingDetail = ({ product }: ProductProps) => {
             checkouts: dateTo,
             room: product._id
         }
-        creatstatus(newckeck)
+        
+        // creatstatus(newckeck)
         const neworder: any = {
             ...data,
             room: product._id,
@@ -104,33 +110,39 @@ const BookingDetail = ({ product }: ProductProps) => {
             checkins: dateFrom,
             checkouts: dateTo,
         }
+       
+       
         const dateBooked: any = {
             dateFrom: dateFrom,
             dateTo: dateTo,
             room: product._id
         }
+        handleClose()
+        setdatebook(dateBooked)
+        setdataorder(neworder)
 
-        await creatOrder(neworder)
-            .then(() => {
-                const disabledDateBooked = async () => {
-                    await creat(dateBooked)
-                        .then(() => {
-                            Swal.fire(
-                                'Đặt phòng thành công',
-                                'Thông tin chi tiết sẽ được gửi tới email của bạn.',
-                                'success'
-                            )
-                            handleClose()
-                        })
-                }
-                disabledDateBooked()
-            })
-            .catch(() => {
-                Swal.fire({
-                    title: 'Có lỗi gì đó.',
-                    icon: 'error'
-                })
-            })
+        // await creatOrder(neworder)
+        //     .then(() => {
+        //         const disabledDateBooked = async () => {
+        //             await creat(dateBooked)
+        //                 .then(() => {
+        //                     // Swal.fire(
+        //                     //     'Đặt phòng thành công',
+        //                     //     'Thông tin chi tiết sẽ được gửi tới email của bạn.',
+        //                     //     'success'
+        //                     // ).then()
+        //                     handleClose()
+        //                     setdialog(true)
+        //                 })
+        //         }
+        //         disabledDateBooked()
+        //     })
+        //     .catch(() => {
+        //         Swal.fire({
+        //             title: 'Có lỗi gì đó.',
+        //             icon: 'error'
+        //         })
+        //     })
     }
 
     return (
@@ -313,8 +325,11 @@ const BookingDetail = ({ product }: ProductProps) => {
                                                 <Button onClick={handleClose}>Hủy</Button>
                                                 <Button
                                                     type="submit"
-                                                    onClick={() => { setShowModal(true); on(); }}
-                                                >Đặt phòng</Button>
+                                                    onClick={() => { setShowModal(false); on(); handleClose; setdialog(true)}}
+                                                >
+                                                    Đặt phòng
+                                                </Button>
+                                                
                                             </DialogActions>
                                         </div>
                                     </form>
@@ -322,6 +337,8 @@ const BookingDetail = ({ product }: ProductProps) => {
                             </>
                         }
                     </Dialog>
+                    {dialong ? <DialogConfirm data={dataorder} datebooks={datebook} room={product.name}/> :''}
+                    {/* <DialogConfirm/> */}
                 </div>
             </div>
         </div>

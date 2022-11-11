@@ -8,7 +8,6 @@ type props = {
 }
 
 export default function ActionAreaCard({ newsList }: props) {
-  
   return (
     <div className={`flex justify-between flex-wrap`}>
       {newsList?.map((item: any, index: any) => {
@@ -16,22 +15,6 @@ export default function ActionAreaCard({ newsList }: props) {
           <div className='mb-4' key={index}>
             <Link href={`/booking_detail/${item.slug}`}>
               <CardActionArea sx={{ display: "flex", flexDirection: "column", alignContent: "space-between", justifyContent: "space-between" }}>
-                {/* <div className="overflow-hidden w-[345px] h-[200px]">
-                  <img src={item.src || item.image} className="w-full h-full" alt="" />
-                </div>
-                <div className='p-2 flex justify-between items-center w-full'>
-                  <div>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {item.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      <p dangerouslySetInnerHTML={{ __html: item.description || "desc" }}></p>
-                    </Typography>
-                  </div>
-                  <div>
-                    <p className='text-[green] text-md font-semibold'>{item?.price ? `${item.price} VND` : ""} </p>
-                  </div>
-                </div> */}
                 <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
                   <div className='h-[200px] overflow-hidden'>
                     <img className="rounded-t-lg " src={item.image ? item.image[0] : ''} alt="" />
@@ -56,3 +39,20 @@ export default function ActionAreaCard({ newsList }: props) {
     </div>
   );
 }
+
+{/* <div className="overflow-hidden w-[345px] h-[200px]">
+                  <img src={item.src || item.image} className="w-full h-full" alt="" />
+                </div>
+                <div className='p-2 flex justify-between items-center w-full'>
+                  <div>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {item.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      <p dangerouslySetInnerHTML={{ __html: item.description || "desc" }}></p>
+                    </Typography>
+                  </div>
+                  <div>
+                    <p className='text-[green] text-md font-semibold'>{item?.price ? `${item.price} VND` : ""} </p>
+                  </div>
+                </div> */}

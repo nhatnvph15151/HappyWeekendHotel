@@ -11,17 +11,22 @@ import TextField from "@material-ui/core/TextField";
 import {
   DateRangePicker,
   DateRangeDelimiter,
-  LocalizationProvider
+  LocalizationProvider,
+  DateTimePicker
 } from "@material-ui/pickers";
 import DateFnsUtils from "@material-ui/pickers/adapter/date-fns"; // choose your lib
 import { InputAdornment } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DialogSearch from '../components/search'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs, { Dayjs } from 'dayjs'
 
 const Home: NextPage = () => {
   const date = new Date()
   const [selectedDate, handleDateChange] = React.useState([date, null]);
+  const [value, setValue] = React.useState<Dayjs | null>(dayjs(date));
+
   const room = useProducts("")
   const dialogRef = useRef<any>();
   const [indexTab, setIndexTab] = useState(1);
@@ -33,8 +38,8 @@ const Home: NextPage = () => {
     return (
       <LocalizationProvider dateAdapter={DateFnsUtils}>
         <DateRangePicker
-          startText="Check-in"
-          endText="Check-out"
+          startText="Ngày nhận"
+          endText="Ngày trả"
           value={selectedDate}
           disablePast
           onChange={(date: any) => handleDateChange(date)}
@@ -57,7 +62,21 @@ const Home: NextPage = () => {
       </LocalizationProvider>
     )
   }
-
+  const DateTimePickers = () => {
+    return (
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DateTimePicker
+          disablePast
+          label="Tìm kiếm theo giờ"
+          renderInput={(params) => <TextField {...params} size="small" helperText="" />}
+          value={value}
+          onChange={(newValue) => {
+            setValue(newValue);
+          }}
+        />
+      </LocalizationProvider>
+    )
+  }
   const [visible, setVisible] = useState(true);
 
   const toggleVisible = () => {
@@ -81,7 +100,7 @@ const Home: NextPage = () => {
         </div>
         <div className={`${visible ? "visible scale-100 opacity-100" : "invisible scale-50 opacity-0"} duration-300 translate-x-[-50%] translate-y-[-80%] absolute top-[100%] left-[50%] w-[80%] mx-auto bg-white shadow-xl rounded-xl p-4`}>
           <div className="flex justify-center">
-            <button className={`${indexTab == 3 ? 'text-[red] border-b border-[red]' : null} duration-150 hover:text-[red] flex flex-col items-center px-4`} onClick={() => { setIndexTab(3) }}>
+            <button className={`${indexTab == 3 ? 'text-[red] border-b border-[red]' : 'border-b border-[white]'} duration-150 hover:text-[red] flex flex-col items-center px-4`} onClick={() => { setIndexTab(3) }}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -104,9 +123,9 @@ const Home: NextPage = () => {
           </div>
           <div className={`border rounded-full p-4 mt-4 relative flex justify-center`}>
             {indexTab == 1 ? <DateRangerPicker /> : ""}
-            {indexTab == 2 ? <DatePicker date={1} /> : ""}
-            {indexTab == 3 ? <DatePicker date={28} /> : ""}
-            <div onClick={()=>{open(selectedDate)}} className="flex px-4 py-2 bg-[orange] rounded-full text-white cursor-pointer items-center justify-center">
+            {indexTab == 2 ? <DateRangerPicker /> : ""}
+            {indexTab == 3 ? <DateTimePickers /> : ""}
+            <div onClick={() => { open(selectedDate) }} className="flex px-4 py-2 bg-[orange] rounded-full text-white cursor-pointer items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>

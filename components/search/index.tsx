@@ -8,7 +8,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useProducts from '../../hook/use-product';
 import ActionAreaCard from '../Card';
-import { Skeleton } from '@mui/material';
+import { IconButton, Skeleton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 function DialogSearch(props: any, ref: any) {
     const [open, setOpen] = React.useState(false);
@@ -61,17 +62,17 @@ function DialogSearch(props: any, ref: any) {
         <div>
             <Dialog
                 fullWidth={true}
-                maxWidth="lg"
+                maxWidth="xl"
                 open={open}
                 onClose={() => { setOpen(false) }}
             >
-                <DialogTitle>Kết quả tìm kiếm nhà nghỉ. </DialogTitle>
+                <DialogTitle sx={{display: 'flex', justifyContent: "space-between"}}>
+                    Kết quả tìm kiếm nhà nghỉ. 
+                    <IconButton onClick={() => { setOpen(false) }}><CloseIcon/></IconButton>
+                </DialogTitle>
                 <DialogContent>
                     {loading ? skeletonLoadingRoom() : <ActionAreaCard newsList={data} />}
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => { setOpen(false) }}>Close</Button>
-                </DialogActions>
             </Dialog>
         </div>
     );

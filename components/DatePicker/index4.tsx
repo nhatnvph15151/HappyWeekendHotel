@@ -8,10 +8,11 @@ import {
 import DateFnsUtils from "@material-ui/pickers/adapter/date-fns"; // choose your lib
 
 type props = {
-    id: any
+    id: any,
+    getDate: any
 }
 
-export default function BasicDateRangePicker({ id }: props) {
+export default function BasicDateRangePicker({ id, getDate }: props) {
     const [selectedDate, handleDateChange] = React.useState([null, null]);
     const [dataDate, setDataDate] = useState([])
     const bookedDates: any[] = []
@@ -23,8 +24,8 @@ export default function BasicDateRangePicker({ id }: props) {
         }
         getData()
     }, [])
-
-
+    getDate(selectedDate)
+    
     const getBookedDates = () => {
         dataDate?.forEach((item: any) => {
             if (item.room == id) {

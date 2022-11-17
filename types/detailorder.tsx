@@ -7,7 +7,8 @@ export type DetailOrderType = {
         ckeckins: string,
         checkouts:string,
         statusorder:number,
-        total:number
+        total:number,
+        status:string
       },
       room: [
         {

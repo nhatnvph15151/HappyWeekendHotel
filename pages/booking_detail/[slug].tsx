@@ -169,15 +169,26 @@ const BookingDetail = () => {
     };
 
     const onsubmit: SubmitHandler<Form> = async data => {
-        const neworder: any = {
+const iduser = JSON.parse(localStorage.getItem("user") as string)?._id;
+      console.log(iduser);
+        const newckeck: any = {
+            checkins: dateFrom,
+            checkouts: dateTo,
+            room: product._id
+        }
+        
+        // creatstatus(newckeck)
+         const neworder: any = {
             ...data,
             room: product._id,
             statusorder: "0",
             total: "10000",
             status: status,
-            checkins: date[0],
-            checkouts: date[1],
+            checkins: dateFrom,
+            checkouts: dateTo,
+            user:iduser
         }
+       
         const dateBooked: any = {
             dateFrom: date[0],
             dateTo: date[1],

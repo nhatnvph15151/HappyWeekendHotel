@@ -7,6 +7,7 @@ import OrderHook from '../../../hook/use-order'
 import { DetailOrderType } from '../../../types/detailorder'
 import { OrderType } from '../../../types/order'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { remove } from '../../../api/bookedDate'
 type Props = {}
 type Form = {
     statusorder: number
@@ -38,31 +39,31 @@ const DetailOrder = (props: Props) => {
             return <span className='rounded-full py-[5px] px-[10px] bg-red-500 text-center text-white font-medium'>Hủy Phòng</span>
         }
     }
-    const updateStatus = (status: number) => {
-        if (status == 0) {
+    const updateStatus = (status: any) => {
+        if (status?.statusorder == 0) {
             return <select id="" {...register('statusorder')}>
                 <option value="1">Đã Xác nhận</option>
                 <option value="2">Đang có khách</option>
-                <option value="4">Hủy</option>
+                <option value="4" >Hủy</option>
             </select>
-        } else if (status == 1) {
+        } else if (status?.statusorder == 1) {
             return <select id="" {...register('statusorder')}>
                 <option value="2">Đang có khách</option>
                 <option value="3">Đã trả phòng</option>
                 <option value="4">Hủy</option>
             </select>
-        } else if (status == 2) {
+        } else if (status?.statusorder == 2) {
             return <select id="" {...register('statusorder')}>
                 <option value="3">Đã trả phòng</option>
                 {/* <option value="4">Hủy</option> */}
             </select>
-        } else if (status == 3) {
+        } else if (status?.statusorder == 3) {
             return "Đã trả phòng"
         }
     }
 
     const onsubmit: SubmitHandler<Form> = data => {
-        const newdata = {
+        const newdata :any = {
             ...data,
             _id: id,
             name: order?.order.name,
@@ -75,8 +76,18 @@ const DetailOrder = (props: Props) => {
             user: "63422c2b90bc348c0cecfeec"
         }
         console.log(newdata)
-        update(newdata).then(()=>{
-            router.push('/admin/order')
+        update(newdata).then((res:any)=>{
+            console.log(res?.status)
+            console.log(res?.statusorder)
+
+            if(res?.statusorder == 4 || res?.statusorder == 3){
+                remove(res?.status).then(()=>{
+                    router.push('/admin/order')
+                })
+            }else{
+                router.push('/admin/order')
+            }
+            
         })
     }
     return (
@@ -94,15 +105,15 @@ const DetailOrder = (props: Props) => {
                         <div >
                             <span className='text-[18px] font-medium'>Thời gian CkeckIn</span> :
                             <div className='ml-[50px]'>
-                                <span>Giờ:</span> {order?.order.ckeckins.slice(11, 16)} <br />
-                                <span>Ngày:</span> {order?.order.ckeckins.slice(0, 10)}
+                                <span>Giờ:</span> {order?.order.ckeckins?.slice(11, 16)} <br />
+                                <span>Ngày:</span> {order?.order.ckeckins?.slice(0, 10)}
                             </div>
                         </div>
                         <div>
                             <span className='text-[18px] font-medium'>Thời gian CkeckOut :</span>
                             <div className='ml-[50px]'>
-                                <span>Giờ:</span> {order?.order.checkouts.slice(11, 16)} <br />
-                                <span>Ngày:</span> {order?.order.checkouts.slice(0, 10)}
+                                <span>Giờ:</span> {order?.order.checkouts?.slice(11, 16)} <br />
+                                <span>Ngày:</span> {order?.order.checkouts?.slice(0, 10)}
                             </div>
                         </div>
                     </div>
@@ -130,7 +141,7 @@ const DetailOrder = (props: Props) => {
                                 <label className='font-medium'>Status Booking: </label><span>{statuss(order?.order.statusorder)}</span>
                             </div>
                             <form action="" className='flex' onSubmit={handleSubmit(onsubmit)}>
-                                <div className='my-[10px]'>{updateStatus(order?.order.statusorder)} </div>
+                                <div className='my-[10px]'>{updateStatus(order?.order)} </div>
                                 <button className='my-[10px] mx-[15px] rounded-full bg-sky-400 py-[5px] px-[10px] text-white text-[13px] text-center'>Cập Nhật</button>
                             </form>
                         </div>

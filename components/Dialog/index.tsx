@@ -24,10 +24,14 @@ const DialogConfirm = ({data,datebooks,room}:any) => {
    const order = async ()  =>{
     console.log(data)
     console.log(datebooks)
-    await creatOrder(data)
-            .then(() => {
+    await creat(datebooks)
+            .then((res:any) => {
                 const disabledDateBooked = async () => {
-                    await creat(datebooks)
+                  const newdata = {
+                    ...data,
+                    status: res?._id
+                  }
+                    await creatOrder(newdata)
                         .then(() => {
                             Swal.fire(
                                 'Đặt phòng thành công',

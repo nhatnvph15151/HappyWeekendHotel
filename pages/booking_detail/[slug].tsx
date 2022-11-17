@@ -94,6 +94,8 @@ const BookingDetail = ({ product }: ProductProps) => {
     const on = async () => { }
 
     const onsubmit: SubmitHandler<Form> = async data => {
+      const iduser = JSON.parse(localStorage.getItem("user") as string)?._id;
+      console.log(iduser);
         const newckeck: any = {
             checkins: dateFrom,
             checkouts: dateTo,
@@ -109,6 +111,7 @@ const BookingDetail = ({ product }: ProductProps) => {
             status: status,
             checkins: dateFrom,
             checkouts: dateTo,
+            user:iduser
         }
        
        

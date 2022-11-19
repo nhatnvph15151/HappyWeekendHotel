@@ -73,7 +73,7 @@ const DetailOrder = (props: Props) => {
             checkins: order?.order.ckeckins,
             checkouts: order?.order.ckeckins,
             room: order?.room[0]._id,
-            user: "63422c2b90bc348c0cecfeec"
+            user: order?.order.user
         }
         console.log(newdata)
         update(newdata).then((res:any)=>{

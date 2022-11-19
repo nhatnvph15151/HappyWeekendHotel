@@ -8,7 +8,8 @@ export type DetailOrderType = {
         checkouts:string,
         statusorder:number,
         total:number,
-        status:string
+        status:string,
+        user:string
       },
       room: [
         {

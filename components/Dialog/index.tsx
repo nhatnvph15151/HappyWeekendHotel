@@ -5,7 +5,6 @@ import { creat } from "../../api/bookedDate";
 import { useRouter } from "next/router";
 import { Button, Dialog, DialogActions, DialogTitle, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import format from "date-fns/format";
 
 type PostProps = {
 
@@ -14,30 +13,28 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
   const [displayBasic2, setDisplayBasic2] = useState<any>(false);
   const router = useRouter()
 
+  const handleClose = () => {
+    setDisplayBasic2(false)
+  }
 
-  console.log(data)
-    
-  const dialogFuncMap: any = {
-    displayBasic2: setDisplayBasic2,
-  };
-   const order = async ()  =>{
-    console.log(data)
-    console.log(datebooks)
-    await creat(datebooks)
-            .then((res:any) => {
-                const disabledDateBooked = async () => {
-                  const newdata = {
-                    ...data,
-                    status: res?._id
-                  }
-                    await creatOrder(newdata)
-                        .then(() => {
-                            Swal.fire(
-                                'Đặt phòng thành công',
-                                'Thông tin chi tiết sẽ được gửi tới email của bạn.',
-                                'success'
-                            )
-                            onHide("displayBasic2")
+  useImperativeHandle(ref, () => ({
+    open: (props: any) => {
+      setDisplayBasic2(true)
+    }
+  }))
+  console.log();
+  const order = async () => {  
+    await creatOrder(data)
+      .then(() => {
+        const disabledDateBooked = async () => {
+          await creat(datebooks)
+            .then(() => {
+              Swal.fire(
+                'Đặt phòng thành công',
+                'Thông tin chi tiết sẽ được gửi tới email của bạn.',
+                'success'
+              )
+              handleClose()
             })
         }
         disabledDateBooked()
@@ -50,9 +47,6 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
       })
   }
 
-  const formatDate = (date:any)=>{
-    return date ? format(new Date(date), 'dd/MM/yyyy') : ''
-  }
   return (
     <Dialog
       fullWidth={true}
@@ -87,11 +81,11 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
               </tr>
               <tr className="bg-[#F5FAFF] ">
                 <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Check In</label> </td>
-                <td className="py-[5px] pl-[42px] text-[#424241]">Giờ : 9h , Ngày : {formatDate(datebooks.dateFrom)} </td>
+                <td className="py-[5px] pl-[42px] text-[#424241]">Giờ : 9h , Ngày : {JSON.stringify(datebooks.dateFrom)} </td>
               </tr>
               <tr className="bg-[#ffffff]">
                 <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Check Out</label> </td>
-                <td className="py-[5px] pl-[42px] text-[#424241]">Giờ : 9h , Ngày : {formatDate(datebooks.dateTo)}</td>
+                <td className="py-[5px] pl-[42px] text-[#424241]">Giờ : 9h , Ngày : 11/11/2020</td>
               </tr>
             </tbody>
           </table>

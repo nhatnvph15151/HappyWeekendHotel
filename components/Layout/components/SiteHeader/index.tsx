@@ -58,7 +58,7 @@ const SiteHeader = (props: Props) => {
         <div className="flex justify-between items-center my-2">
           <div className="flex">
             <Link href="/" >
-              <img className='w-[100px] cursor-pointer' src="https://res.cloudinary.com/djsbi0bma/image/upload/v1664420813/logo-removebg-preview_qdh0jk.png" alt="" />
+              <img className='w-[70px] cursor-pointer' src="https://res.cloudinary.com/djsbi0bma/image/upload/v1644211111/samples/cloudinary-icon.png" alt="" />
             </Link>
             <span className='flex items-center cursor-pointer relative group px-6'>
               Danh mục nhà nghỉ

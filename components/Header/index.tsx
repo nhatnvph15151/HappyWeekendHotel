@@ -39,7 +39,7 @@ const Header = (props: Props) => {
         <div className="flex justify-between items-center my-2">
           <div className="flex">
             <Link href="/" >
-              <img className='w-[100px] cursor-pointer' src="https://res.cloudinary.com/djsbi0bma/image/upload/v1664420813/logo-removebg-preview_qdh0jk.png" alt="" />
+              <img className='w-[100px] cursor-pointer' src="https://res.cloudinary.com/djsbi0bma/image/upload/v1644211111/samples/cloudinary-icon.png" alt="" />
             </Link>
             <span className='flex items-center px-6 cursor-pointer hover:opacity-50 duration-150'>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

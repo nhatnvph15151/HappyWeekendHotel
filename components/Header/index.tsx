@@ -15,7 +15,6 @@ const Header = (props: Props) => {
   useEffect(() => {
     const getUser = JSON.parse(localStorage.getItem('user') as string)
 
-    console.log(getUser)
     if (getUser == {} || getUser == null) {
       setStatus(false)
     } else {
@@ -133,7 +132,7 @@ const Header = (props: Props) => {
                         'aria-labelledby': 'basic-button',
                       }}
                     >
-                      <Link href={'/profile/${_id}'}>
+                      <Link href={'/profile'}>
                         <MenuItem>
                           <div className='contents'><img width={50} className="rounded-full h-[50px] w-[50px] object-cover border-current" src={user.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
                           <div className="flex-col pl-3 w-[100%] items-start">

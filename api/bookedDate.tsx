@@ -10,7 +10,7 @@ export const getAll = () => {
     return instance.get(url)
 }
 
-export const remove = (_id:number) => {
+export const remove = (_id:string) => {
     const url = `dateBooked/${_id}/delete`;
     return instance.delete(url)
 }

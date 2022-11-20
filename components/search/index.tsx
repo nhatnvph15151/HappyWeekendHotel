@@ -10,6 +10,8 @@ import useProducts from '../../hook/use-product';
 import ActionAreaCard from '../Card';
 import { IconButton, Skeleton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import formatISO from 'date-fns/formatISO'
+import dayjs from 'dayjs';
 
 function DialogSearch(props: any, ref: any) {
     const [open, setOpen] = React.useState(false);
@@ -21,7 +23,10 @@ function DialogSearch(props: any, ref: any) {
         openSearchResult: (prop: any) => {
             setLoading(true)
             const searchRooms = async () => {
-                await fetch(`http://localhost:4000/api/rooms?dateFrom=${prop[0]}&dateTo=${prop[1]}`)
+                const checkIn = dayjs(prop[0]).toISOString()
+                const checkOut = prop[1] ? dayjs(prop[1]).toISOString() : null
+                console.log(checkIn, checkOut);
+                await fetch(`http://localhost:4000/api/room?dateFrom=${checkIn}&dateTo=${checkOut}`)
                     .then((res) => res.json())
                     .then((result) => {
                         setData(result)
@@ -71,7 +76,7 @@ function DialogSearch(props: any, ref: any) {
                     <IconButton onClick={() => { setOpen(false) }}><CloseIcon/></IconButton>
                 </DialogTitle>
                 <DialogContent>
-                    {loading ? skeletonLoadingRoom() : <ActionAreaCard newsList={data} />}
+                    {loading ? skeletonLoadingRoom() : <ActionAreaCard newsList={data ? data : ''} />}
                 </DialogContent>
             </Dialog>
         </div>

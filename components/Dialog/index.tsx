@@ -14,27 +14,30 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
   const [displayBasic2, setDisplayBasic2] = useState<any>(false);
   const router = useRouter()
 
-  const handleClose = () => {
-    setDisplayBasic2(false)
-  }
 
-  useImperativeHandle(ref, () => ({
-    open: (props: any) => {
-      setDisplayBasic2(true)
-    }
-  }))
-  const order = async () => {
-    await creatOrder(data)
-      .then(() => {
-        const disabledDateBooked = async () => {
-          await creat(datebooks)
-            .then(() => {
-              Swal.fire(
-                'Đặt phòng thành công',
-                'Thông tin chi tiết sẽ được gửi tới email của bạn.',
-                'success'
-              )
-              handleClose()
+  console.log(data)
+    
+  const dialogFuncMap: any = {
+    displayBasic2: setDisplayBasic2,
+  };
+   const order = async ()  =>{
+    console.log(data)
+    console.log(datebooks)
+    await creat(datebooks)
+            .then((res:any) => {
+                const disabledDateBooked = async () => {
+                  const newdata = {
+                    ...data,
+                    status: res?._id
+                  }
+                    await creatOrder(newdata)
+                        .then(() => {
+                            Swal.fire(
+                                'Đặt phòng thành công',
+                                'Thông tin chi tiết sẽ được gửi tới email của bạn.',
+                                'success'
+                            )
+                            onHide("displayBasic2")
             })
         }
         disabledDateBooked()

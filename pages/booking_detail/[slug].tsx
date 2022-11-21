@@ -1,15 +1,11 @@
-import React, { useEffect } from 'react'
+/* eslint-disable @next/next/no-img-element */
+import React, { useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faUtensils, faSpa, faShirt, faShower, faBell, faCar, faWifi } from '@fortawesome/free-solid-svg-icons'
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
 import { ProductType } from '../../types/products'
-import { BasicType } from '../../types/basic'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import axios from 'axios'
 import useStatus from '../../hook/use-status'
 import { creatOrder } from '../../api/order'
-import { OrderType } from '../../types/order'
-import { StatusType } from '../../types/statusroom'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -20,6 +16,24 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 import useProducts from '../../hook/use-product'
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Mousewheel, Pagination } from "swiper";
+import "swiper/css";
+import "swiper/css/pagination";
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import BasicDateRangePicker from '../../components/DatePicker/index4'
+import DialogConfirm from '../../components/Dialog'
+import { DateTimePicker, LocalizationProvider } from '@material-ui/pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs, { Dayjs } from 'dayjs'
+import { Tab, Tabs, Typography } from '@mui/material'
+import BedtimeIcon from '@mui/icons-material/Bedtime';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import addDays from 'date-fns/addDays'
 
 type ProductProps = {
     product: ProductType
@@ -28,127 +42,249 @@ type Form = {
     name: string
     email: string
     phone: number
+    ckeckins: any
+    ckeckouts: any
 }
 
-const BookingDetail = ({ product }: ProductProps) => {
-    const [ckeckin, setckekin] = React.useState('')
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+const BookingDetail = () => {
+    const router = useRouter()
+    const { slug } = router.query
+    const { data: product } = useProducts(slug)
+    const [values, setValues] =
+        React.useState<Dayjs | null>(null);
+    const [value, setValue] = React.useState(0);
+    const [date, setDate] = React.useState([])//date range pciker
+    const [datebook, setdatebook] = React.useState({})
+    const [dataorder, setdataorder] = React.useState({})
+    const [dialong, setdialog] = React.useState(false)
     const [status, setstatus] = React.useState<string>()
     const [ckeckout, setckekout] = React.useState('')
     const [showModal, setShowModal] = React.useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<Form>()
     const { creatstatus } = useStatus(setstatus)
     const [open, setOpen] = React.useState(false);
-    const [desc, setDesc] = React.useState("");
-    const router = useRouter();
+    const [open2, setOpen2] = React.useState(false);
+    const [activeStep, setActiveStep] = React.useState(0);
+    const [skipped, setSkipped] = React.useState(new Set<number>());
+    const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
 
-    const room = useProducts("");
-
-    useEffect(() => {
-        setDesc(product.description)
-    }), []
-
-    const handleClickOpen = () => {
-        console.log(open);
-        
-        setOpen(true);
+    const isStepOptional = (step: number) => {
+        return step === 1;
     };
 
+    const isStepSkipped = (step: number) => {
+        return skipped.has(step);
+    };
+
+    const handleNext = () => {
+        let newSkipped = skipped;
+        if (isStepSkipped(activeStep)) {
+            newSkipped = new Set(newSkipped.values());
+            newSkipped.delete(activeStep);
+        }
+
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped(newSkipped);
+    };
+
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+
+    const handleSkip = () => {
+        if (!isStepOptional(activeStep)) {
+            // You probably want to guard against something like this,
+            // it should never occur unless someone's actively trying to break something.
+            throw new Error("You can't skip a step that isn't optional.");
+        }
+
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped((prevSkipped) => {
+            const newSkipped = new Set(prevSkipped.values());
+            newSkipped.add(activeStep);
+            return newSkipped;
+        });
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+    };
+    const dialogConfirmRef = useRef();
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClickOpen2 = () => {
+        setOpen2(true);
+    };
     const handleClose = () => {
         setOpen(false);
     };
-    const hanlechangeckeckin = (e: any) => {
-        const value = e.target.value
-        console.log(value)
-        setckekin(value)
+    const handleClose2 = () => {
+        setOpen2(false);
+    };
+    const getDate = (dateData: any) => { //date range pciker
+        setDate(dateData);
     }
-    const hanlechangeckeckout = (e: any) => {
-        const value = e.target.value
-        console.log(value)
-        setckekout(value)
+    const on = async () => { }
+
+    const openDialogConfirm = () => {
+        dialogConfirmRef.current.open('hi')
     }
-    const on = async () => {  }
+
+    function a11yProps(index: number) {
+        return {
+            id: `simple-tab-${index}`,
+            'aria-controls': `simple-tabpanel-${index}`,
+        };
+    }
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
 
     const onsubmit: SubmitHandler<Form> = async data => {
-        console.log(product)
+const iduser = JSON.parse(localStorage.getItem("user") as string)?._id;
+      console.log(iduser);
         const newckeck: any = {
-            checkins: ckeckin,
-            checkouts: ckeckout,
+            checkins: dateFrom,
+            checkouts: dateTo,
             room: product._id
         }
-        creatstatus(newckeck)
-        const neworder: any = {
+        
+        // creatstatus(newckeck)
+         const neworder: any = {
             ...data,
             room: product._id,
             statusorder: "0",
             total: "10000",
             status: status,
-            checkins: ckeckin,
-            checkouts: ckeckout,
+            checkins: dateFrom,
+            checkouts: dateTo,
+            user:iduser
         }
-        await creatOrder(neworder)
-            .then(() => {
-                product.status = 0
-                room.edit(product).then(() => {
-                    Swal.fire(
-                        'Đặt phòng thành công',
-                        'Thông tin chi tiết sẽ được gửi tới email của bạn.',
-                        'success'
-                    )
-                })
-            })
-            .catch(() => {
-                Swal.fire({
-                    title: 'Có lỗi gì đó.',
-                    icon: 'error'
-                })
-            })
+       
+        const dateBooked: any = {
+            dateFrom: date[0],
+            dateTo: date[1],
+            room: product._id
+        }
+
+        setdatebook(dateBooked)
+        setdataorder(neworder)
+        openDialogConfirm()
+        handleClose()
     }
+
     return (
         <div className='w-[80%] mx-auto py-2'>
             <div className="content-header__booking mt-8">
                 <div className="content-text__booking">
                     <div className="new-content__booking">
                         <div className="flex justify-between items-center">
-                            <h1 className='text-[#FFA500] text-2xl font-semibold'>{product.name}</h1>
-                            <div className="float-left">
-                                <FontAwesomeIcon icon={faStar} className='text-[#FFA500]' />
-                                <FontAwesomeIcon icon={faStar} className='text-[#FFA500]' />
-                                <FontAwesomeIcon icon={faStar} className='text-[#FFA500]' />
-                                <FontAwesomeIcon icon={faStar} className='text-[#FFA500]' />
-                                <FontAwesomeIcon icon={faStar} />
+                            <h1 className='text-[#FFA500] text-2xl font-semibold'>{product?.name}</h1>
+                            <button className={`bg-[orange] px-4 py-2 rounded-md duration-300 ${open ? 'invisible translate-y-[-20px] opacity-0' : 'visible translate-y-0 opacity-100'}`} onClick={handleClickOpen}>
+                                Đặt phòng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className="relative mx-auto mt-6 w-full overflow-hidden rounded-md flex h-[500px]">
+                    <div className="basis-4/5 hover:opacity-70 duration-150">
+                        <img className='w-full' src={product?.image ? product.image[0] : ""} alt="" />
+                    </div>
+                    <div className="flex-1">
+                        {product?.image?.map((item: any, index: any) => (
+                            <div key={index} className={`${index == 0 ? "hidden" : ""} hover:opacity-70 duration-150 border`}>
+                                <img
+                                    src={`${item}`}
+                                    srcSet={`${item}`}
+                                    alt={item}
+                                    loading="lazy"
+                                />
                             </div>
-                        </div>
-                        {/* <div className="flex"><p className='pt-[10px] text-[17px]'>{basics?.address}</p>
-                            <p className='pt-[10px] pl-[50px] text-[17px]'>{basics?.name}</p></div> */}
+                        ))}
+                    </div>
+                    <div onClick={() => {
+                        handleClickOpen2()
+                    }} className="absolute bottom-[20px] right-[20px] bg-white shadow-xl p-2 rounded-full cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+                        </svg>
+                    </div>
+                </div>
 
-                    </div>
-                    <div className="bar__booking border-spacing-1 border-[#FFA500] border-[1px] mt-[20px] opacity-40"></div>
-                </div>
-                <div className="mx-auto mt-6 max-w-2xl lg:grid lg:max-w-full lg:grid-cols-3 lg:gap-x-8">
-                    <div className="aspect-w-3 aspect-h-4 hidden overflow-hidden rounded-lg lg:block">
-                        <img src={product.image} alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
-                    </div>
-                    <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-                        <div className="aspect-w-3 aspect-h-2 overflow-hidden rounded-lg">
-                            <img src={product.image} alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
-                        </div>
-                        <div className="aspect-w-3 aspect-h-2 overflow-hidden rounded-lg">
-                            <img src={product.image} alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
-                        </div>
-                    </div>
-                    <div className="aspect-w-4 aspect-h-5 sm:overflow-hidden sm:rounded-lg lg:aspect-w-3 lg:aspect-h-4">
-                        <img src={product.image} alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
-                    </div>
-                </div>
-                {/* <p className="content mt-[20px]" dangerouslySetInnerHTML={{ __html: desc || "desc" }}>
-                </p> */}
+                <>
+                    <Dialog
+                        fullWidth
+                        maxWidth="md"
+                        open={open2}
+                        onClose={handleClose2}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <button className='absolute top-[20px] right-[20px] p-2 rounded-full bg-[white] z-50 shadow-xl' onClick={() => {
+                            handleClose2()
+                        }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        <>
+                            <Swiper
+                                direction={"vertical"}
+                                slidesPerView={1}
+                                spaceBetween={30}
+                                mousewheel={true}
+                                autoHeight={true}
+                                pagination={{
+                                    clickable: true,
+                                }}
+                                modules={[Mousewheel, Pagination]}
+                                className="mySwiper"
+                            >
+                                {
+                                    product?.image?.map((item: any, index: any) => {
+                                        return (
+                                            <SwiperSlide key={index}>
+                                                <img className="h-full w-full" src={item} alt="Two each of gray, white, and black shirts laying flat." />
+                                            </SwiperSlide>
+                                        )
+                                    })
+                                }
+                            </Swiper>
+                        </>
+                    </Dialog>
+                </>
 
                 <div>
-                    <button className='bg-[orange] px-4 py-2 rounded-md' onClick={handleClickOpen}>
-                        Đặt phòng
-                    </button>
                     <Dialog open={open} onClose={handleClose}>
-                        {product.coc
+                        {product?.coc
                             ? <div className='flex justify-center flex-col items-center'>
                                 <DialogTitle>Yêu cầu thanh toán trước</DialogTitle>
                                 <DialogContent>
@@ -171,33 +307,78 @@ const BookingDetail = ({ product }: ProductProps) => {
                                     </DialogContentText>
                                     <form action="" onSubmit={handleSubmit(onsubmit)}>
                                         <div className="mb-6">
-                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Họ và tên</label>
-                                            <input {...register('name')} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Họ và tên <span>*</span></label>
+                                            <input {...register('name', { required: true })} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                            {Object.keys(errors).length !== 0 && (
+                                                <div>
+                                                    {errors.name?.type === "required" && <p className='text-red-600'>Tên không được bỏ trống</p>}
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="mb-6">
-                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Số điện thoại</label>
-                                            <input {...register('phone')} type="number" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Số điện thoại <span>*</span></label>
+                                            <input {...register('phone', { required: true })} type="number" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                            {Object.keys(errors).length !== 0 && (
+                                                <div>
+                                                    {errors.phone?.type === "required" && <p className='text-red-600'>Số điện thoại sản phẩm không được bỏ trống</p>}
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="mb-6">
-                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</label>
-                                            <input {...register('email')} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email <span>*</span></label>
+                                            <input {...register('email', { required: true })} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                            {Object.keys(errors).length !== 0 && (
+                                                <div>
+                                                    {errors.email?.type === "required" && <p className='text-red-600'>Email sản phẩm không được bỏ trống</p>}
+                                                </div>
+                                            )}
                                         </div>
-                                        <div className="mb-6">
-                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thời gian nhận</label>
-                                            <input {...register('name')} onChange={hanlechangeckeckin} type="datetime-local" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                        </div>
-                                        <div className="mb-6">
-                                            <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Thời gian trả</label>
-                                            <input {...register('name')} onChange={hanlechangeckeckout} type="datetime-local" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                        </div>
+                                        <Box sx={{ width: '100%' }}>
+                                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                                                    <Tab icon={<CalendarMonthIcon />} iconPosition="start" label="Theo ngày" {...a11yProps(0)} />
+                                                    <Tab icon={<BedtimeIcon />} iconPosition="start" label="Qua đêm" {...a11yProps(1)} />
+                                                    <Tab icon={<AccessTimeIcon />} iconPosition="start" label="Theo giờ" {...a11yProps(2)} />
+                                                </Tabs>
+                                            </Box>
+                                            <TabPanel value={value} index={2}>
+                                                <div className='mt-6'>
+                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                        <DateTimePicker
+                                                            renderInput={(props) => <TextField helperText="" {...props} />}
+                                                            label="DateTimePicker"
+                                                            value={values}
+                                                            onChange={(newValues) => {
+                                                                setValues(newValues)
+                                                                setDate([
+                                                                    newValues.$d,
+                                                                    addDays(new Date(newValues.$d), 1)
+                                                                ])
+                                                            }}
+                                                        />
+                                                    </LocalizationProvider>
+
+                                                </div>
+                                            </TabPanel>
+                                            <TabPanel value={value} index={0}>
+                                                <BasicDateRangePicker getDate={getDate} id={product?._id ? product._id : ''} />
+                                            </TabPanel>
+                                            <TabPanel value={value} index={1}>
+                                                <BasicDateRangePicker getDate={getDate} id={product?._id ? product._id : ''} />
+                                            </TabPanel>
+
+                                        </Box>
                                         {/*footer*/}
                                         <div className="flex items-center justify-end border-t border-solid border-slate-200 rounded-b">
                                             <DialogActions>
                                                 <Button onClick={handleClose}>Hủy</Button>
                                                 <Button
                                                     type="submit"
-                                                    onClick={() => { setShowModal(true); on(); handleClose() }}
-                                                >Đặt phòng</Button>
+                                                    onClick={() => { setShowModal(false); on(); handleClose; setdialog(true); }}
+                                                >
+                                                    Đặt phòng
+                                                </Button>
+
                                             </DialogActions>
                                         </div>
                                     </form>
@@ -205,254 +386,164 @@ const BookingDetail = ({ product }: ProductProps) => {
                             </>
                         }
                     </Dialog>
-                </div>
-            </div>
-
-            <div className="mt-[60px]">
-                <div className="">
-                    <div className="border-spacing-1 border-[#FFA500] border-[1px] mt-[20px] w-[70px]"></div>
-                    <h1 className='text-3xl font-semibold pt-[5px]'>REVIEW</h1>
-                </div>
-                <div className="flex items-center gap-3 mt-[30px]">
-                    <div className="bg-[#FFA500] w-[70px] text-center p-[18px] rounded-[20px] text-white">8.4</div>
-                    <p className='text-lg font-medium'>Very goood</p>
-                    <p>-</p>
-                    <p className='text-[#5c5c5c]'>111 reviews</p>
-                    <p className='text-lg font-medium text-[#FFA500]'>Read all Reviews</p>
-                </div>
-                <div className="mt-[30px]">
-                    <h2 className='font-medium text-2xl'>Categories:</h2>
-                    <div className="mt-[15px]">
-                        <div className="flex justify-between">
-                            <div className="">
-                                <p>Staff</p>
-                                <div className="mt-[5px] w-[250px] h-[10px] bg-[#ffff] relative border-spacing-1 border border-[#FFA500]">
-                                    <div className="absolute top-0 left-0 bottom-0 right-20 bg-[#B5986D]"></div>
-                                </div>
-                            </div>
-                            <div className="">
-                                <p>Cleanliness</p>
-                                <div className="mt-[5px] w-[250px] h-[10px] bg-[#ffff] relative border-spacing-1 border border-[#FFA500]">
-                                    <div className="absolute top-0 left-0 bottom-0 right-20 bg-[#B5986D]"></div>
-                                </div>
-                            </div>
-                            <div className="">
-                                <p>Facilities</p>
-                                <div className="mt-[5px] w-[250px] h-[10px] bg-[#ffff] relative border-spacing-1 border border-[#FFA500]">
-                                    <div className="absolute top-0 left-0 bottom-0 right-20 bg-[#B5986D]"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex justify-between mt-[20px]">
-                            <div className="">
-                                <p>Comfort</p>
-                                <div className="mt-[5px] w-[250px] h-[10px] bg-[#ffff] relative border-spacing-1 border border-[#FFA500]">
-                                    <div className="absolute top-0 left-0 bottom-0 right-20 bg-[#B5986D]"></div>
-                                </div>
-                            </div>
-                            <div className="">
-                                <p>Value for money</p>
-                                <div className="mt-[5px] w-[250px] h-[10px] bg-[#ffff] relative border-spacing-1 border border-[#FFA500]">
-                                    <div className="absolute top-0 left-0 bottom-0 right-20 bg-[#B5986D]"></div>
-                                </div>
-                            </div>
-                            <div className="">
-                                <p>Location</p>
-                                <div className="mt-[5px] w-[250px] h-[10px] bg-[#ffff] relative border-spacing-1 border border-[#FFA500]">
-                                    <div className="absolute top-0 left-0 bottom-0 right-20 bg-[#B5986D]"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-[20px]">
-                            <p>Free wifi</p>
-                            <div className="mt-[5px] w-[250px] h-[10px] bg-[#ffff] relative border-spacing-1 border border-[#FFA500]">
-                                <div className="absolute top-0 left-0 bottom-0 right-20 bg-[#B5986D]"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="mt-[100px]">
-                <div className="">
-                    <div className="border-spacing-1 border-[#FFA500] border-[1px] mt-[20px] w-[70px]"></div>
-                    <h1 className='text-3xl font-semibold pt-[5px]'>AVAILABLE ROOMS</h1>
-                </div>
-
-                <div className="flex gap-20">
-                    <div className="mt-[30px]">
-                        <div className="icons flex items-center gap-12">
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faWifi} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Wifi</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faBell} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Buffet</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faShower} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Pool</p>
-                            </div>
-                        </div>
-                        <div className="content-name pt-[5px]">
-                            <h1 className='text-3xl font-semibold'>Double room, one room - “ABC”</h1>
-                        </div>
-                        <div className="flex gap-3 items-center mt-[15px]">
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                        </div>
-                        <div className="pt-[15px]">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sodales erat quis
-                                condimentum molestie. Sed ex turpis, semper quis augue non, mollis lacinia dolor.
-                                Aliquam maximus semper placerat. Fusce gravida condimentum volutpat. Aliquam sagittis
-                                malesuada ultricies. Proin eget tortor a ante cursus pellentesque
-                            </p>
-                        </div>
-                        <div className="pt-[15px] flex justify-between">
-                            <strong>From 20$ a day</strong>
-                            <p className='text-[#FFA500]'><a href="">calculate price</a></p>
-                        </div>
-                    </div>
-                    {/*  */}
-                    <div className="mt-[30px]">
-                        <div className="icons flex items-center gap-12">
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faWifi} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Wifi</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faBell} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Buffet</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faShower} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Pool</p>
-                            </div>
-                        </div>
-                        <div className="content-name pt-[5px]">
-                            <h1 className='text-3xl font-semibold'>Double room, one room - “ABC”</h1>
-                        </div>
-                        <div className="flex gap-3 items-center mt-[15px]">
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                        </div>
-                        <div className="pt-[15px]">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sodales erat quis
-                                condimentum molestie. Sed ex turpis, semper quis augue non, mollis lacinia dolor.
-                                Aliquam maximus semper placerat. Fusce gravida condimentum volutpat. Aliquam sagittis
-                                malesuada ultricies. Proin eget tortor a ante cursus pellentesque
-                            </p>
-                        </div>
-                        <div className="pt-[15px] flex justify-between">
-                            <strong>From 20$ a day</strong>
-                            <p className='text-[#FFA500]'><a href="">calculate price</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex gap-20 mt-[31px]">
-                    <div className="mt-[30px]">
-                        <div className="icons flex items-center gap-12">
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faWifi} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Wifi</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faBell} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Buffet</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faShower} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Pool</p>
-                            </div>
-                        </div>
-                        <div className="content-name pt-[5px]">
-                            <h1 className='text-3xl font-semibold'>Double room, one room - “ABC”</h1>
-                        </div>
-                        <div className="flex gap-3 items-center mt-[15px]">
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                        </div>
-                        <div className="pt-[15px]">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sodales erat quis
-                                condimentum molestie. Sed ex turpis, semper quis augue non, mollis lacinia dolor.
-                                Aliquam maximus semper placerat. Fusce gravida condimentum volutpat. Aliquam sagittis
-                                malesuada ultricies. Proin eget tortor a ante cursus pellentesque
-                            </p>
-                        </div>
-                        <div className="pt-[15px] flex justify-between">
-                            <strong>From 20$ a day</strong>
-                            <p className='text-[#FFA500]'><a href="">calculate price</a></p>
-                        </div>
-                    </div>
-                    {/*  */}
-                    <div className="mt-[30px]">
-                        <div className="icons flex items-center gap-12">
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faWifi} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Wifi</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faBell} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Buffet</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <FontAwesomeIcon icon={faShower} className='text-[#FFA500] text-xl' />
-                                <p className='text-xl'>Pool</p>
-                            </div>
-                        </div>
-                        <div className="content-name pt-[5px]">
-                            <h1 className='text-3xl font-semibold'>Double room, one room - “ABC”</h1>
-                        </div>
-                        <div className="flex gap-3 items-center mt-[15px]">
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                            <img src="https://picsum.photos/200/330" className='rounded-[20px] w-[30%]' alt="" />
-                        </div>
-                        <div className="pt-[15px]">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sodales erat quis
-                                condimentum molestie. Sed ex turpis, semper quis augue non, mollis lacinia dolor.
-                                Aliquam maximus semper placerat. Fusce gravida condimentum volutpat. Aliquam sagittis
-                                malesuada ultricies. Proin eget tortor a ante cursus pellentesque
-                            </p>
-                        </div>
-                        <div className="pt-[15px] flex justify-between">
-                            <strong>From 20$ a day</strong>
-                            <p className='text-[#FFA500]'><a href="">calculate price</a></p>
-                        </div>
-                    </div>
+                    <DialogConfirm
+                        ref={dialogConfirmRef}
+                        data={dataorder}
+                        datebooks={datebook}
+                        room={product?.name} />
                 </div>
             </div>
         </div>
     )
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-    const data = await (await fetch(`http://localhost:4000/api/rooms`)).json();
-    const paths = data.map((product: any) => (
-        { params: { slug: product.slug } }
-    ))
-    return {
-        paths,
-        fallback: true // blocking or true
-    }
-}
-// server
-export const getStaticProps: GetStaticProps<ProductProps> = async (context: GetStaticPropsContext) => {
-    console.log('context', context);
-    const product = await (await fetch(`http://localhost:4000/api/rooms/${context.params?.slug}`)).json();
-    return {
-        props: { product },
-        revalidate: 5
-    }
+export default BookingDetail 
 
-}
+{/* <div className="flex mt-6 border rounded-md p-2 relative">
+                    <Box className='basis-4/6' sx={{ width: '100%' }}>
+                        <Stepper activeStep={activeStep}>
+                            {steps.map((label, index) => {
+                                const stepProps: { completed?: boolean } = {};
+                                const labelProps: {
+                                    optional?: React.ReactNode;
+                                } = {};
+                                if (isStepOptional(index)) {
+                                    labelProps.optional = (
+                                        <Typography variant="caption">Optional</Typography>
+                                    );
+                                }
+                                if (isStepSkipped(index)) {
+                                    stepProps.completed = false;
+                                }
+                                return (
+                                    <Step key={label} {...stepProps}>
+                                        <StepLabel {...labelProps}>{label}</StepLabel>
+                                    </Step>
+                                );
+                            })}
+                        </Stepper>
+                        {activeStep === steps.length ? (
+                            <React.Fragment>
+                                <Typography sx={{ mt: 2, mb: 1 }}>
+                                    All steps completed - you&apos;re finished
+                                </Typography>
+                                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                                    <Box sx={{ flex: '1 1 auto' }} />
+                                    <Button onClick={handleReset}>Reset</Button>
+                                </Box>
+                            </React.Fragment>
+                        ) : (
+                            <React.Fragment>
+                                {activeStep == 0 ?
+                                    <>
+                                        <DialogTitle>Thông tin đặt phòng</DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText>
+                                                Những thông tin này sẽ giúp chúng tôi liên hệ và trợ giúp bạn dễ dàng hơn
+                                            </DialogContentText>
+                                            <form action="" onSubmit={handleSubmit(onsubmit)}>
+                                                <div className="mb-6">
+                                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Họ và tên <span>*</span></label>
+                                                    <input {...register('name', { required: true })} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                                    {Object.keys(errors).length !== 0 && (
+                                                        <div>
+                                                            {errors.name?.type === "required" && <p className='text-red-600'>Tên không được bỏ trống</p>}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="mb-6">
+                                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Số điện thoại <span>*</span></label>
+                                                    <input {...register('phone', { required: true })} type="number" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                                    {Object.keys(errors).length !== 0 && (
+                                                        <div>
+                                                            {errors.phone?.type === "required" && <p className='text-red-600'>Số điện thoại sản phẩm không được bỏ trống</p>}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="mb-6">
+                                                    <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email <span>*</span></label>
+                                                    <input {...register('email', { required: true })} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                                    {Object.keys(errors).length !== 0 && (
+                                                        <div>
+                                                            {errors.email?.type === "required" && <p className='text-red-600'>Email sản phẩm không được bỏ trống</p>}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <Box sx={{ width: '100%' }}>
+                                                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                                                            <Tab icon={<CalendarMonthIcon />} iconPosition="start" label="Theo ngày" {...a11yProps(0)} />
+                                                            <Tab icon={<BedtimeIcon />} iconPosition="start" label="Qua đêm" {...a11yProps(1)} />
+                                                            <Tab icon={<AccessTimeIcon />} iconPosition="start" label="Theo giờ" {...a11yProps(2)} />
+                                                        </Tabs>
+                                                    </Box>
+                                                    <TabPanel value={value} index={2}>
+                                                        <div className='mt-6'>
+                                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                                <DateTimePicker
+                                                                    renderInput={(props) => <TextField helperText="" {...props} />}
+                                                                    label="DateTimePicker"
+                                                                    value={values}
+                                                                    onChange={(newValues) => {
+                                                                        setValues(newValues)
+                                                                        setDate([
+                                                                            newValues.$d,
+                                                                            addDays(new Date(newValues.$d), 1)
+                                                                        ])
+                                                                    }}
+                                                                />
+                                                            </LocalizationProvider>
 
+                                                        </div>
+                                                    </TabPanel>
+                                                    <TabPanel value={value} index={0}>
+                                                        <BasicDateRangePicker getDate={getDate} id={product?._id ? product._id : ''} />
+                                                    </TabPanel>
+                                                    <TabPanel value={value} index={1}>
+                                                        <BasicDateRangePicker getDate={getDate} id={product?._id ? product._id : ''} />
+                                                    </TabPanel>
 
-export default BookingDetail
+                                                </Box>
+                                                {/*footer*/}
+                //                                 <div className="flex items-center justify-end border-t border-solid border-slate-200 rounded-b">
+                //                                     <DialogActions>
+                //                                         <Button onClick={handleClose}>Hủy</Button>
+                //                                         <Button
+                //                                             type="submit"
+                //                                             onClick={() => { setShowModal(false); on(); handleClose; setdialog(true); }}
+                //                                         >
+                //                                             Đặt phòng
+                //                                         </Button>
+
+                //                                     </DialogActions>
+                //                                 </div>
+                //                             </form>
+                //                         </DialogContent>
+                //                     </>
+                //                     : ""}
+                //                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                //                     <Button
+                //                         color="inherit"
+                //                         disabled={activeStep === 0}
+                //                         onClick={handleBack}
+                //                         sx={{ mr: 1 }}
+                //                     >
+                //                         Back
+                //                     </Button>
+                //                     <Box sx={{ flex: '1 1 auto' }} />
+                //                     {isStepOptional(activeStep) && (
+                //                         <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                //                             Skip
+                //                         </Button>
+                //                     )}
+                //                     <Button onClick={handleNext}>
+                //                         {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                //                     </Button>
+                //                 </Box>
+                //             </React.Fragment>
+                //         )}
+                //     </Box>
+                //     <div className='relative flex-1 border-l p-2'>
+                //         <div className=" sticky top-[100px]">Thông tin đặt phòng</div>
+                //     </div>
+                // </div> */}

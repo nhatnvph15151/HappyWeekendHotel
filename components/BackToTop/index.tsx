@@ -17,7 +17,7 @@ const BackToTop = ({visible}: Props) => {
     return (
         <div
             onClick={scrollToTop}
-            className={`${!visible ? "visible bottom-[10px] opacity-100" : "invisible bottom-[30px] opacity-50"} cursor-pointer duration-150 bg-[orange] p-4 rounded-full fixed right-[10px]`}>
+            className={`${!visible ? "visible bottom-[10px] opacity-100" : "invisible bottom-[30px] opacity-50"} cursor-pointer duration-150 bg-[orange] p-2 rounded-full fixed right-[10px]`}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

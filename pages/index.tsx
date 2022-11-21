@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import DatePicker from '../components/DatePicker'
 import SimpleSwiper from '../components/Slide'
 import BackToTop from '../components/BackToTop'
@@ -7,22 +7,76 @@ import HomePageLayout from '../components/Layout/HomePageLayout'
 import ActionAreaCard from '../components/Card'
 import useProducts from '../hook/use-product'
 import Link from 'next/link'
+import TextField from "@material-ui/core/TextField";
+import {
+  DateRangePicker,
+  DateRangeDelimiter,
+  LocalizationProvider,
+  DateTimePicker
+} from "@material-ui/pickers";
+import DateFnsUtils from "@material-ui/pickers/adapter/date-fns"; // choose your lib
+import { InputAdornment } from '@mui/material'
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import DialogSearch from '../components/search'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs, { Dayjs } from 'dayjs'
 
 const Home: NextPage = () => {
+  const date = new Date()
+  const [selectedDate, handleDateChange] = React.useState([date, null]);
+  const [value, setValue] = React.useState<Dayjs | null>(dayjs(date));
+
   const room = useProducts("")
-
+  const dialogRef = useRef<any>();
   const [indexTab, setIndexTab] = useState(1);
-  const personPerRoom = [
-    { id: 1, qual: "2 người lớn" },
-    { id: 2, qual: "1 người lớn" }
-  ]
 
-  const newsList = [
-    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 1 },
-    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 2 },
-    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 3 },
-    { src: 'https://kenhhomestay.com/wp-content/uploads/2021/02/khach-san-tinh-yeu-ha-noi-9.jpg', name: 'Nhà nghỉ tình yêu', decropt: "Ổn", id: 3 },
-  ]
+  const open = (item: any) => {
+    dialogRef.current.openSearchResult(item)
+  }
+  const DateRangerPicker = () => {
+    return (
+      <LocalizationProvider dateAdapter={DateFnsUtils}>
+        <DateRangePicker
+          startText="Ngày nhận"
+          endText="Ngày trả"
+          value={selectedDate}
+          disablePast
+          onChange={(date: any) => handleDateChange(date)}
+          renderInput={(startProps, endProps) => (
+            <>
+              <TextField {...startProps} size="small" variant='standard'
+                InputProps={{
+                  startAdornment: <InputAdornment position="start"><LoginIcon /></InputAdornment>,
+                }}
+                helperText="" />
+              <DateRangeDelimiter> to </DateRangeDelimiter>
+              <TextField {...endProps} size="small" variant='standard'
+                InputProps={{
+                  startAdornment: <InputAdornment position="start"><LogoutIcon /></InputAdornment>,
+                }}
+                helperText="" />
+            </>
+          )}
+        />
+      </LocalizationProvider>
+    )
+  }
+  const DateTimePickers = () => {
+    return (
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DateTimePicker
+          disablePast
+          label="Tìm kiếm theo giờ"
+          renderInput={(params) => <TextField {...params} size="small" helperText="" />}
+          value={value}
+          onChange={(newValue) => {
+            setValue(newValue);
+          }}
+        />
+      </LocalizationProvider>
+    )
+  }
   const [visible, setVisible] = useState(true);
 
   const toggleVisible = () => {
@@ -35,13 +89,6 @@ const Home: NextPage = () => {
     }
   };
 
-  const defaultBooking = {
-    bookingFrom: "17/10/2022",
-    bookingTo: "17/11/2022",
-    totalDayBooking: "30",
-    personQual: 2,
-  }
-
   useEffect(() => {
     window.addEventListener("scroll", toggleVisible)
   }, [])
@@ -49,11 +96,11 @@ const Home: NextPage = () => {
     <div className=''>
       <div className="w-[80%] mx-auto relative mb-[50px] z-10">
         <div className="flex justify-center h-[286px] bg-[url('https://res.cloudinary.com/djsbi0bma/image/upload/v1664538912/banner_bqsfeg.png')] bg-no-repeat bg-cover">
-          <h1 className='text-5xl text-center font-semibold text-white mt-5 w-[60%]'>Đặt phòng khách sạn linh hoạt - Giá tốt nhất</h1>
+          <h1 className='text-5xl text-center font-semibold text-white mt-5 w-[65%]'>Đặt phòng nhà nghỉ nhanh - tiện lợi</h1>
         </div>
         <div className={`${visible ? "visible scale-100 opacity-100" : "invisible scale-50 opacity-0"} duration-300 translate-x-[-50%] translate-y-[-80%] absolute top-[100%] left-[50%] w-[80%] mx-auto bg-white shadow-xl rounded-xl p-4`}>
           <div className="flex justify-center">
-            <button className={`${indexTab == 1 ? 'text-[red] border-b border-[red]' : null} duration-150 hover:text-[red] flex flex-col items-center px-4`} onClick={() => { setIndexTab(1) }}>
+            <button className={`${indexTab == 3 ? 'text-[red] border-b border-[red]' : 'border-b border-[white]'} duration-150 hover:text-[red] flex flex-col items-center px-4`} onClick={() => { setIndexTab(3) }}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -67,7 +114,7 @@ const Home: NextPage = () => {
               <p>Qua đêm</p>
             </button>
 
-            <button className={`${indexTab == 3 ? 'text-[red] border-b border-[red]' : null} duration-150 hover:text-[red] flex flex-col items-center px-4`} onClick={() => { setIndexTab(3) }}>
+            <button className={`${indexTab == 1 ? 'text-[red] border-b border-[red]' : null} duration-150 hover:text-[red] flex flex-col items-center px-4`} onClick={() => { setIndexTab(1) }}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
               </svg>
@@ -75,30 +122,20 @@ const Home: NextPage = () => {
             </button>
           </div>
           <div className={`border rounded-full p-4 mt-4 relative flex justify-center`}>
-            {indexTab == 1 ? <DatePicker date={7} /> : ""}
-            {indexTab == 2 ? <DatePicker date={1} /> : ""}
-            {indexTab == 3 ? <DatePicker date={28} /> : ""}
-            <Link href="/search?status=1">
-              <div className="flex px-4 py-2 bg-[orange] rounded-full text-white cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                </svg>
-                <p>Tìm kiếm</p>
-              </div>
-            </Link>
+            {indexTab == 1 ? <DateRangerPicker /> : ""}
+            {indexTab == 2 ? <DateRangerPicker /> : ""}
+            {indexTab == 3 ? <DateTimePickers /> : ""}
+            <div onClick={() => { open(selectedDate) }} className="flex px-4 py-2 bg-[orange] rounded-full text-white cursor-pointer items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+              <p>Tìm kiếm</p>
+            </div>
           </div>
         </div>
       </div>
       <div className="w-[80%] mx-auto pt-2">
-        <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1>
-        <>
-          <SimpleSwiper
-            newsList={room.data}
-          />
-        </>
-      </div>
-      <div className="w-[80%] mx-auto pt-2">
-        <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ HOT</h1>
+        {/* <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1> */}
         <>
           <SimpleSwiper
             newsList={room.data}
@@ -118,13 +155,41 @@ const Home: NextPage = () => {
               </svg>
             </h1>
           </div>
-          <ActionAreaCard newsList={newsList} />
+          <ActionAreaCard newsList={[
+            [
+              {
+                "_id": "63613e3ec5b015dc3665246c",
+                "name": "ThanhntOk",
+                "slug": "thanhntok",
+                "image": {
+                  "_id": "63613e50c5b015dc3665246f",
+                  "image": [
+                    "https://a0.muscache.com/im/pictures/beec3be2-ad2b-423b-a9a5-75070f905d0b.jpg?im_w=720",
+                    "https://a0.muscache.com/im/pictures/235d56fe-4241-4267-a24c-c70fdb4f8711.jpg?im_w=1200"
+                  ],
+                  "room": "63613e3ec5b015dc3665246c",
+                  "createdAt": "2022-11-01T15:42:08.949Z",
+                  "updatedAt": "2022-11-01T15:48:25.010Z",
+                  "__v": 0
+                },
+                "price": 150,
+                "description": "<p>ABCLGVSBDKVBSDLVHOSBDVSBDIUSDIUCBSDHVSDIYFVDS</p>",
+                "coc": true,
+                "category": "6352172dcdb05980122fdcb0",
+                "date": "635e9b7c5dee23ec01e8f4e6",
+                "createdAt": "2022-11-01T15:41:50.511Z",
+                "updatedAt": "2022-11-01T15:46:43.167Z",
+                "__v": 0
+              }
+            ]
+          ]} />
         </div>
       </div>
+      <DialogSearch ref={dialogRef} />
       <BackToTop visible={visible} />
     </div>
   )
 }
 
-Home.Layout = HomePageLayout 
+Home.Layout = HomePageLayout
 export default Home

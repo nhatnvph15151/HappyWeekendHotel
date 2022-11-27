@@ -79,7 +79,7 @@ const BookingDetail = () => {
     const [values, setValues] =
         React.useState<Dayjs | null>(null);
     const [value, setValue] = React.useState(0);
-    const [date, setDate] = React.useState([])//date range pciker
+    const [date, setDate] = React.useState<any>([])//date range pciker
     const [datebook, setdatebook] = React.useState({})
     const [dataorder, setdataorder] = React.useState({})
     const [dialong, setdialog] = React.useState(false)
@@ -135,7 +135,7 @@ const BookingDetail = () => {
     const handleReset = () => {
         setActiveStep(0);
     };
-    const dialogConfirmRef = useRef();
+    const dialogConfirmRef = useRef<any>();
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -169,26 +169,15 @@ const BookingDetail = () => {
     };
 
     const onsubmit: SubmitHandler<Form> = async data => {
-const iduser = JSON.parse(localStorage.getItem("user") as string)?._id;
-      console.log(iduser);
-        const newckeck: any = {
-            checkins: dateFrom,
-            checkouts: dateTo,
-            room: product._id
-        }
-        
-        // creatstatus(newckeck)
-         const neworder: any = {
+        const neworder: any = {
             ...data,
             room: product._id,
             statusorder: "0",
             total: "10000",
             status: status,
-            checkins: dateFrom,
-            checkouts: dateTo,
-            user:iduser
+            checkins: date[0],
+            checkouts: date[1],
         }
-       
         const dateBooked: any = {
             dateFrom: date[0],
             dateTo: date[1],
@@ -347,7 +336,7 @@ const iduser = JSON.parse(localStorage.getItem("user") as string)?._id;
                                                         <DateTimePicker
                                                             renderInput={(props) => <TextField helperText="" {...props} />}
                                                             label="DateTimePicker"
-                                                            value={values}
+                                                            value={'2022-11-18T08:20:01.000Z'}
                                                             onChange={(newValues) => {
                                                                 setValues(newValues)
                                                                 setDate([

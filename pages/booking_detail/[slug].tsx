@@ -79,7 +79,7 @@ const BookingDetail = () => {
     const [values, setValues] =
         React.useState<Dayjs | null>(null);
     const [value, setValue] = React.useState(0);
-    const [date, setDate] = React.useState([])//date range pciker
+    const [date, setDate] = React.useState<any>([])//date range pciker
     const [datebook, setdatebook] = React.useState({})
     const [dataorder, setdataorder] = React.useState({})
     const [dialong, setdialog] = React.useState(false)
@@ -135,7 +135,7 @@ const BookingDetail = () => {
     const handleReset = () => {
         setActiveStep(0);
     };
-    const dialogConfirmRef = useRef();
+    const dialogConfirmRef = useRef<any>();
     const handleClickOpen = () => {
         setOpen(true);
     };

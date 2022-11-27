@@ -123,3 +123,11 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
   );
 };
 export default forwardRef(DialogConfirm);
+function handleClose() {
+  throw new Error("Function not implemented.");
+}
+
+function onHide(arg0: string) {
+  throw new Error("Function not implemented.");
+}
+

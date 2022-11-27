@@ -70,7 +70,7 @@ const UserAdmin = (props: Props) => {
                                           <div className="flex items-center">
                                               <div className="flex-shrink-0">
                                                   <a href="#" className="block relative">
-                                                      <img alt="profil" src={item.password}  className="mx-auto object-cover rounded-full h-10 w-10 " />
+                                                      <img alt="profil" src={item.avatar}  className="mx-auto object-cover rounded-full h-10 w-10 " />
                                                   </a>
                                               </div>
                                               <div className="ml-3">
@@ -98,7 +98,7 @@ const UserAdmin = (props: Props) => {
                                           <a href="#" className="text-indigo-600 hover:text-indigo-900">
                                               Edit
                                           </a>
-                                         <button className=' bg-red-600 text-white rounded hover:bg-red-800 mb-4 px-3 py-2  ' onClick={() => remove(ite)} >Xóa</button> <br />
+                                         <button className=' bg-red-600 text-white rounded hover:bg-red-800 mb-4 px-3 py-2  ' onClick={() => remove(item)} >Xóa</button> <br />
                                           
                                       </td>
                                   </tr>

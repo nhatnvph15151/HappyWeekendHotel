@@ -7,18 +7,18 @@ import { OrderUser } from '../../../types/OrderUser'
 type Props = {}
 
 const Orderlisst = (props: Props) => {
-    const [user , setUser] = useState({})
-    const [order,setorder] = useState([])
-    useEffect (() => {
+    const [user, setUser] = useState({})
+    const [order, setorder] = useState([])
+    useEffect(() => {
         const getUser = JSON.parse(localStorage.getItem('user') as string)
-         console.log(getUser)  
-         setUser(getUser)
-         const get = async () =>{
-            const data= await listOrderUser(getUser._id)
-            setorder(data) 
-         }
-         get()
-    },[])
+        console.log(getUser)
+        setUser(getUser)
+        const get = async () => {
+            const data = await listOrderUser(getUser._id)
+            setorder(data)
+        }
+        get()
+    }, [])
     console.log(order)
     const statuss = (value: number) => {
         if (value == 0) {
@@ -28,18 +28,18 @@ const Orderlisst = (props: Props) => {
         } else if (value == 2) {
             return <span className='bg-green-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Đang Có Khách</span>
         } else if (value == 3) {
-            return <span  className='bg-orange-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Đã Trả Phòng</span>
+            return <span className='bg-orange-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Đã Trả Phòng</span>
         }
         else {
-            return <span  className='bg-red-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Hủy Phòng</span>
+            return <span className='bg-red-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Hủy Phòng</span>
         }
     }
-  return (
-    <div className=''>
+    return (
+        <div className=''>
             <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
                 <div className="account_sidebar flex flex-col w-[370px] h-fit border  border-gray-20 rounded-3xl p-[24px] pb-[70px] mr-[32px]">
                     <div className="account_info px-[16px] py-[24px]">
-                    <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user?.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
+                        <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user?.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
                         <div className='text-center font-medium text-2xl'>{user?.phone}</div>
                     </div>
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='/profile' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
@@ -64,79 +64,79 @@ const Orderlisst = (props: Props) => {
                     </svg>
                         <span className='pl-[10px] font-normal text-lg'>Đăng Xuất</span></a></div>
 
-                </div>            
+                </div>
                 <div className="profile_account relative w-[768px]">
                     <div className="flex flex-row justify-between mb-[32px]">
                         <h2 className='text-[40px] font-bold'>Phòng Đặt của tôi</h2>
-                   </div> 
-                              
-                    <div>
-                    <table className="min-w-full leading-normal scroll">
-                <thead>
-                    <tr>
-                        <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-
-                        </th>
-                        <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                            Name
-                        </th>
-                        <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                            image
-                        </th>
-                        <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                            desc
-                        </th>
-                        <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {order?.map((item: OrderUser, index: number) => (
-                        <tr >
-                            <td className="py-5 border-b border-gray-200 bg-white text-sm">
-                                <p className="text-gray-900 whitespace-no-wrap">
-                                    {index + 1}
-                                </p>
-                            </td>
-                            <td className="py-5 border-b border-gray-200 bg-white text-sm">
-                                <div className="flex items-center">
-                                    <div className="ml-3">
-                                        <p className="text-gray-900 whitespace-no-wrap">
-                                            {item?.room.name}
-                                        </p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                <p className="text-gray-900 whitespace-no-wrap">
-                                    <img width={100} src={`${item?.room.image?.[0]}`} alt="" />
-                                </p>
-                            </td>
-                            <td className=" py-5 border-b border-gray-200 bg-white text-sm">
-                                <p className="text-gray-900 whitespace-no-wrap">
-                                    {item.room.description}
-                                </p>
-                            </td>
-                            <td className=" py-5 border-b border-gray-200 bg-white text-sm">
-                                <p className="text-gray-900 whitespace-no-wrap">
-                                    <div className=''>
-                                    {statuss(item.statusorder)}
-                                    </div>
-                                </p>
-                            </td>
-                            <td className=" border-b border-gray-200 bg-white text-sm">
-                                <Link href={`/profile/order/${item._id}`}><button className='bg-gray-600 rounded-full px-[10px] py-[5px] bg-sky-500 text-center text-white font-medium'>Detail</button></Link>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
                     </div>
-            
-                </div>         
-            </div>  
+
+                    <div>
+                        <table className="min-w-full leading-normal scroll">
+                            <thead>
+                                <tr>
+                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+
+                                    </th>
+                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                                        Name
+                                    </th>
+                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                                        image
+                                    </th>
+                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                                        desc
+                                    </th>
+                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {order?.map((item: OrderUser, index: number) => (
+                                    <tr >
+                                        <td className="py-5 border-b border-gray-200 bg-white text-sm">
+                                            <p className="text-gray-900 whitespace-no-wrap">
+                                                {index + 1}
+                                            </p>
+                                        </td>
+                                        <td className="py-5 border-b border-gray-200 bg-white text-sm">
+                                            <div className="flex items-center">
+                                                <div className="ml-3">
+                                                    <p className="text-gray-900 whitespace-no-wrap">
+                                                        {item?.room.name}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <p className="text-gray-900 whitespace-no-wrap">
+                                                <img width={100} src={`${item?.room.image?.[0]}`} alt="" />
+                                            </p>
+                                        </td>
+                                        <td className=" py-5 border-b border-gray-200 bg-white text-sm">
+                                            <p className="text-gray-900 whitespace-no-wrap">
+                                                {item.room.description}
+                                            </p>
+                                        </td>
+                                        <td className=" py-5 border-b border-gray-200 bg-white text-sm">
+                                            <p className="text-gray-900 whitespace-no-wrap">
+                                                <div className=''>
+                                                    {statuss(item.statusorder)}
+                                                </div>
+                                            </p>
+                                        </td>
+                                        <td className=" border-b border-gray-200 bg-white text-sm">
+                                            <Link href={`/profile/order/${item._id}`}><button className='bg-gray-600 rounded-full px-[10px] py-[5px] bg-sky-500 text-center text-white font-medium'>Detail</button></Link>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
         </div>
-  )
+    )
 }
 
 export default Orderlisst

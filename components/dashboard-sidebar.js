@@ -41,11 +41,6 @@ const items = [
     title: "Rooms",
   },
   {
-    href: "/admin/basic",
-    icon: <BedroomParentIcon fontSize="small" />,
-    title: "Basic",
-  },
-  {
     href: "/admin/blog",
     icon: <BedroomParentIcon fontSize="small" />,
     title: "Blog",

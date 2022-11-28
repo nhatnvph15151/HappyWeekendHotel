@@ -3,5 +3,6 @@ export type UserType = {
     name:string,
     email:string,
     password:string,
-    phone:number
+    phone:number,
+    avatar:string
 }

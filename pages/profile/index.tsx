@@ -38,16 +38,16 @@ const Profile = (props: Props) => {
     const [user, setUser] = useState({})
     useEffect(() => {
         const getUser = JSON.parse(localStorage.getItem('user') as string)
-        console.log(getUser)
-        setUser(getUser)
-    }, [])
+         console.log(getUser)  
+         setUser(getUser)
+    },[])
 
     return (
         <div className=''>
             <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
                 <div className="account_sidebar flex flex-col w-[370px] h-fit border  border-gray-20 rounded-3xl p-[24px] pb-[70px] mr-[32px]">
                     <div className="account_info px-[16px] py-[24px]">
-                        <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
+                    <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
                         <div className='text-center font-medium text-2xl'>{user.phone}</div>
                     </div>
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='/profile' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
@@ -116,7 +116,7 @@ const Profile = (props: Props) => {
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Email</label>
                             <div className="input font-medium ">
-                                {user.email}
+                                 {user.email}
                             </div>
                         </div>
                         <hr className='my-[20px]' />
@@ -130,14 +130,14 @@ const Profile = (props: Props) => {
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Giới tính</label>
                             <div className="input font-medium ">
-                                chưa cung cấp
+                                    chưa cung cấp
                             </div>
                         </div>
                         <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Địa chỉ</label>
                             <div className="input font-medium ">
-                                chưa cung cấp
+                            chưa cung cấp
                             </div>
                         </div>
                         <hr className='my-[20px]' />

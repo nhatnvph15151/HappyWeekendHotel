@@ -9,7 +9,7 @@ const userUser = () => {
 
     const dele = async (id:any) => {
         await remove(id);
-        mutate (data.filter((item: { _id: any; }) => item._id !== id ));    
+        mutate (data.filter((item: { _id: any }) => item._id !== id ));    
     };
 
   

@@ -169,8 +169,10 @@ const BookingDetail = () => {
     };
 
     const onsubmit: SubmitHandler<Form> = async data => {
+        const user = JSON.parse(localStorage.getItem('user') as string)?._id
         const neworder: any = {
             ...data,
+            user: user,
             room: product._id,
             statusorder: "0",
             total: "10000",

@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { update } from '../../api/users';
+import { useRouter } from 'next/router';
 
 
 type Props = {}
@@ -22,7 +23,7 @@ const Profile = (props: Props) => {
     const [display, setdisplay] = useState<any>(false)
     const [edit, setEdit] = useState(true);
     const { register, handleSubmit, formState: { errors }, reset } = useForm<Form>()
-
+    const router = useRouter()
     const onsubmit = () => {
         setEdit(!edit)
     }
@@ -62,6 +63,7 @@ const Profile = (props: Props) => {
         update(data).then((res: any) => {
             localStorage.setItem('user', JSON.stringify(res))
             setdisplay(false)
+            router.push(`/`).then(() => { router.push('/profile') })
         })
     }
     const Gender = (key: any) => {

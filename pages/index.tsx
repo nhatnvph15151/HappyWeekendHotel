@@ -95,7 +95,7 @@ const Home: NextPage = () => {
   return (
     <div className=''>
       <div className="w-[80%] mx-auto relative mb-[50px] z-10">
-        <div className="flex justify-center h-[286px] bg-[url('https://res.cloudinary.com/djsbi0bma/image/upload/v1664538912/banner_bqsfeg.png')] bg-no-repeat bg-cover">
+        <div className="flex justify-center h-[286px] bg-[url('https://res.cloudinary.com/dkhutgvlb/image/upload/v1669818180/33_1654843382_62a2e7f6b03fb_brxw7x.png')] bg-no-repeat bg-cover">
           <h1 className='text-5xl text-center font-semibold text-white mt-5 w-[65%]'>Đặt phòng nhà nghỉ nhanh - tiện lợi</h1>
         </div>
         <div className={`${visible ? "visible scale-100 opacity-100" : "invisible scale-50 opacity-0"} duration-300 translate-x-[-50%] translate-y-[-80%] absolute top-[100%] left-[50%] w-[80%] mx-auto bg-white shadow-xl rounded-xl p-4`}>

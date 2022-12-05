@@ -12,7 +12,15 @@ type PostProps = {
 const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
   const [displayBasic2, setDisplayBasic2] = useState<any>(false);
   const router = useRouter()
+  const dateToString =
+    ("0" + (data.checkins?.getUTCDate() + 1)).slice(-2) + "/" +
+    ("0" + (data.checkins?.getUTCMonth() + 1)).slice(-2) + "/" +
+    data.checkins?.getUTCFullYear()
 
+  const dateFromString =
+    ("0" + (data.checkouts?.getUTCDate() + 1)).slice(-2) + "/" +
+    ("0" + (data.checkouts?.getUTCMonth() + 1)).slice(-2) + "/" +
+    data.checkouts?.getUTCFullYear()
   const handleClose = () => {
     setDisplayBasic2(false)
   }
@@ -24,10 +32,14 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
   }))
   console.log();
   const order = async () => {
-    await creatOrder(data)
-      .then(() => {
+    await creat(datebooks)
+      .then((res: any) => {
+        const newdata = {
+          ...data,
+          status: res._id
+        }
         const disabledDateBooked = async () => {
-          await creat(datebooks)
+          await creatOrder(newdata)
             .then(() => {
               Swal.fire(
                 'Đặt phòng thành công',
@@ -80,13 +92,17 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
                   <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Tên phòng đặt</label> </td>
                   <td className="py-[5px] pl-[42px] text-[#424241]">{room}</td>
                 </tr>
+                <tr className=" bg-[#ffffff]">
+                  <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Tổng tiền</label> </td>
+                  <td className="py-[5px] pl-[42px] text-[#424241]">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(data.total)}</td>
+                </tr>
                 <tr className="bg-[#F5FAFF] ">
                   <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Check In</label> </td>
-                  <td className="py-[5px] pl-[42px] text-[#424241]">Giờ : 9h , Ngày : {JSON.stringify(datebooks.dateFrom)} </td>
+                  <td className="py-[5px] pl-[42px] text-[#424241]"> {dateToString} </td>
                 </tr>
                 <tr className="bg-[#ffffff]">
                   <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Check Out</label> </td>
-                  <td className="py-[5px] pl-[42px] text-[#424241]">Giờ : 9h , Ngày : 11/11/2020</td>
+                  <td className="py-[5px] pl-[42px] text-[#424241]">{dateFromString}</td>
                 </tr>
               </tbody>
             </table>

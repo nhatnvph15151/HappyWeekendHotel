@@ -85,29 +85,28 @@ const BookingDetail = () => {
     const [dataorder, setdataorder] = React.useState({})
     const [dialong, setdialog] = React.useState(false)
     const [status, setstatus] = React.useState<string>()
-    const [ckeckout, setckekout] = React.useState('')
+    // const [ckeckout, setckekout] = React.useState('')
     const [showModal, setShowModal] = React.useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<Form>()
-    const { creatstatus } = useStatus(setstatus)
+    // const { creatstatus } = useStatus(setstatus)
     const [open, setOpen] = React.useState(false);
     const [open2, setOpen2] = React.useState(false);
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
     const [facilities, setfacilities] = useState<any[]>([])
-
+    const [chaprice, setchaprice] = useState<number>()
+    const [totaldate, settotaldate] = useState<number>(0)
     useEffect(() => {
         const getfacilities = async () => {
             await listfac(`${product?._id}`).then((res: any) => {
                 // console.log(res)
                 setfacilities(res)
             })
-
         }
         getfacilities()
         console.log(facilities)
-
-    }, [])
+    }, [product?._id])
     const isStepOptional = (step: number) => {
         return step === 1;
     };
@@ -184,12 +183,14 @@ const BookingDetail = () => {
 
     const onsubmit: SubmitHandler<Form> = async data => {
         const user = JSON.parse(localStorage.getItem('user') as string)?._id
+        const total = chaprice * totaldate
+
         const neworder: any = {
             ...data,
             user: user,
             room: product._id,
             statusorder: "0",
-            total: "10000",
+            total: total,
             status: status,
             checkins: date[0],
             checkouts: date[1],
@@ -204,6 +205,10 @@ const BookingDetail = () => {
         setdataorder(neworder)
         openDialogConfirm()
         handleClose()
+    }
+    const changePrice = (value: number) => {
+        // console.log(product.price)
+        setchaprice(value)
     }
 
     return (
@@ -352,11 +357,17 @@ const BookingDetail = () => {
                                         <Box sx={{ width: '100%' }}>
                                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                                    <Tab icon={<CalendarMonthIcon />} iconPosition="start" label="Theo ngày" {...a11yProps(0)} />
+                                                    {product?.price?.map((item: any) => (
+                                                        <Tab icon={<CalendarMonthIcon />} onClick={() => {
+                                                            setchaprice(item.value)
+                                                        }} iconPosition="start" label={`${item.title}`} {...a11yProps(item.brand)} />
+                                                    ))}
+                                                    {/* <Tab icon={<CalendarMonthIcon />} iconPosition="start" label="Theo ngày" {...a11yProps(0)} />
                                                     <Tab icon={<BedtimeIcon />} iconPosition="start" label="Qua đêm" {...a11yProps(1)} />
-                                                    <Tab icon={<AccessTimeIcon />} iconPosition="start" label="Theo giờ" {...a11yProps(2)} />
+                                                    <Tab icon={<AccessTimeIcon />} iconPosition="start" label="Theo giờ" {...a11yProps(2)} /> */}
                                                 </Tabs>
                                             </Box>
+                                            <div className='flex mt-[10px] font-medium text-gray-500'>Giá phòng: {new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(chaprice)} <div className='ml-[40px]'>Số ngày ở: {totaldate}</div> </div><div className='mt-[10px] font-bold text-[18px] text-orange-500'>Tổng: {totaldate ? new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(chaprice * totaldate) : 0}</div>
                                             <TabPanel value={value} index={2}>
                                                 <div className='mt-6'>
                                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -377,13 +388,14 @@ const BookingDetail = () => {
                                                 </div>
                                             </TabPanel>
                                             <TabPanel value={value} index={0}>
-                                                <BasicDateRangePicker getDate={getDate} id={product?._id ? product._id : ''} />
+                                                <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} id={product?._id ? product._id : ''} />
                                             </TabPanel>
                                             <TabPanel value={value} index={1}>
-                                                <BasicDateRangePicker getDate={getDate} id={product?._id ? product._id : ''} />
+                                                <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} id={product?._id ? product._id : ''} />
                                             </TabPanel>
 
                                         </Box>
+
                                         {/*footer*/}
                                         <div className="flex items-center justify-end border-t border-solid border-slate-200 rounded-b">
                                             <DialogActions>

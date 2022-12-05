@@ -35,6 +35,8 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import addDays from 'date-fns/addDays'
 import { listfac } from '../../api/facilities'
+import CommentItem from '../../components/CommentItem'
+import Link from 'next/link'
 
 type ProductProps = {
     product: ProductType
@@ -91,6 +93,7 @@ const BookingDetail = () => {
     // const { creatstatus } = useStatus(setstatus)
     const [open, setOpen] = React.useState(false);
     const [open2, setOpen2] = React.useState(false);
+    const [openDialogComment, setOpenDialogComment] = useState(false);
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
@@ -161,6 +164,10 @@ const BookingDetail = () => {
     const handleClose2 = () => {
         setOpen2(false);
     };
+
+    // toggle dialog comment list
+    const handleToggleDialogComment = () => setOpenDialogComment(!openDialogComment);
+
     const getDate = (dateData: any) => { //date range pciker
         setDate(dateData);
     }
@@ -248,6 +255,7 @@ const BookingDetail = () => {
                         </svg>
                     </div>
                 </div>
+
                 <div className='m-auto w-[1000px]'>
                     <div className='text-center pt-[100px] pb-[80px] text-[35px] font-bold'><h1>Tiện Ích</h1></div>
                     <div className='grid grid-cols-3 gap-10 mb-[50px]'>
@@ -257,6 +265,55 @@ const BookingDetail = () => {
                                 <p className='self-center text-[18px] text-gray-500 font-medium'>{item.name}</p>
                             </div>
                         ))}
+                    </div>
+                </div>
+
+                {/* bình luận */}
+                <div>
+                    <div className='pt-5 font-bold flex items-end'>
+                        <h2 className='text-[35px]'>Đánh giá</h2>
+                        <div className='text-lg pb-1.5'>
+                            &ensp;•&ensp;
+                            4 Đánh giá
+                        </div>
+                    </div>
+
+                    {/* form */}
+                    <form className="px-3 py-2 border-2 border-[#FFA500] mt-3">
+                        <h2 className="font-semibold text-xl">Bình luận về Phòng 1</h2>
+                        
+                        <div className="mt-2">
+                            <label htmlFor="form__comment-content" className="block text-sm font-semibold">Nhận xét của bạn</label>
+                            <textarea id="form__comment-content" cols={30} rows={10} name="content" className="w-full outline-none border mt-1 px-3 py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-none focus:shadow-[0_0_5px_#ccc]" placeholder="Nhập nội dung bình luận" defaultValue={""} />
+                            <div className="text-sm mt-0.5 text-red-500" />
+                        </div>
+                        <button className="my-3 px-4 py-2 bg-[#FFA500] font-semibold uppercase text-white text-sm transition ease-linear duration-300 hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">Gửi đi</button>
+                    </form>
+
+                    {/* <div className="mt-5">
+                        Vui lòng
+                        <Link href="/signin">
+                            <button className="bg-[#FFA500] mx-1 px-2 py-1 rounded text-white text-sm font-semibold transition duration-200 ease-linear hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">đăng nhập</button>
+                        </Link>
+                        để nhận xét
+                    </div> */}
+
+                    {/* danh sách comment */}
+                    <div className='grid grid-cols-3 gap-5 my-7'>
+                        <CommentItem />
+                        <CommentItem />
+                        <CommentItem />
+                        <CommentItem />
+                        <CommentItem />
+                        <CommentItem />
+                    </div>
+
+                    {/* button see more */}
+                    <div className='inline-flex items-center cursor-pointer mb-12' onClick={() => handleToggleDialogComment()}>
+                        <span className='font-bold underline'>Hiển thị thêm</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" className='w-4 h-4 mt-1 ml-1'>
+                            <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" />
+                        </svg>
                     </div>
                 </div>
 
@@ -420,6 +477,41 @@ const BookingDetail = () => {
                         datebooks={datebook}
                         room={product?.name} />
                 </div>
+
+                {/* dialog comment */}
+                <Dialog
+                    open={openDialogComment}
+                    onClose={() => handleToggleDialogComment()}
+                    fullWidth
+                    maxWidth="lg"
+                >
+                    <div className='px-6 py-4'>
+                        <button className='block ml-auto' onClick={() => handleToggleDialogComment()}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" className='w-6 h-6'>
+                                <path d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z" />
+                            </svg>
+                        </button>
+
+                        <div className='font-bold flex items-end'>
+                            <h2 className='text-[35px]'>Đánh giá</h2>
+                            <div className='text-lg pb-1.5'>
+                                &ensp;•&ensp;
+                                4 Đánh giá
+                            </div>
+                        </div>
+
+                        {/* list comment */}
+                        <div className='grid grid-cols-3 gap-5 my-3'>
+                            <CommentItem />
+                            <CommentItem />
+                            <CommentItem />
+                            <CommentItem />
+                            <CommentItem />
+                            <CommentItem />
+                            <CommentItem />
+                        </div>
+                    </div>
+                </Dialog>
             </div>
         </div>
     )

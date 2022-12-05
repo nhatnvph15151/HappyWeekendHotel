@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import userUser from '../../hook/use-user'
 
 
 import Backdrop from '@mui/material/Backdrop';
@@ -12,23 +13,9 @@ import TextField from '@mui/material/TextField';
 
 
 type Props = {}
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
+
 const Profile = (props: Props) => {
     const [ edit, setEdit] = useState(true);
-
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
 
 
     const onsubmit = () => {
@@ -38,19 +25,58 @@ const Profile = (props: Props) => {
     //     const reslut = localStorage.getItem(JSON.stringify('user') as string)
     //     console.log(reslut)
     // }
-    const [user , setUser] = useState({})
-    useEffect (() => {
+    const [user, setUser] = useState({})
+    useEffect(() => {
         const getUser = JSON.parse(localStorage.getItem('user') as string)
-         console.log(getUser)  
-         setUser(getUser)
-    },[])
+        console.log(getUser)
+        setUser(getUser)
+    }, [])
+    let imageUpdate = ""
+    const Edit: SubmitHandler<Form> = async data => {
+        console.log(data)
+        console.log(data.avatar?.[0])
+        if (data.avatar?.[0] != 'h') {
+            const file = data.avatar?.[0]
+            const formData = new FormData()
 
+            formData.append("file", file)
+            formData.append("upload_preset", "mi59v8ju")
+
+            const { data: newimage } = await axios({
+                url: "https://api.cloudinary.com/v1_1/dkrifqhuk/image/upload",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-formendcoded",
+                }, data: formData,
+            })
+            imageUpdate = newimage.url
+            data.avatar = imageUpdate
+            console.log(data.avatar)
+        }
+        console.log(data)
+        update(data).then((res: any) => {
+            localStorage.setItem('user', JSON.stringify(res))
+            setdisplay(false)
+            router.push(`/`).then(() => { router.push('/profile') })
+        })
+    }
+    const Gender = (key: any) => {
+        if (key == "1") {
+            return "Nam"
+        } else if (key == '2') {
+            return "Nữ"
+        } else if (key == '3') {
+            return "Khác"
+        } else {
+            return 'Chưa cung cấp'
+        }
+    }
     return (
         <div className=''>
             <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
                 <div className="account_sidebar flex flex-col w-[370px] h-fit border  border-gray-20 rounded-3xl p-[24px] pb-[70px] mr-[32px]">
                     <div className="account_info px-[16px] py-[24px]">
-                    <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
+                        <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
                         <div className='text-center font-medium text-2xl'>{user.phone}</div>
                     </div>
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='/profile' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
@@ -75,80 +101,13 @@ const Profile = (props: Props) => {
                     </svg>
                         <span className='pl-[10px] font-normal text-lg'>Đăng Xuất</span></a></div>
 
-                </div>            
+                </div>
                 <div className="profile_account relative w-[768px]">
                     <div className="flex flex-row justify-between mb-[32px]">
                         <h2 className='text-[40px] font-bold'>Hồ sơ của tôi</h2>
-                        <div >
-                        <div className='border border-gray-700 rounded-full'>
-                                <Button onClick={handleOpen} className='btn rounded-full border border-gray-700 px-[24px] font-medium py-[10px] '>Chỉnh sửa</Button>
-                                <Modal
-                                    aria-labelledby="transition-modal-title"
-                                    aria-describedby="transition-modal-description"
-                                    open={open}
-                                    onClose={handleClose}
-                                    closeAfterTransition
-                                    BackdropComponent={Backdrop}
-                                    BackdropProps={{
-                                        timeout: 500,
-                                    }}
-                                >
-                                    <Fade in={open}>
-                                        <Box sx={style}>
-                                            <Typography id="transition-modal-title" variant="h6" component="h2">
-                                                <Box
-                                                    component="form"
-                                                    sx={{
-                                                        '& > :not(style)': { m: 1, width: '25ch' },
-                                                    }}
-                                                    noValidate
-                                                    autoComplete="off"
-                                                >
-                                                    <TextField
-                                                        required
-                                                        id="outlined-required"
-                                                        label="số điện thoại"
-                                                        defaultValue={user.phone}
-                                                    />
-                                                     <TextField
-                                                        required
-                                                        id="outlined-required"
-                                                        label="họ và tên"
-                                                        defaultValue={user.name}
-                                                    />
-                                                      <TextField
-                                                        required
-                                                        id="outlined-required"
-                                                        label="email"
-                                                        defaultValue= {user.email}
-                                                    />
-                                                     <TextField
-                                                        required
-                                                        id="outlined-required"
-                                                        label="Ngày sinh"
-                                                        defaultValue=""
-                                                    />
-                                                     <TextField
-                                                        required
-                                                        id="outlined-required"
-                                                        label="Giới tính"
-                                                        defaultValue=""
-                                                    />
-                                                     <TextField
-                                                        required
-                                                        id="outlined-required"
-                                                        label="Địa chỉ"
-                                                        defaultValue=""
-                                                    />
-                                                </Box>
-                                            </Typography>
-                                            <Typography id="transition-modal-description" sx={{ mt: 2 ,}}>
-                                                   <Button variant="outlined">Primary</Button>
-                                            </Typography>
-                                        </Box>
-                                    </Fade>
-                                </Modal>
-                            </div>                       </div>
+                        <div className=''>
+                            <button onClick={onsubmit} className='btn rounded-full border border-gray-700 px-[24px] font-medium py-[10px] '>Chỉnh sửa</button>
+                        </div>
                    </div> 
                               
                     <div>
@@ -169,42 +128,98 @@ const Profile = (props: Props) => {
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Email</label>
                             <div className="input font-medium ">
-                               {user.email}
-                            </div>
-                        </div>
-                        <hr className='my-[20px]' />
-                        <div className="form_item flex flex-row items-center">
-                            <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Ngày sinh</label>
-                            <div className="input font-medium ">
-                                chưa cung cấp
+                                {user.email}
                             </div>
                         </div>
                         <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Giới tính</label>
                             <div className="input font-medium ">
-                            chưa cung cấp
+                                {Gender(user.gender)}
                             </div>
                         </div>
                         <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Địa chỉ</label>
                             <div className="input font-medium ">
-                            chưa cung cấp
+                                {user.address ? user.address : "Chưa được cung cấp"}
                             </div>
                         </div>
-                        <hr className='my-[20px]' />  
+                        <hr className='my-[20px]' />
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Tài khoản liên kết</label>
                             <div className="input font-medium ">
-                            chưa cung cấp
+                                chưa cung cấp
                             </div>
                         </div>
-                            
+
                     </div>
-            
-                </div>         
-            </div>  
+
+                </div>
+            </div>
+
+
+
+
+            <Dialog
+                fullWidth={true}
+                open={display}
+                onClose={() => { setdisplay(false) }}
+            >
+                <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <h1 className='font-medium text-[25px]'>Chỉnh sửa thông tin cá nhân</h1>
+                    <IconButton onClick={() => { setdisplay(false) }} aria-label="delete">
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <div className="card">
+                    <div className="my-[30px]">
+                        <form action="" onSubmit={handleSubmit(Edit)} className=' py-[0px] w-[500px] m-auto drop-shadow-md rounded-md'>
+                            <div className='relative z-0 mb-6 w-full group'>
+                                <label htmlFor="" className="z-50 peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Họ và tên</label>
+                                <input type="text" {...register('name')} className='className="block pt-4  px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"' />
+                            </div>
+                            <div className='relative z-0 mb-6 w-full group'>
+                                <label htmlFor="" className="z-50 peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Số điện thoại</label>
+                                <input type="text" {...register('phone')} className='className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"' />
+                            </div>
+                            <div className='relative z-0 mb-6 w-full group'>
+                                <label htmlFor="" className="z-50 peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Avatar</label>
+                                <input type="file" {...register('avatar')} className='className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"' />
+                            </div>
+                            <img width={50} src={`${user.avatar}`} alt="" />
+
+                            <div className='relative z-0 mb-6 w-full group mt-[10px]'>
+                                <label htmlFor="" className="z-50 peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email</label>
+                                <input type="text" {...register('email')} className='className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"' />
+                            </div>
+                            <div className='relative z-0 mb-6 w-full group'>
+                                <label htmlFor="" className="z-50 peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Địa chỉ</label>
+                                <input type="text" {...register('address')} className='className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"' />
+                            </div>
+                            <div className='relative z-0 w-full group'>
+                                <label htmlFor="" className="z-50 peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Giới tính</label>
+                                <select name="" id="" className='mt-[20px] w-full' {...register('gender')}>
+                                    <option value="1">Nam</option>
+                                    <option value="2">Nữ</option>
+                                    <option value="3">Khác</option>
+                                </select>
+                            </div>
+                            <DialogActions sx={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                                <div className="flex">
+                                    <div>
+                                        <button
+                                            className="px-4 py-2 rounded-md shadow-xl bg-[orange] text-white"
+                                        // onClick={() => { router.push('/payment') }}
+                                        >Save</button>
+                                    </div>
+                                </div>
+                            </DialogActions>
+                        </form>
+                    </div>
+
+                </div>
+            </Dialog>
         </div>
     )
 }

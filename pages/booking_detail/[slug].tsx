@@ -34,6 +34,7 @@ import BedtimeIcon from '@mui/icons-material/Bedtime';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import addDays from 'date-fns/addDays'
+import { listfac } from '../../api/facilities'
 
 type ProductProps = {
     product: ProductType
@@ -79,7 +80,7 @@ const BookingDetail = () => {
     const [values, setValues] =
         React.useState<Dayjs | null>(null);
     const [value, setValue] = React.useState(0);
-    const [date, setDate] = React.useState([])//date range pciker
+    const [date, setDate] = React.useState<any>([])//date range pciker
     const [datebook, setdatebook] = React.useState({})
     const [dataorder, setdataorder] = React.useState({})
     const [dialong, setdialog] = React.useState(false)
@@ -93,7 +94,20 @@ const BookingDetail = () => {
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+    const [facilities, setfacilities] = useState<any[]>([])
 
+    useEffect(() => {
+        const getfacilities = async () => {
+            await listfac(`${product?._id}`).then((res: any) => {
+                // console.log(res)
+                setfacilities(res)
+            })
+
+        }
+        getfacilities()
+        console.log(facilities)
+
+    }, [])
     const isStepOptional = (step: number) => {
         return step === 1;
     };
@@ -135,7 +149,7 @@ const BookingDetail = () => {
     const handleReset = () => {
         setActiveStep(0);
     };
-    const dialogConfirmRef = useRef();
+    const dialogConfirmRef = useRef<any>();
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -169,26 +183,17 @@ const BookingDetail = () => {
     };
 
     const onsubmit: SubmitHandler<Form> = async data => {
-const iduser = JSON.parse(localStorage.getItem("user") as string)?._id;
-      console.log(iduser);
-        const newckeck: any = {
-            checkins: dateFrom,
-            checkouts: dateTo,
-            room: product._id
-        }
-        
-        // creatstatus(newckeck)
-         const neworder: any = {
+        const user = JSON.parse(localStorage.getItem('user') as string)?._id
+        const neworder: any = {
             ...data,
+            user: user,
             room: product._id,
             statusorder: "0",
             total: "10000",
             status: status,
-            checkins: dateFrom,
-            checkouts: dateTo,
-            user:iduser
+            checkins: date[0],
+            checkouts: date[1],
         }
-       
         const dateBooked: any = {
             dateFrom: date[0],
             dateTo: date[1],
@@ -236,6 +241,17 @@ const iduser = JSON.parse(localStorage.getItem("user") as string)?._id;
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
                         </svg>
+                    </div>
+                </div>
+                <div className='m-auto w-[1000px]'>
+                    <div className='text-center pt-[100px] pb-[80px] text-[35px] font-bold'><h1>Tiện Ích</h1></div>
+                    <div className='grid grid-cols-3 gap-10 mb-[50px]'>
+                        {facilities.map((item: any) => (
+                            <div className='flex ml-[70px]'>
+                                <img width={45} className='mr-[20px] sepia' src={`${item.image}`} alt="" />
+                                <p className='self-center text-[18px] text-gray-500 font-medium'>{item.name}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
@@ -347,7 +363,7 @@ const iduser = JSON.parse(localStorage.getItem("user") as string)?._id;
                                                         <DateTimePicker
                                                             renderInput={(props) => <TextField helperText="" {...props} />}
                                                             label="DateTimePicker"
-                                                            value={values}
+                                                            value={'2022-11-18T08:20:01.000Z'}
                                                             onChange={(newValues) => {
                                                                 setValues(newValues)
                                                                 setDate([
@@ -397,7 +413,7 @@ const iduser = JSON.parse(localStorage.getItem("user") as string)?._id;
     )
 }
 
-export default BookingDetail 
+export default BookingDetail
 
 {/* <div className="flex mt-6 border rounded-md p-2 relative">
                     <Box className='basis-4/6' sx={{ width: '100%' }}>

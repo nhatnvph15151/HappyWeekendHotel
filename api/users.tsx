@@ -13,3 +13,7 @@ export const signup = (user: UserType) => {
 export const signin = (user: UserType) => {
     return instance.post('/signin', user)
 }
+
+export const update = (user: UserType) => {
+    return instance.put(`/users/${user._id}`, user)
+}

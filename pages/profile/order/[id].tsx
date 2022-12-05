@@ -9,25 +9,38 @@ import React, { useEffect, useState } from 'react'
 import { DetailOrderType } from '../../../types/detailorder'
 import { update } from '../../../api/order';
 import { remove } from '../../../api/bookedDate';
+import { listfac } from '../../../api/facilities';
 
 type Props = {}
 
 const DtailOrderHistory = (props: Props) => {
-    const [user , setUser] = useState({})
-    const [order,setorder] = useState<DetailOrderType>()
+    const [user, setUser] = useState({})
+    const [orders, setorder] = useState<DetailOrderType>()
+    const [facilities, setfacilities] = useState<any>()
     const router = useRouter()
     const { id } = router.query
     useEffect(() => {
         const getUser = JSON.parse(localStorage.getItem('user') as string)
-         console.log(getUser)  
-         setUser(getUser)
+        console.log(getUser)
+        setUser(getUser)
         const get = async () => {
             const { data } = await axios.get(`http://localhost:4000/api/order/${id}`)
             setorder(data)
-            console.log(data?.order.checkins)
+            console.log(orders?.room[0]._id)
         }
+
         get()
+
     }, [id])
+    useEffect(() => {
+        const abc = async () => {
+            await listfac(orders?.room[0]._id).then((res: any) => {
+                setfacilities(res)
+            })
+            console.log(facilities)
+        }
+        abc()
+    }, [orders?.room[0]._id])
     const statuss = (value: number) => {
         if (value == 0) {
             return <span className='float-right rounded-full py-[5px] px-[15px] bg-sky-500 text-center text-white font-medium'>Chờ Xác Nhận</span>
@@ -39,43 +52,43 @@ const DtailOrderHistory = (props: Props) => {
             return <span className='float-right bg-orange-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Đã Trả Phòng</span>
         }
         else {
-            return <span  className='ml-[15px] bg-red-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Hủy Phòng</span>
+            return <span className='ml-[15px] bg-red-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Hủy Phòng</span>
         }
     }
     const onsubmit = () => {
-        const newdata :any = {
-            statusorder:4,
+        const newdata: any = {
+            statusorder: 4,
             _id: id,
-            name: order?.order.name,
-            email: order?.order.email,
-            phone: order?.order.phone,
-            total: order?.order.total,
-            checkins: order?.order.ckeckins,
-            checkouts: order?.order.ckeckins,
-            room: order?.room[0]._id,
-            user: order?.order.user
+            name: orders?.order.name,
+            email: orders?.order.email,
+            phone: orders?.order.phone,
+            total: orders?.order.total,
+            checkins: orders?.order.ckeckins,
+            checkouts: orders?.order.ckeckins,
+            room: orders?.room[0]._id,
+            user: orders?.order.user
         }
         console.log(newdata)
-        update(newdata).then((res:any)=>{
+        update(newdata).then((res: any) => {
             console.log(res?.status)
             console.log(res?.statusorder)
-
-            if(res?.statusorder == 4 || res?.statusorder == 3){
-                remove(res?.status).then(()=>{
+            if (res?.statusorder == 4 || res?.statusorder == 3) {
+                remove(res?.status).then(() => {
                     router.push('/profile/order')
                 })
-            }else{
+            } else {
                 router.push('/profile/order')
             }
-            
+
         })
     }
-  return (
-    <div>
-        <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
+    console.log(facilities)
+    return (
+        <div>
+            <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
                 <div className="account_sidebar flex flex-col w-[370px] h-fit border  border-gray-20 rounded-3xl p-[24px] pb-[70px] mr-[32px]">
                     <div className="account_info px-[16px] py-[24px]">
-                    <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user?.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
+                        <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user?.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
                         <div className='text-center font-medium text-2xl'>{user?.phone}</div>
                     </div>
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='/profile' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
@@ -100,51 +113,64 @@ const DtailOrderHistory = (props: Props) => {
                     </svg>
                         <span className='pl-[10px] font-normal text-lg'>Đăng Xuất</span></a></div>
 
-                </div>            
+                </div>
                 <div className="profile_account relative w-[768px]">
                     <div className="flex flex-row justify-between mb-[32px]">
                         <h2 className='text-[40px] font-bold'>Phòng Đặt của tôi</h2>
-                   </div> 
-                              
+                    </div>
+
                     <div>
-                            <div className='flex'>
-                                <div className='mr-[50px]'>
-                                    <h1 className='text-[20px] font-medium mb-[20px]'> {order?.room[0].name}</h1>
-                                    <img width={350} src={`${order?.room[0].image}`} alt="" />
-                                    <p className='pt-[20px] pb-[10px] text-[17px] font-medium'>Giá: {order?.room[0].price} VND</p>
-                                    <p className='text-[17px] font-medium'>Descriptions: {order?.room[0].description}</p>
+                        <div className='flex'>
+                            <div className='mr-[50px]'>
+                                <h1 className='text-[20px] font-medium mb-[20px]'> {orders?.room[0].name}</h1>
+                                <img width={350} src={`${orders?.room[0].image}`} alt="" />
+                                {/* <p className='pt-[20px] pb-[10px] text-[17px] font-medium'>Giá: {order?.room[0].price} VND</p> */}
+                                <p className='text-[17px] pt-[10px] font-medium'>Descriptions: {orders?.room[0].description}</p>
+                                <p className='text-[20px] font-medium mb-[20px] mt-[20px]'>Tiền ích : </p>
+                                <div className='flex'>
+                                    <div className='grid grid-cols-2 gap-4'>
+                                        {facilities?.map((item: any) => (
+                                            <div className='flex'>
+                                                <img width={20} src={`${item?.image}`} alt="" />
+                                                <p>{item.name}</p>
+                                            </div>
+
+                                        ))}
+                                    </div>
                                 </div>
-                                <div className='py-[30px] w-[500px] h-[100%] px-[40px] border-solid border-2 border-indigo-600 rounded-xl'>
-                                    <h1 className='text-center text-[20px] font-bold mb-[25px]'>Thông tin </h1>
-                                    <p className='text-[17px] font-medium'>Check In <span className='float-right'>{order?.order.checkins?.slice(0, 10)}</span></p>
-                                    <p className='py-[10px] text-[17px] font-medium'>Check out <span className='float-right'>{order?.order.checkouts?.slice(0, 10)}</span></p>
-                                    <p className='text-[17px] font-medium'>Total <span className='float-right'> {order?.order.total} VND</span> </p>
-                                    <p className='py-[30px] text-[17px] font-medium'>Status {statuss(order?.order.statusorder)}</p>
-                                    <div className='flex mt-[30px]'>
-                                        <div >
-                                            <Button 
-                                            label="Đặt lại" 
+
+                            </div>
+                            <div className='py-[30px] w-[500px] h-[100%] px-[40px] border-solid border-2 border-indigo-600 rounded-xl'>
+                                <h1 className='text-center text-[20px] font-bold mb-[25px]'>Thông tin </h1>
+                                <p className='text-[17px] font-medium'>Check In <span className='float-right'>{orders?.order.checkins?.slice(0, 10)}</span></p>
+                                <p className='py-[10px] text-[17px] font-medium'>Check out <span className='float-right'>{orders?.order.checkouts?.slice(0, 10)}</span></p>
+                                <p className='text-[17px] font-medium'>Total <span className='float-right'> {orders?.order.total} VND</span> </p>
+                                <p className='py-[30px] text-[17px] font-medium'>Status {statuss(orders?.order.statusorder)}</p>
+                                <div className='flex mt-[30px]'>
+                                    <div >
+                                        <Button
+                                            label="Đặt lại"
                                             className="p-button-outlined p-button-info"
-                                            onClick={()=>{router.push(`/booking_detail/${order?.room[0].slug}`)}}
-                                            />
-                                        </div>
-                                        <div className='mx-[20px]'>
-                                        {order?.order.statusorder < 2 ? <Button 
-                                        label="Hủy Phòng"
-                                        className="p-button-outlined p-button-danger"
-                                        onClick={()=>{onsubmit()}}
+                                            onClick={() => { router.push(`/booking_detail/${orders?.room[0].slug}`) }}
+                                        />
+                                    </div>
+                                    <div className='mx-[20px]'>
+                                        {orders?.order.statusorder < 2 ? <Button
+                                            label="Hủy Phòng"
+                                            className="p-button-outlined p-button-danger"
+                                            onClick={() => { onsubmit() }}
                                         /> : ''}
-                                        
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
-            
-                </div>         
-            </div>  
-    </div>
-  )
+
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export default DtailOrderHistory

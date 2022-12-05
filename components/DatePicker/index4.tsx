@@ -10,13 +10,14 @@ import DateFnsUtils from "@material-ui/pickers/adapter/date-fns"; // choose your
 type props = {
     id: any,
     getDate: any
+    settotaldate: number
 }
 
-export default function BasicDateRangePicker({ id, getDate }: props) {
-    const [selectedDate, handleDateChange] = React.useState([null, null]);
+export default function BasicDateRangePicker({ id, getDate, settotaldate }: props) {
+    const [selectedDate, handleDateChange] = React.useState<any>([null, null]);
     const [dataDate, setDataDate] = useState([])
     const bookedDates: any[] = []
-    
+
     useEffect(() => {
         const getData = async () => {
             const data = await fetch('http://localhost:4000/api/dateBooked').then((res) => res.json())
@@ -25,7 +26,12 @@ export default function BasicDateRangePicker({ id, getDate }: props) {
         getData()
     }, [])
     getDate(selectedDate)
-    
+    const dateone: any = new Date(selectedDate?.[0])
+    const datetwo: any = new Date(selectedDate?.[1])
+    const time = Math.abs(datetwo - dateone)
+    const days = Math.ceil(time / (1000 * 60 * 60 * 24))
+    settotaldate(days)
+    // console.log(datetwo)
     const getBookedDates = () => {
         dataDate?.forEach((item: any) => {
             if (item.room == id) {
@@ -49,7 +55,7 @@ export default function BasicDateRangePicker({ id, getDate }: props) {
         });
         //  return true
         return date.getTime() === 0 || date.getTime() === 6 || convertedIntoDateObject.includes(date.getTime());
-    };   
+    };
     return (
         <LocalizationProvider dateAdapter={DateFnsUtils}>
             <DateRangePicker

@@ -13,15 +13,15 @@ type Props = {}
 
 const ProductsAdmin = (props: Props) => {
     const { data, error, dele } = useProducts("")
-    const [page, setPage] = React.useState(2);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(2);
 
-    const handleChangePage = (event: any, newPage: any) => {
+    const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event: any) => {
-        setRowsPerPage(parseInt(event.target.value, 0));
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(+event.target.value);
         setPage(0);
     };
     if (!data) return <div>Loading...</div>
@@ -85,7 +85,7 @@ const ProductsAdmin = (props: Props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data?.map((item: any, index: any) => (
+                                    {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: any, index: any) => (
                                         <tr key={item._id} className="cursor-pointer select-none">
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
@@ -137,13 +137,13 @@ const ProductsAdmin = (props: Props) => {
                         </div>
                         <div className="absolute bottom-0 bg-white w-full border-t border">
                             <TablePagination
-                                className=''
-                                component="div"
-                                count={100}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                rowsPerPage={rowsPerPage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                 rowsPerPageOptions={[]}
+                                 component="div"
+                                 count={data.length}
+                                 rowsPerPage={rowsPerPage}
+                                 page={page}
+                                 onPageChange={handleChangePage}
+                                 onRowsPerPageChange={handleChangeRowsPerPage}
                             />
                         </div>
                     </div>

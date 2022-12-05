@@ -1,29 +1,23 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import userUser from '../../hook/use-user'
-import { Dialog, DialogActions, DialogTitle, IconButton } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import axios from 'axios';
-import { update } from '../../api/users';
-import { useRouter } from 'next/router';
+
+
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 
 
 type Props = {}
-type Form = {
-    name: string,
-    phone: number,
-    avatar: string,
-    email: string,
-    address: string,
-    gender: string
-}
 
 const Profile = (props: Props) => {
-    const [display, setdisplay] = useState<any>(false)
-    const [edit, setEdit] = useState(true);
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<Form>()
-    const router = useRouter()
+    const [ edit, setEdit] = useState(true);
+
+
     const onsubmit = () => {
         setEdit(!edit)
     }
@@ -112,10 +106,10 @@ const Profile = (props: Props) => {
                     <div className="flex flex-row justify-between mb-[32px]">
                         <h2 className='text-[40px] font-bold'>Hồ sơ của tôi</h2>
                         <div className=''>
-                            <button onClick={() => { setdisplay(true); reset(user) }} className='btn rounded-full border border-gray-700 px-[24px] font-medium py-[10px] '>Chỉnh sửa</button>
+                            <button onClick={onsubmit} className='btn rounded-full border border-gray-700 px-[24px] font-medium py-[10px] '>Chỉnh sửa</button>
                         </div>
-                    </div>
-
+                   </div> 
+                              
                     <div>
                         <div className="form_item flex flex-row items-center">
                             <label className='flex flex-row w-[180px] text-[18px] ' htmlFor="">Số điện thoại</label>

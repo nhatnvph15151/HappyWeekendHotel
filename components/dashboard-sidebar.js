@@ -56,6 +56,11 @@ const items = [
     title: "Category Blog",
   },
   {
+    href: "/admin/utilities",
+    icon: <CategoryIcon fontSize="small" />,
+    title: "Facilities",
+  },
+  {
     href: "/admin/404",
     icon: <XCircleIcon fontSize="small" />,
     title: "Error",

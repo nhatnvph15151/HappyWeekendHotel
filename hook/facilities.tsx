@@ -6,10 +6,10 @@ import { creatfac, removefac, updatefac } from "../api/facilities";
 import { Blog } from "../types/blog";
 import { facilities } from "../types/fac";
 
-const useFacilities = (slug: any) => {
+const useFacilities = (id: any) => {
 
     const fetcher = (args: string) => axios.get(args).then(res => res.data)
-    const { data, error, mutate } = useSWR(slug ? `http://localhost:4000/api/facilities/${slug}` : "http://localhost:4000/api/facilities", fetcher);
+    const { data, error, mutate } = useSWR(id ? `http://localhost:4000/api/facilities/${id}` : "http://localhost:4000/api/facilities", fetcher);
 
     // create
     const add = async (item: facilities) => {

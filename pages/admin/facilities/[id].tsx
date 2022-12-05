@@ -24,8 +24,8 @@ type formInput = {
 function AddUtilities({ }: Props) {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const router = useRouter();
-  const { slug } = router.query
-  const fac = useFacilities(slug)
+  const { id } = router.query
+  const fac = useFacilities(id)
   //   const category = useCategory()
   const [loading, setLoading] = React.useState(true)
   const [editorLoaded, setEditorLoaded] = React.useState(false);
@@ -37,12 +37,14 @@ function AddUtilities({ }: Props) {
     setdesc(fac.data)
   }, [fac.data])
 
+
+
   React.useEffect(() => {
     setEditorLoaded(true);
   }, []);
   const themsp: SubmitHandler<any> = (data: formInput) => {
     setLoading(false)
-    console.log("okeeo");
+
   }
   return (
     <div>

@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { DetailOrderType } from '../../../types/detailorder'
 import { update } from '../../../api/order';
 import { remove } from '../../../api/bookedDate';
-import { listfac } from '../../../api/facilities';
+import { getOnefac, listfac } from '../../../api/facilities';
 
 type Props = {}
 
@@ -34,7 +34,7 @@ const DtailOrderHistory = (props: Props) => {
     }, [id])
     useEffect(() => {
         const abc = async () => {
-            await listfac(orders?.room[0]._id).then((res: any) => {
+            await getOnefac(orders?.room[0]._id).then((res: any) => {
                 setfacilities(res)
             })
             console.log(facilities)
@@ -82,7 +82,7 @@ const DtailOrderHistory = (props: Props) => {
 
         })
     }
-    console.log(facilities)
+    console.log(orders?.room[0].image)
     return (
         <div>
             <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
@@ -121,18 +121,32 @@ const DtailOrderHistory = (props: Props) => {
 
                     <div>
                         <div className='flex'>
-                            <div className='mr-[50px]'>
+                            <div className='mr-[50px] w-[600px]'>
                                 <h1 className='text-[20px] font-medium mb-[20px]'> {orders?.room[0].name}</h1>
-                                <img width={350} src={`${orders?.room[0].image}`} alt="" />
+                                {/* {product?.image?.map((item: any, index: any) => (
+                                    <div key={index} className={`${index == 0 ? "hidden" : ""} hover:opacity-70 duration-150 border`}>
+                                        <img
+                                            src={`${item}`}
+                                            srcSet={`${item}`}
+                                            alt={item}
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                ))} */}
+                                <div className='grid grid-cols-2 gap-2'>
+                                    {orders?.room[0].image?.map((item: any) => (
+                                        <img width={250} src={item} alt="" />
+                                    ))}
+                                </div>
                                 {/* <p className='pt-[20px] pb-[10px] text-[17px] font-medium'>Giá: {order?.room[0].price} VND</p> */}
-                                <p className='text-[17px] pt-[10px] font-medium'>Descriptions: {orders?.room[0].description}</p>
+                                <p className='text-[17px] pt-[10px] font-medium'>Chi tiết phòng: {orders?.room[0].description}</p>
                                 <p className='text-[20px] font-medium mb-[20px] mt-[20px]'>Tiền ích : </p>
                                 <div className='flex'>
                                     <div className='grid grid-cols-2 gap-4'>
                                         {facilities?.map((item: any) => (
                                             <div className='flex'>
                                                 <img width={20} src={`${item?.image}`} alt="" />
-                                                <p>{item.name}</p>
+                                                <p className='ml-[5px]'>{item.name}</p>
                                             </div>
 
                                         ))}
@@ -144,8 +158,8 @@ const DtailOrderHistory = (props: Props) => {
                                 <h1 className='text-center text-[20px] font-bold mb-[25px]'>Thông tin </h1>
                                 <p className='text-[17px] font-medium'>Check In <span className='float-right'>{orders?.order.checkins?.slice(0, 10)}</span></p>
                                 <p className='py-[10px] text-[17px] font-medium'>Check out <span className='float-right'>{orders?.order.checkouts?.slice(0, 10)}</span></p>
-                                <p className='text-[17px] font-medium'>Total <span className='float-right'> {orders?.order.total} VND</span> </p>
-                                <p className='py-[30px] text-[17px] font-medium'>Status {statuss(orders?.order.statusorder)}</p>
+                                <p className='font-medium text-[20px] text-orange-600'>Tổng tiền <span className='float-right'> {new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(orders?.order.total)}</span> </p>
+                                <p className='py-[30px] text-[17px] font-medium'>Trạng thái {statuss(orders?.order.statusorder)}</p>
                                 <div className='flex mt-[30px]'>
                                     <div >
                                         <Button

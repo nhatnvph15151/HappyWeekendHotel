@@ -36,7 +36,7 @@ import BedtimeIcon from '@mui/icons-material/Bedtime';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import addDays from 'date-fns/addDays'
-import { listfac } from '../../api/facilities'
+import { getOnefac, listfac } from '../../api/facilities'
 import CommentItem from '../../components/CommentItem'
 import Link from 'next/link'
 import { UserType } from '../../types/user'
@@ -117,7 +117,7 @@ const BookingDetail = () => {
 
     useEffect(() => {
         const getfacilities = async () => {
-            await listfac(`${product?._id}`).then((res: any) => {
+            await getOnefac(`${product?._id}`).then((res: any) => {
                 // console.log(res)
                 setfacilities(res)
             })

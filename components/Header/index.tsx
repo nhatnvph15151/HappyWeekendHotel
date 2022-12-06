@@ -18,7 +18,7 @@ const Header = (props: Props) => {
 
   useEffect(() => {
     const getUser = JSON.parse(localStorage.getItem('user') as string)
-    if (Object.keys(getUser).length == 0 || getUser == null) {
+    if (getUser == 0 || getUser == null) {
       setStatus(false)
     } else {
       setStatus(true)

@@ -298,7 +298,19 @@ const BookingDetail = () => {
                         </svg>
                     </div>
                 </div>
-
+                <div className='mt-[50px]'>
+                    <h1 className='text-[35px] font-medium text-[#FFA500]'>Giá Phòng</h1>
+                    <div className='flex mt-[30px]'>
+                        {
+                            product?.price?.map((item: any) => (
+                                <div className='px-[30px]'>
+                                    <span className='font-medium text-[20px] text-red-500'>{item.title}:</span>
+                                    <span className='ml-[10px] text-[18px] text-red-500'>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(item.value)}</span>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
                 <div className='m-auto w-[1000px]'>
                     <div className='text-center pt-[100px] pb-[80px] text-[35px] font-bold'><h1>Tiện Ích</h1></div>
                     <div className='grid grid-cols-3 gap-10 mb-[50px]'>

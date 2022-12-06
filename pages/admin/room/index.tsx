@@ -101,11 +101,11 @@ const ProductsAdmin = (props: Props) => {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                                            {/* <p className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
                                                     {item.price}
                                                 </p>
-                                            </td>
+                                            </p> */}
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <div className="w-[50px] h-[50px] rounded-xl overflow-hidden shadow-xl">
                                                     <img src={item.image[0] ? item?.image[0] : "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80"} className="w-[100px] h-[100px]" alt="" />

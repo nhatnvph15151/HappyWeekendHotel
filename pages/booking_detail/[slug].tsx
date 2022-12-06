@@ -34,7 +34,7 @@ import BedtimeIcon from '@mui/icons-material/Bedtime';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import addDays from 'date-fns/addDays'
-import { listfac } from '../../api/facilities'
+import { getOnefac, listfac } from '../../api/facilities'
 import CommentItem from '../../components/CommentItem'
 import Link from 'next/link'
 
@@ -102,7 +102,7 @@ const BookingDetail = () => {
     const [totaldate, settotaldate] = useState<number>(0)
     useEffect(() => {
         const getfacilities = async () => {
-            await listfac(`${product?._id}`).then((res: any) => {
+            await getOnefac(`${product?._id}`).then((res: any) => {
                 // console.log(res)
                 setfacilities(res)
             })
@@ -281,7 +281,7 @@ const BookingDetail = () => {
                     {/* form */}
                     <form className="px-3 py-2 border-2 border-[#FFA500] mt-3">
                         <h2 className="font-semibold text-xl">Bình luận về Phòng 1</h2>
-                        
+
                         <div className="mt-2">
                             <label htmlFor="form__comment-content" className="block text-sm font-semibold">Nhận xét của bạn</label>
                             <textarea id="form__comment-content" cols={30} rows={10} name="content" className="w-full outline-none border mt-1 px-3 py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-none focus:shadow-[0_0_5px_#ccc]" placeholder="Nhập nội dung bình luận" defaultValue={""} />

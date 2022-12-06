@@ -125,7 +125,7 @@ const ProductsAdmin = (props: Props) => {
                                                     </Tooltip>
                                                 </Link>
                                                 <Tooltip title={`Xóa ${item.name}`}>
-                                                    <Button onClick={() => { remove(item._id) }} className='text-[red]' variant="text" startIcon={<DeleteIcon />}>
+                                                    <Button onClick={() => { remove(item._id)}} className='text-[red]' variant="text" startIcon={<DeleteIcon />}>
                                                         Delete
                                                     </Button>
                                                 </Tooltip>

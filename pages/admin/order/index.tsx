@@ -8,7 +8,7 @@ type Props = {}
 
 const index = (props: Props) => {
     const { data, error, mutate } = OrderHook()
-    
+
     if (!data) return <div>Loading...</div>
     if (error) return <div>Errors</div>
     const statuss = (value: number) => {
@@ -19,10 +19,10 @@ const index = (props: Props) => {
         } else if (value == 2) {
             return <span className='bg-green-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Đang Có Khách</span>
         } else if (value == 3) {
-            return <span  className='bg-orange-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Đã Trả Phòng</span>
+            return <span className='bg-orange-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Đã Trả Phòng</span>
         }
         else {
-            return <span  className='bg-red-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Hủy Phòng</span>
+            return <span className='bg-red-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Hủy Phòng</span>
         }
     }
     return (
@@ -34,16 +34,19 @@ const index = (props: Props) => {
 
                         </th>
                         <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                            Name
+                            Tên Khách Hàng
                         </th>
                         <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                            price
+                            Phòng
                         </th>
                         <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                            image
+                            Email
                         </th>
                         <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                            desc
+                            Số điện thoại
+                        </th>
+                        <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                            Trạng thái Phòng
                         </th>
                         <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
                         </th>
@@ -67,6 +70,15 @@ const index = (props: Props) => {
                                 </div>
                             </td>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <div className="flex items-center">
+                                    <div className="ml-3">
+                                        <p className="text-gray-900 whitespace-no-wrap">
+                                            {item.room?.name}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p className="text-gray-900 whitespace-no-wrap">
                                     {item.email}
                                 </p>
@@ -79,7 +91,7 @@ const index = (props: Props) => {
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p className="text-gray-900 whitespace-no-wrap">
                                     <div className=''>
-                                    {statuss(item.statusorder)}
+                                        {statuss(item.statusorder)}
                                     </div>
                                 </p>
                             </td>

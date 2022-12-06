@@ -6,5 +6,6 @@ export type UserType = {
     phone: number,
     avatar: string,
     address: string,
-    gender: string
+    gender: string,
+    role: number,
 }

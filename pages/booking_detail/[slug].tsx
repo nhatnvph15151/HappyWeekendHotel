@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { FormEvent, useEffect, useRef, useState } from 'react'
+import toastr from "toastr";
+import 'toastr/build/toastr.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faUtensils, faSpa, faShirt, faShower, faBell, faCar, faWifi } from '@fortawesome/free-solid-svg-icons'
 import { ProductType } from '../../types/products'
@@ -34,7 +36,12 @@ import BedtimeIcon from '@mui/icons-material/Bedtime';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import addDays from 'date-fns/addDays'
-import { listfac } from '../../api/facilities'
+import { getOnefac, listfac } from '../../api/facilities'
+import CommentItem from '../../components/CommentItem'
+import Link from 'next/link'
+import { UserType } from '../../types/user'
+import useComment from '../../hook/use-comment'
+import { CommentType } from '../../types/comment'
 
 type ProductProps = {
     product: ProductType
@@ -73,10 +80,15 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
+
 const BookingDetail = () => {
+    const LIMIT_SHOW_COMMENT = 6;
+
     const router = useRouter()
     const { slug } = router.query
     const { data: product } = useProducts(slug)
+    const { data: comments, addComment, removeComment } = useComment(product?._id);
+
     const [values, setValues] =
         React.useState<Dayjs | null>(null);
     const [value, setValue] = React.useState(0);
@@ -85,29 +97,41 @@ const BookingDetail = () => {
     const [dataorder, setdataorder] = React.useState({})
     const [dialong, setdialog] = React.useState(false)
     const [status, setstatus] = React.useState<string>()
-    const [ckeckout, setckekout] = React.useState('')
+    // const [ckeckout, setckekout] = React.useState('')
     const [showModal, setShowModal] = React.useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<Form>()
-    const { creatstatus } = useStatus(setstatus)
+    // const { creatstatus } = useStatus(setstatus)
     const [open, setOpen] = React.useState(false);
     const [open2, setOpen2] = React.useState(false);
+    const [openDialogComment, setOpenDialogComment] = useState(false);
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
     const [facilities, setfacilities] = useState<any[]>([])
+    const [chaprice, setchaprice] = useState<number>()
+    const [totaldate, settotaldate] = useState<number>(0)
+    const [currentUser, setCurrentUser] = useState<UserType>();
+    const [isLogged, setIsLogged] = useState(false);
+    const [comment, setComment] = useState<string>();
+    const [errComment, setErrComment] = useState<string>();
 
     useEffect(() => {
         const getfacilities = async () => {
-            await listfac(`${product?._id}`).then((res: any) => {
+            await getOnefac(`${product?._id}`).then((res: any) => {
                 // console.log(res)
                 setfacilities(res)
             })
-
         }
         getfacilities()
         console.log(facilities)
+    }, [product?._id])
 
-    }, [])
+    useEffect(() => {
+        const getUser = JSON.parse(localStorage.getItem("user") as string || "{}");
+        setIsLogged(!!getUser._id);
+        setCurrentUser(getUser);
+    }, []);
+
     const isStepOptional = (step: number) => {
         return step === 1;
     };
@@ -162,6 +186,10 @@ const BookingDetail = () => {
     const handleClose2 = () => {
         setOpen2(false);
     };
+
+    // toggle dialog comment list
+    const handleToggleDialogComment = () => setOpenDialogComment(!openDialogComment);
+
     const getDate = (dateData: any) => { //date range pciker
         setDate(dateData);
     }
@@ -184,12 +212,14 @@ const BookingDetail = () => {
 
     const onsubmit: SubmitHandler<Form> = async data => {
         const user = JSON.parse(localStorage.getItem('user') as string)?._id
+        const total = chaprice * totaldate
+
         const neworder: any = {
             ...data,
             user: user,
             room: product._id,
             statusorder: "0",
-            total: "10000",
+            total: total,
             status: status,
             checkins: date[0],
             checkouts: date[1],
@@ -204,6 +234,31 @@ const BookingDetail = () => {
         setdataorder(neworder)
         openDialogConfirm()
         handleClose()
+    }
+
+    const changePrice = (value: number) => {
+        // console.log(product.price)
+        setchaprice(value)
+    }
+
+    // submit comment
+    const handleSubmitComment = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const commentData = comment?.trim();
+        if (!commentData) {
+            setErrComment("Vui lòng nhập nội dung bình luận");
+        } else {
+            setErrComment("")
+        }
+
+        await addComment({
+            comment: commentData!,
+            user: currentUser?._id as any,
+            room: product._id
+        });
+        setComment("");
+        toastr.success("Bình luận thành công");
     }
 
     return (
@@ -243,6 +298,7 @@ const BookingDetail = () => {
                         </svg>
                     </div>
                 </div>
+
                 <div className='m-auto w-[1000px]'>
                     <div className='text-center pt-[100px] pb-[80px] text-[35px] font-bold'><h1>Tiện Ích</h1></div>
                     <div className='grid grid-cols-3 gap-10 mb-[50px]'>
@@ -253,6 +309,62 @@ const BookingDetail = () => {
                             </div>
                         ))}
                     </div>
+                </div>
+
+                {/* bình luận */}
+                <div>
+                    <div className='pt-5 font-bold flex items-end'>
+                        <h2 className='text-[35px]'>Đánh giá</h2>
+                        <div className='text-lg pb-1.5'>
+                            &ensp;•&ensp;
+                            {comments?.length} Đánh giá
+                        </div>
+                    </div>
+
+                    {/* form comment */}
+                    {!isLogged ? (
+                        <div className="mt-5">
+                            Vui lòng
+                            <Link href="/signin">
+                                <button className="bg-[#FFA500] mx-1 px-2 py-1 rounded text-white text-sm font-semibold transition duration-200 ease-linear hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">đăng nhập</button>
+                            </Link>
+                            để nhận xét
+                        </div>
+                    ) : (
+                        <form className="px-3 py-2 border-2 border-[#FFA500] mt-3" onSubmit={handleSubmitComment}>
+                            <h2 className="font-semibold text-xl">{!comments?.length ? `Hãy là người đầu tiên bình luận về "${product?.name}"` : `Bình luận về "${product?.name}"`}</h2>
+
+                            <div className="mt-2">
+                                <label htmlFor="form__comment-content" className="block text-sm font-semibold">Nhận xét của bạn</label>
+                                <textarea id="form__comment-content" value={comment} onChange={(e) => setComment(e.target.value)} cols={30} rows={10} name="content" className="w-full outline-none border mt-1 px-3 py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-none focus:shadow-[0_0_5px_#ccc]" placeholder="Nhập nội dung bình luận" />
+                                {errComment && <div className="text-sm mt-0.5 text-red-500">{errComment}</div>}
+                            </div>
+                            <button className="my-3 px-4 py-2 bg-[#FFA500] font-semibold uppercase text-white text-sm transition ease-linear duration-300 hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">Gửi đi</button>
+                        </form>
+                    )}
+                    
+                    {/* danh sách comment */}
+                    <div className='grid grid-cols-3 gap-5 my-7'>
+                        {comments?.slice(0, LIMIT_SHOW_COMMENT).map((cmt: CommentType) => {
+                            return <CommentItem
+                                key={cmt._id}
+                                comment={cmt as any}
+                                isLogged={isLogged}
+                                currentUser={currentUser}
+                                onRemoveCmt={removeComment}
+                            />
+                        })}
+                    </div>
+
+                    {/* button see more */}
+                    {comments?.length > LIMIT_SHOW_COMMENT && (
+                        <div className='inline-flex items-center cursor-pointer mb-12' onClick={() => handleToggleDialogComment()}>
+                            <span className='font-bold underline'>Hiển thị thêm</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" className='w-4 h-4 mt-1 ml-1'>
+                                <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" />
+                            </svg>
+                        </div>
+                    )}
                 </div>
 
                 <>
@@ -352,11 +464,17 @@ const BookingDetail = () => {
                                         <Box sx={{ width: '100%' }}>
                                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                                    <Tab icon={<CalendarMonthIcon />} iconPosition="start" label="Theo ngày" {...a11yProps(0)} />
+                                                    {product?.price?.map((item: any) => (
+                                                        <Tab icon={<CalendarMonthIcon />} onClick={() => {
+                                                            setchaprice(item.value)
+                                                        }} iconPosition="start" label={`${item.title}`} {...a11yProps(item.brand)} />
+                                                    ))}
+                                                    {/* <Tab icon={<CalendarMonthIcon />} iconPosition="start" label="Theo ngày" {...a11yProps(0)} />
                                                     <Tab icon={<BedtimeIcon />} iconPosition="start" label="Qua đêm" {...a11yProps(1)} />
-                                                    <Tab icon={<AccessTimeIcon />} iconPosition="start" label="Theo giờ" {...a11yProps(2)} />
+                                                    <Tab icon={<AccessTimeIcon />} iconPosition="start" label="Theo giờ" {...a11yProps(2)} /> */}
                                                 </Tabs>
                                             </Box>
+                                            <div className='flex mt-[10px] font-medium text-gray-500'>Giá phòng: {new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(chaprice)} <div className='ml-[40px]'>Số ngày ở: {totaldate}</div> </div><div className='mt-[10px] font-bold text-[18px] text-orange-500'>Tổng: {totaldate ? new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(chaprice * totaldate) : 0}</div>
                                             <TabPanel value={value} index={2}>
                                                 <div className='mt-6'>
                                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -377,13 +495,14 @@ const BookingDetail = () => {
                                                 </div>
                                             </TabPanel>
                                             <TabPanel value={value} index={0}>
-                                                <BasicDateRangePicker getDate={getDate} id={product?._id ? product._id : ''} />
+                                                <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} id={product?._id ? product._id : ''} />
                                             </TabPanel>
                                             <TabPanel value={value} index={1}>
-                                                <BasicDateRangePicker getDate={getDate} id={product?._id ? product._id : ''} />
+                                                <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} id={product?._id ? product._id : ''} />
                                             </TabPanel>
 
                                         </Box>
+
                                         {/*footer*/}
                                         <div className="flex items-center justify-end border-t border-solid border-slate-200 rounded-b">
                                             <DialogActions>
@@ -408,6 +527,43 @@ const BookingDetail = () => {
                         datebooks={datebook}
                         room={product?.name} />
                 </div>
+
+                {/* dialog comment */}
+                <Dialog
+                    open={openDialogComment}
+                    onClose={() => handleToggleDialogComment()}
+                    fullWidth
+                    maxWidth="lg"
+                >
+                    <div className='px-6 py-4'>
+                        <button className='block ml-auto' onClick={() => handleToggleDialogComment()}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" className='w-6 h-6'>
+                                <path d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z" />
+                            </svg>
+                        </button>
+
+                        <div className='font-bold flex items-end'>
+                            <h2 className='text-[35px]'>Đánh giá</h2>
+                            <div className='text-lg pb-1.5'>
+                                &ensp;•&ensp;
+                                {comments?.length} Đánh giá
+                            </div>
+                        </div>
+
+                        {/* list comment */}
+                        <div className='grid grid-cols-3 gap-5 my-3'>
+                            {comments?.map((cmt: CommentType) => {
+                                return <CommentItem
+                                    key={cmt._id}
+                                    comment={cmt as any}
+                                    isLogged={isLogged}
+                                    currentUser={currentUser}
+                                    onRemoveCmt={removeComment}
+                                />
+                            })}
+                        </div>
+                    </div>
+                </Dialog>
             </div>
         </div>
     )

@@ -37,6 +37,9 @@ import addDays from 'date-fns/addDays'
 import { listfac } from '../../api/facilities'
 import CommentItem from '../../components/CommentItem'
 import Link from 'next/link'
+import { UserType } from '../../types/user'
+import useComment from '../../hook/use-comment'
+import { CommentType } from '../../types/comment'
 
 type ProductProps = {
     product: ProductType
@@ -75,10 +78,15 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
+
 const BookingDetail = () => {
+    const LIMIT_SHOW_COMMENT = 6;
+
     const router = useRouter()
     const { slug } = router.query
     const { data: product } = useProducts(slug)
+    const { data: comments } = useComment(product?._id);
+
     const [values, setValues] =
         React.useState<Dayjs | null>(null);
     const [value, setValue] = React.useState(0);
@@ -100,6 +108,11 @@ const BookingDetail = () => {
     const [facilities, setfacilities] = useState<any[]>([])
     const [chaprice, setchaprice] = useState<number>()
     const [totaldate, settotaldate] = useState<number>(0)
+    const [currentUser, setCurrentUser] = useState<UserType>();
+    const [isLogged, setIsLogged] = useState(false);
+
+    console.log(product)
+
     useEffect(() => {
         const getfacilities = async () => {
             await listfac(`${product?._id}`).then((res: any) => {
@@ -110,6 +123,13 @@ const BookingDetail = () => {
         getfacilities()
         console.log(facilities)
     }, [product?._id])
+
+    useEffect(() => {
+        const getUser = JSON.parse(localStorage.getItem("user") as string || "{}");
+        setIsLogged(!!getUser._id);
+        setCurrentUser(getUser);
+    }, []);
+
     const isStepOptional = (step: number) => {
         return step === 1;
     };
@@ -274,47 +294,46 @@ const BookingDetail = () => {
                         <h2 className='text-[35px]'>Đánh giá</h2>
                         <div className='text-lg pb-1.5'>
                             &ensp;•&ensp;
-                            4 Đánh giá
+                            {comments?.length} Đánh giá
                         </div>
                     </div>
 
-                    {/* form */}
-                    <form className="px-3 py-2 border-2 border-[#FFA500] mt-3">
-                        <h2 className="font-semibold text-xl">Bình luận về Phòng 1</h2>
-                        
-                        <div className="mt-2">
-                            <label htmlFor="form__comment-content" className="block text-sm font-semibold">Nhận xét của bạn</label>
-                            <textarea id="form__comment-content" cols={30} rows={10} name="content" className="w-full outline-none border mt-1 px-3 py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-none focus:shadow-[0_0_5px_#ccc]" placeholder="Nhập nội dung bình luận" defaultValue={""} />
-                            <div className="text-sm mt-0.5 text-red-500" />
+                    {/* form comment */}
+                    {!isLogged ? (
+                        <div className="mt-5">
+                            Vui lòng
+                            <Link href="/signin">
+                                <button className="bg-[#FFA500] mx-1 px-2 py-1 rounded text-white text-sm font-semibold transition duration-200 ease-linear hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">đăng nhập</button>
+                            </Link>
+                            để nhận xét
                         </div>
-                        <button className="my-3 px-4 py-2 bg-[#FFA500] font-semibold uppercase text-white text-sm transition ease-linear duration-300 hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">Gửi đi</button>
-                    </form>
+                    ) : (
+                        <form className="px-3 py-2 border-2 border-[#FFA500] mt-3">
+                            <h2 className="font-semibold text-xl">Bình luận về {`"${product?.name}"`}</h2>
 
-                    {/* <div className="mt-5">
-                        Vui lòng
-                        <Link href="/signin">
-                            <button className="bg-[#FFA500] mx-1 px-2 py-1 rounded text-white text-sm font-semibold transition duration-200 ease-linear hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">đăng nhập</button>
-                        </Link>
-                        để nhận xét
-                    </div> */}
-
+                            <div className="mt-2">
+                                <label htmlFor="form__comment-content" className="block text-sm font-semibold">Nhận xét của bạn</label>
+                                <textarea id="form__comment-content" cols={30} rows={10} name="content" className="w-full outline-none border mt-1 px-3 py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-none focus:shadow-[0_0_5px_#ccc]" placeholder="Nhập nội dung bình luận" defaultValue={""} />
+                                <div className="text-sm mt-0.5 text-red-500" />
+                            </div>
+                            <button className="my-3 px-4 py-2 bg-[#FFA500] font-semibold uppercase text-white text-sm transition ease-linear duration-300 hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">Gửi đi</button>
+                        </form>
+                    )}
+                    
                     {/* danh sách comment */}
                     <div className='grid grid-cols-3 gap-5 my-7'>
-                        <CommentItem />
-                        <CommentItem />
-                        <CommentItem />
-                        <CommentItem />
-                        <CommentItem />
-                        <CommentItem />
+                        {comments?.slice(0, LIMIT_SHOW_COMMENT).map((cmt: CommentType) => <CommentItem key={cmt._id} comment={cmt as any} />)}
                     </div>
 
                     {/* button see more */}
-                    <div className='inline-flex items-center cursor-pointer mb-12' onClick={() => handleToggleDialogComment()}>
-                        <span className='font-bold underline'>Hiển thị thêm</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" className='w-4 h-4 mt-1 ml-1'>
-                            <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" />
-                        </svg>
-                    </div>
+                    {comments?.length > LIMIT_SHOW_COMMENT && (
+                        <div className='inline-flex items-center cursor-pointer mb-12' onClick={() => handleToggleDialogComment()}>
+                            <span className='font-bold underline'>Hiển thị thêm</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" className='w-4 h-4 mt-1 ml-1'>
+                                <path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" />
+                            </svg>
+                        </div>
+                    )}
                 </div>
 
                 <>
@@ -496,19 +515,13 @@ const BookingDetail = () => {
                             <h2 className='text-[35px]'>Đánh giá</h2>
                             <div className='text-lg pb-1.5'>
                                 &ensp;•&ensp;
-                                4 Đánh giá
+                                {comments?.length} Đánh giá
                             </div>
                         </div>
 
                         {/* list comment */}
                         <div className='grid grid-cols-3 gap-5 my-3'>
-                            <CommentItem />
-                            <CommentItem />
-                            <CommentItem />
-                            <CommentItem />
-                            <CommentItem />
-                            <CommentItem />
-                            <CommentItem />
+                            {comments?.map((cmt: CommentType) => <CommentItem key={cmt._id} comment={cmt as any} />)}
                         </div>
                     </div>
                 </Dialog>

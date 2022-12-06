@@ -1,5 +1,7 @@
 import dayjs from "dayjs";
 import { UserType } from "../../types/user";
+import "sweetalert2/dist/sweetalert2.css";
+import Swal from "sweetalert2";
 
 /* eslint-disable @next/next/no-img-element */
 type CommentItemProps = {
@@ -7,10 +9,35 @@ type CommentItemProps = {
     user: UserType;
     createdAt: Date;
     comment: string;
+    _id: string;
   };
+  isLogged: boolean;
+  currentUser?: UserType;
+  onRemoveCmt: (cmtId: string) => Promise<void>;
 };
 
-const CommentItem = ({ comment }: CommentItemProps) => {
+const CommentItem = ({ comment, isLogged, currentUser, onRemoveCmt }: CommentItemProps) => {
+  const handleRemoveComment = (commentId: string) => {
+    Swal.fire({
+      title: 'Bạn có chắc chắn muốn xóa?',
+      text: "Không thể hoàn tác sau khi xóa!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await onRemoveCmt(commentId);
+        Swal.fire(
+          'Thành công!',
+          'Đã xóa bình luận.',
+          'success'
+        )
+      }
+    })
+  }
+
   return (
     <div className='flex items-center my-3'>
       <div className='mr-3'>
@@ -24,9 +51,11 @@ const CommentItem = ({ comment }: CommentItemProps) => {
         <div>Nội dung: {comment.comment}</div>
       </div>
 
-      <button className="p-2 border text-sm transition hover:text-white hover:bg-[#FFA500] hover:border-[#FFA500]">
-        Xóa
-      </button>
+      {isLogged && (currentUser?.role === 1 || currentUser?._id === comment.user._id) && (
+        <button onClick={() => handleRemoveComment(comment._id)} className="p-2 border text-sm transition hover:text-white hover:bg-[#FFA500] hover:border-[#FFA500]">
+          Xóa
+        </button>
+      )}
     </div>
   )
 }

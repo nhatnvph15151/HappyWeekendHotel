@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { FormEvent, useEffect, useRef, useState } from 'react'
+import toastr from "toastr";
+import 'toastr/build/toastr.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faUtensils, faSpa, faShirt, faShower, faBell, faCar, faWifi } from '@fortawesome/free-solid-svg-icons'
 import { ProductType } from '../../types/products'
@@ -85,7 +87,7 @@ const BookingDetail = () => {
     const router = useRouter()
     const { slug } = router.query
     const { data: product } = useProducts(slug)
-    const { data: comments } = useComment(product?._id);
+    const { data: comments, addComment, removeComment } = useComment(product?._id);
 
     const [values, setValues] =
         React.useState<Dayjs | null>(null);
@@ -110,8 +112,8 @@ const BookingDetail = () => {
     const [totaldate, settotaldate] = useState<number>(0)
     const [currentUser, setCurrentUser] = useState<UserType>();
     const [isLogged, setIsLogged] = useState(false);
-
-    console.log(product)
+    const [comment, setComment] = useState<string>();
+    const [errComment, setErrComment] = useState<string>();
 
     useEffect(() => {
         const getfacilities = async () => {
@@ -233,9 +235,30 @@ const BookingDetail = () => {
         openDialogConfirm()
         handleClose()
     }
+
     const changePrice = (value: number) => {
         // console.log(product.price)
         setchaprice(value)
+    }
+
+    // submit comment
+    const handleSubmitComment = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const commentData = comment?.trim();
+        if (!commentData) {
+            setErrComment("Vui lòng nhập nội dung bình luận");
+        } else {
+            setErrComment("")
+        }
+
+        await addComment({
+            comment: commentData!,
+            user: currentUser?._id as any,
+            room: product._id
+        });
+        setComment("");
+        toastr.success("Bình luận thành công");
     }
 
     return (
@@ -308,13 +331,13 @@ const BookingDetail = () => {
                             để nhận xét
                         </div>
                     ) : (
-                        <form className="px-3 py-2 border-2 border-[#FFA500] mt-3">
-                            <h2 className="font-semibold text-xl">Bình luận về {`"${product?.name}"`}</h2>
+                        <form className="px-3 py-2 border-2 border-[#FFA500] mt-3" onSubmit={handleSubmitComment}>
+                            <h2 className="font-semibold text-xl">{!comments?.length ? `Hãy là người đầu tiên bình luận về "${product?.name}"` : `Bình luận về "${product?.name}"`}</h2>
 
                             <div className="mt-2">
                                 <label htmlFor="form__comment-content" className="block text-sm font-semibold">Nhận xét của bạn</label>
-                                <textarea id="form__comment-content" cols={30} rows={10} name="content" className="w-full outline-none border mt-1 px-3 py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-none focus:shadow-[0_0_5px_#ccc]" placeholder="Nhập nội dung bình luận" defaultValue={""} />
-                                <div className="text-sm mt-0.5 text-red-500" />
+                                <textarea id="form__comment-content" value={comment} onChange={(e) => setComment(e.target.value)} cols={30} rows={10} name="content" className="w-full outline-none border mt-1 px-3 py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-none focus:shadow-[0_0_5px_#ccc]" placeholder="Nhập nội dung bình luận" />
+                                {errComment && <div className="text-sm mt-0.5 text-red-500">{errComment}</div>}
                             </div>
                             <button className="my-3 px-4 py-2 bg-[#FFA500] font-semibold uppercase text-white text-sm transition ease-linear duration-300 hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">Gửi đi</button>
                         </form>
@@ -322,7 +345,15 @@ const BookingDetail = () => {
                     
                     {/* danh sách comment */}
                     <div className='grid grid-cols-3 gap-5 my-7'>
-                        {comments?.slice(0, LIMIT_SHOW_COMMENT).map((cmt: CommentType) => <CommentItem key={cmt._id} comment={cmt as any} />)}
+                        {comments?.slice(0, LIMIT_SHOW_COMMENT).map((cmt: CommentType) => {
+                            return <CommentItem
+                                key={cmt._id}
+                                comment={cmt as any}
+                                isLogged={isLogged}
+                                currentUser={currentUser}
+                                onRemoveCmt={removeComment}
+                            />
+                        })}
                     </div>
 
                     {/* button see more */}
@@ -521,7 +552,15 @@ const BookingDetail = () => {
 
                         {/* list comment */}
                         <div className='grid grid-cols-3 gap-5 my-3'>
-                            {comments?.map((cmt: CommentType) => <CommentItem key={cmt._id} comment={cmt as any} />)}
+                            {comments?.map((cmt: CommentType) => {
+                                return <CommentItem
+                                    key={cmt._id}
+                                    comment={cmt as any}
+                                    isLogged={isLogged}
+                                    currentUser={currentUser}
+                                    onRemoveCmt={removeComment}
+                                />
+                            })}
                         </div>
                     </div>
                 </Dialog>

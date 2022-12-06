@@ -12,7 +12,7 @@ export const get = (roomId: string) => {
     return instance.get(url);
 }
 
-export const remove = (commentId: string) => {
+export const remove = (commentId: string): Promise<CommentType> => {
     const url = `comment/${commentId}/delete`;
     return instance.delete(url)
 }

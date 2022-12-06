@@ -1,6 +1,6 @@
 import axios from "axios";
 import useSWR from "swr";
-import { create } from "../api/comment";
+import { create, remove } from "../api/comment";
 import { CommentType } from "../types/comment";
 
 const useComment = (roomId: any) => {
@@ -9,15 +9,22 @@ const useComment = (roomId: any) => {
     const { data, error, mutate } = useSWR(roomId ? `http://localhost:4000/api/comments/${roomId}` : "http://localhost:4000/api/comments", fetcher);
 
     // create
-    const add = async (commentData: CommentType) => {
+    const addComment = async (commentData: CommentType) => {
         const comment = await create(commentData);
         const currentUser = JSON.parse(localStorage.getItem("user") as string);
         comment.user = currentUser;
-        mutate([...data, comment]);
+        mutate([comment, ...data]);
     };
 
+    const removeComment = async (commentId: string) => {
+        const comment = await remove(commentId);
+        const newComments = data.filter((cmt: CommentType) => cmt._id !== comment._id);
+        mutate(newComments);
+    }
+
     return {
-        add,
+        addComment,
+        removeComment,
         data,
         error
     };

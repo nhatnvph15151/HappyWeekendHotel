@@ -1,3 +1,4 @@
+import { RoomType } from "./room";
 import { UserType } from "./user";
 
 export type CommentType = {
@@ -6,4 +7,10 @@ export type CommentType = {
   user: UserType | string;
   createdAt?: Date;
   room: string;
+}
+
+export type CommentType2 = {
+  _id: string;
+  user: UserType;
+  room: RoomType;
 }

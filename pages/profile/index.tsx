@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import userUser from '../../hook/use-user'
+
 import { Dialog, DialogActions, DialogTitle, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -8,8 +9,6 @@ import axios from 'axios';
 import { update } from '../../api/users';
 import { useRouter } from 'next/router';
 
-
-type Props = {}
 type Form = {
     name: string,
     phone: number,
@@ -18,10 +17,11 @@ type Form = {
     address: string,
     gender: string
 }
+type Props = {}
 
 const Profile = (props: Props) => {
-    const [display, setdisplay] = useState<any>(false)
     const [edit, setEdit] = useState(true);
+    const [display, setdisplay] = useState<any>(false)
     const { register, handleSubmit, formState: { errors }, reset } = useForm<Form>()
     const router = useRouter()
     const onsubmit = () => {
@@ -31,7 +31,7 @@ const Profile = (props: Props) => {
     //     const reslut = localStorage.getItem(JSON.stringify('user') as string)
     //     console.log(reslut)
     // }
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState<any>({})
     useEffect(() => {
         const getUser = JSON.parse(localStorage.getItem('user') as string)
         console.log(getUser)
@@ -82,8 +82,8 @@ const Profile = (props: Props) => {
             <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
                 <div className="account_sidebar flex flex-col w-[370px] h-fit border  border-gray-20 rounded-3xl p-[24px] pb-[70px] mr-[32px]">
                     <div className="account_info px-[16px] py-[24px]">
-                        <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
-                        <div className='text-center font-medium text-2xl'>{user.phone}</div>
+                        <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user?.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
+                        <div className='text-center font-medium text-2xl'>{user?.phone}</div>
                     </div>
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='/profile' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />

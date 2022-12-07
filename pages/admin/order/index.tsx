@@ -3,14 +3,24 @@ import React from 'react'
 import { DashboardLayout } from '../../../components/dashboard-layout'
 import OrderHook from '../../../hook/use-order'
 import { OrderType } from '../../../types/order'
-
+import { Button, TablePagination, Tooltip } from '@mui/material'
 type Props = {}
 
 const index = (props: Props) => {
     const { data, error, mutate } = OrderHook()
-    
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(8);
+
     if (!data) return <div>Loading...</div>
     if (error) return <div>Errors</div>
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
     const statuss = (value: number) => {
         if (value == 0) {
             return <span className='rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Chờ Xác Nhận</span>
@@ -19,11 +29,20 @@ const index = (props: Props) => {
         } else if (value == 2) {
             return <span className='bg-green-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Đang Có Khách</span>
         } else if (value == 3) {
-            return <span  className='bg-orange-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Đã Trả Phòng</span>
+            return <span className='bg-orange-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Đã Trả Phòng</span>
         }
         else {
-            return <span  className='bg-red-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Hủy Phòng</span>
+            return <span className='bg-red-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Hủy Phòng</span>
         }
+    }
+
+    const formatDate = (date: any) => {
+        const abc = new Date(date)
+        const dateformat =
+            ("0" + (abc?.getUTCDate() + 1)).slice(-2) + "/" +
+            ("0" + (abc?.getUTCMonth() + 1)).slice(-2) + "/" +
+            abc?.getUTCFullYear()
+        return dateformat
     }
     return (
         <div>
@@ -34,23 +53,29 @@ const index = (props: Props) => {
 
                         </th>
                         <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                            Name
+                            Tên Khách Hàng
                         </th>
                         <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                            price
+                            Phòng
                         </th>
                         <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                            image
+                            Email
                         </th>
                         <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                            desc
+                            Số điện thoại
+                        </th>
+                        <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                            Check in
+                        </th>
+                        <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+                            Trạng thái Phòng
                         </th>
                         <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {data?.map((item: OrderType, index: number) => (
+                    {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: OrderType, index: number) => (
                         <tr >
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p className="text-gray-900 whitespace-no-wrap">
@@ -67,6 +92,15 @@ const index = (props: Props) => {
                                 </div>
                             </td>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <div className="flex items-center">
+                                    <div className="ml-3">
+                                        <p className="text-gray-900 whitespace-no-wrap">
+                                            {item.room?.name}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p className="text-gray-900 whitespace-no-wrap">
                                     {item.email}
                                 </p>
@@ -78,8 +112,13 @@ const index = (props: Props) => {
                             </td>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p className="text-gray-900 whitespace-no-wrap">
+                                    {formatDate(item.checkins)}
+                                </p>
+                            </td>
+                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p className="text-gray-900 whitespace-no-wrap">
                                     <div className=''>
-                                    {statuss(item.statusorder)}
+                                        {statuss(item.statusorder)}
                                     </div>
                                 </p>
                             </td>
@@ -90,6 +129,17 @@ const index = (props: Props) => {
                     ))}
                 </tbody>
             </table>
+            <div className=" bottom-0 bg-white w-full border-t border">
+                <TablePagination
+                    rowsPerPageOptions={[]}
+                    component="div"
+                    count={data.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </div>
         </div>
     )
 }

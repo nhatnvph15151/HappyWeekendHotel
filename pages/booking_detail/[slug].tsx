@@ -7,7 +7,6 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import useStatus from '../../hook/use-status'
 import { creatOrder } from '../../api/order'
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -35,6 +34,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import addDays from 'date-fns/addDays'
 import { listfac } from '../../api/facilities'
+import { TextField } from '@material-ui/core'
 
 type ProductProps = {
     product: ProductType
@@ -246,8 +246,8 @@ const BookingDetail = () => {
                 <div className='m-auto w-[1000px]'>
                     <div className='text-center pt-[100px] pb-[80px] text-[35px] font-bold'><h1>Tiện Ích</h1></div>
                     <div className='grid grid-cols-3 gap-10 mb-[50px]'>
-                        {facilities.map((item: any) => (
-                            <div className='flex ml-[70px]'>
+                        {facilities.map((item: any, index: any) => (
+                            <div className='flex ml-[70px]' key={index}>
                                 <img width={45} className='mr-[20px] sepia' src={`${item.image}`} alt="" />
                                 <p className='self-center text-[18px] text-gray-500 font-medium'>{item.name}</p>
                             </div>
@@ -364,7 +364,7 @@ const BookingDetail = () => {
                                                             renderInput={(props) => <TextField helperText="" {...props} />}
                                                             label="DateTimePicker"
                                                             value={'2022-11-18T08:20:01.000Z'}
-                                                            onChange={(newValues) => {
+                                                            onChange={(newValues: any) => {
                                                                 setValues(newValues)
                                                                 setDate([
                                                                     newValues.$d,

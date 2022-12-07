@@ -13,12 +13,12 @@ const Header = (props: Props) => {
   const router = useRouter()
   const query = router.query
   const [status, setStatus] = useState(false)
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState<any>({})
   const [showSearch, setShowSearch] = useState(false)
 
   useEffect(() => {
     const getUser = JSON.parse(localStorage.getItem('user') as string)
-    if (Object.keys(getUser).length == 0 || getUser == null) {
+    if (getUser || getUser == null) {
       setStatus(false)
     } else {
       setStatus(true)

@@ -22,7 +22,6 @@ const Header = (props: Props) => {
       setStatus(false)
     } else {
       setStatus(true)
-
     }
     setUser(getUser)
   }, [])

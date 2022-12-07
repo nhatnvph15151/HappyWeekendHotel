@@ -312,7 +312,7 @@ const BookingDetail = () => {
                     </div>
                 </div>
                 <div className='m-auto w-[1000px]'>
-                    <div className='text-center pt-[100px] pb-[80px] text-[35px] font-bold'><h1>Tiện Ích</h1></div>
+                    <div className='text-center text-[35px] font-bold'><h1>Tiện Ích</h1></div>
                     <div className='grid grid-cols-3 gap-10 mb-[50px]'>
                         {facilities.map((item: any) => (
                             <div className='flex ml-[70px]'>

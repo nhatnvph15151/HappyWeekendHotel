@@ -38,8 +38,8 @@ const Footer = (props: Props) => {
                 </Link>
               </li>
               <li className="mb-4">
-              <Link href="/blog" className="hover:underline text-sm" >
-                Trang blog
+                <Link href="/blog" className="hover:underline text-sm" >
+                  Trang blog
                 </Link>
                 {/* <a href="#" className="hover:underline text-sm">Trang blog</a> */}
               </li>
@@ -56,17 +56,11 @@ const Footer = (props: Props) => {
             <ul className="text-[black] dark:text-gray-400 flex">
               <li className="mb-4">
                 <a href="#" className="hover:underline text-sm">
-                  <img width="30px" src="https://res.cloudinary.com/djsbi0bma/image/upload/v1664423305/MoMo_Logo-removebg-preview_inlun8.png" alt="" />
+                  <img width="100px" className='pr-2 h-[100%]' src="https://seeklogo.com/images/V/vnpay-logo-CCF12E3F02-seeklogo.com.png" alt="" />
                 </a>
               </li>
               <a href="#" className="hover:underline text-sm">
-                <img width="30px" src="https://res.cloudinary.com/djsbi0bma/image/upload/v1664423305/MoMo_Logo-removebg-preview_inlun8.png" alt="" />
-              </a>
-              <a href="#" className="hover:underline text-sm">
-                <img width="30px" src="https://res.cloudinary.com/djsbi0bma/image/upload/v1664423305/MoMo_Logo-removebg-preview_inlun8.png" alt="" />
-              </a>
-              <a href="#" className="hover:underline text-sm">
-                <img width="30px" src="https://res.cloudinary.com/djsbi0bma/image/upload/v1664423305/MoMo_Logo-removebg-preview_inlun8.png" alt="" />
+                <img width="100px" className='pl-2' src="https://seeklogo.com/images/V/vnpay-logo-CCF12E3F02-seeklogo.com.png" alt="" />
               </a>
             </ul>
           </div>

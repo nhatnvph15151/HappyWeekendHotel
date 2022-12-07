@@ -80,6 +80,7 @@ const Orderlisst = (props: Props) => {
                         <span onClick={() => {
                             setStatus(false)
                             localStorage.removeItem('user')
+                            router.push('/')
                         }} className='pl-[10px] font-normal text-lg'>
                             Đăng Xuất</span></a></div>
 

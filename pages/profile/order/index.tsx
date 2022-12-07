@@ -1,4 +1,6 @@
+import { MenuItem } from '@mui/material'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { listOrderUser } from '../../../api/order'
 import { OrderType } from '../../../types/order'
@@ -10,17 +12,25 @@ const Orderlisst = (props: Props) => {
     const [user, setUser] = useState({})
     const [order, setorder] = useState([])
     const [status, setStatus] = useState(false)
+    const router = useRouter();
     useEffect(() => {
         const getUser = JSON.parse(localStorage.getItem('user') as string)
         if (getUser == 0 || getUser == null) {
+            router.push('/')
             setStatus(false)
         } else {
             setStatus(true)
         }
         setUser(getUser)
         const get = async () => {
-            const data = await listOrderUser(getUser._id)
-            setorder(data)
+            if (getUser == 0 || getUser == null) {
+                router.push('/')
+                setStatus(false)
+            } else {
+                setStatus(true)
+                const data = await listOrderUser(getUser._id)
+                setorder(data)
+            }
         }
         get()
     }, [])
@@ -67,10 +77,11 @@ const Orderlisst = (props: Props) => {
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='#' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                     </svg>
-                        <span className='pl-[10px] font-normal text-lg'><Link href={'/'}><a className='w-[100%] block' onClick={() => {
+                        <span onClick={() => {
                             setStatus(false)
                             localStorage.removeItem('user')
-                        }}>Đăng xuất</a></Link></span></a></div>
+                        }} className='pl-[10px] font-normal text-lg'>
+                            Đăng Xuất</span></a></div>
 
                 </div>
                 <div className="profile_account relative w-[768px]">

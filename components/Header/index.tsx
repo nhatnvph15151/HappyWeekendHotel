@@ -13,7 +13,7 @@ const Header = (props: Props) => {
   const router = useRouter()
   const query = router.query
   const [status, setStatus] = useState(false)
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState<any>({})
   const [showSearch, setShowSearch] = useState(false)
 
   useEffect(() => {

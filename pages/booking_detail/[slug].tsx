@@ -9,7 +9,6 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import useStatus from '../../hook/use-status'
 import { creatOrder } from '../../api/order'
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -268,7 +267,7 @@ const BookingDetail = () => {
                     <div className="new-content__booking">
                         <div className="flex justify-between items-center">
                             <h1 className='text-[#FFA500] text-4xl font-semibold'>{product?.name}</h1>
-                           
+
                             <button className={`bg-[orange] px-4 py-2 rounded-md duration-300 ${open ? 'invisible translate-y-[-20px] opacity-0' : 'visible translate-y-0 opacity-100'}`} onClick={handleClickOpen}>
                                 Đặt phòng
                             </button>
@@ -314,7 +313,7 @@ const BookingDetail = () => {
                     </div>
                 </div>
                 <div className='mt-[50px]'>
-                     <h1 className='text-[35px] font-medium text-[#FFA500]'>Tiện Ích</h1>
+                    <h1 className='text-[35px] font-medium text-[#FFA500]'>Tiện Ích</h1>
                     <div className='grid grid-cols-3 gap-10 mb-[50px]'>
                         {facilities.map((item: any) => (
                             <div className='flex ml-[70px]  mt-[30px]'>
@@ -356,7 +355,7 @@ const BookingDetail = () => {
                             <button className="my-3 px-4 py-2 bg-[#FFA500] font-semibold uppercase text-white text-sm transition ease-linear duration-300 hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">Gửi đi</button>
                         </form>
                     )}
-                    
+
                     {/* danh sách comment */}
                     <div className='grid grid-cols-3 gap-5 my-7'>
                         {comments?.slice(0, LIMIT_SHOW_COMMENT).map((cmt: CommentType) => {
@@ -496,7 +495,7 @@ const BookingDetail = () => {
                                                             renderInput={(props) => <TextField helperText="" {...props} />}
                                                             label="DateTimePicker"
                                                             value={'2022-11-18T08:20:01.000Z'}
-                                                            onChange={(newValues) => {
+                                                            onChange={(newValues: any) => {
                                                                 setValues(newValues)
                                                                 setDate([
                                                                     newValues.$d,

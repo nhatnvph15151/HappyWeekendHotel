@@ -99,7 +99,7 @@ const UserAdmin = (props: Props) => {
                                           <a href="#" className="text-indigo-600 hover:text-indigo-900">
                                               Edit
                                           </a>
-                                         <button className=' bg-red-600 text-white rounded hover:bg-red-800 mb-4 px-3 py-2 'onClick={() =>remove(item)}>Xóa</button> <br />
+                                         <button className=' bg-red-600 text-white rounded hover:bg-red-800 mb-4 px-3 py-2  ' onClick={() => remove(item._id)} >Xóa</button> <br />
                                           
                                       </td>
                                   </tr>

@@ -112,6 +112,7 @@ const Orderlisst = (props: Props) => {
                             </thead>
                             <tbody>
                                 {order?.map((item: OrderUser, index: number) => (
+                                    // eslint-disable-next-line react/jsx-key
                                     <tr >
                                         <td className="py-5 border-b border-gray-200 bg-white text-sm">
                                             <p className="text-gray-900 whitespace-no-wrap">

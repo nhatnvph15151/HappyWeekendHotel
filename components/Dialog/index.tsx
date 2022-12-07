@@ -5,6 +5,7 @@ import { creat } from "../../api/bookedDate";
 import { useRouter } from "next/router";
 import { Button, Dialog, DialogActions, DialogTitle, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import { bangking } from "../../api/banking";
 
 type PostProps = {
 
@@ -124,7 +125,10 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
               <div>
                 <button
                   className="px-4 py-2 rounded-md shadow-xl bg-[orange] text-white"
-                  onClick={() => { router.push('/payment') }}
+                  onClick={() => { 
+                    // router.push('/payment')
+                    bangking().then((res:any)=>{router.push(`${res.redirect}`)})
+                   }}
                 >Thanh toán trực tuyến</button>
               </div>
             </div>

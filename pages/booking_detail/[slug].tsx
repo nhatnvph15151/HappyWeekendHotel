@@ -267,11 +267,13 @@ const BookingDetail = () => {
                 <div className="content-text__booking">
                     <div className="new-content__booking">
                         <div className="flex justify-between items-center">
-                            <h1 className='text-[#FFA500] text-2xl font-semibold'>{product?.name}</h1>
+                            <h1 className='text-[#FFA500] text-4xl font-semibold'>{product?.name}</h1>
+                           
                             <button className={`bg-[orange] px-4 py-2 rounded-md duration-300 ${open ? 'invisible translate-y-[-20px] opacity-0' : 'visible translate-y-0 opacity-100'}`} onClick={handleClickOpen}>
                                 Đặt phòng
                             </button>
                         </div>
+                        <h2 className=' text-2xl font-semibold'>{product?.category?.name}</h2>
                     </div>
                 </div>
                 <div className="relative mx-auto mt-6 w-full overflow-hidden rounded-md flex h-[500px]">
@@ -311,11 +313,11 @@ const BookingDetail = () => {
                         }
                     </div>
                 </div>
-                <div className='m-auto w-[1000px]'>
-                    <div className='text-center pt-[100px] pb-[80px] text-[35px] font-bold'><h1>Tiện Ích</h1></div>
+                <div className='mt-[50px]'>
+                     <h1 className='text-[35px] font-medium text-[#FFA500]'>Tiện Ích</h1>
                     <div className='grid grid-cols-3 gap-10 mb-[50px]'>
                         {facilities.map((item: any) => (
-                            <div className='flex ml-[70px]'>
+                            <div className='flex ml-[70px]  mt-[30px]'>
                                 <img width={45} className='mr-[20px] sepia' src={`${item.image}`} alt="" />
                                 <p className='self-center text-[18px] text-gray-500 font-medium'>{item.name}</p>
                             </div>
@@ -326,7 +328,7 @@ const BookingDetail = () => {
                 {/* bình luận */}
                 <div>
                     <div className='pt-5 font-bold flex items-end'>
-                        <h2 className='text-[35px]'>Đánh giá</h2>
+                        <h2 className='text-[35px] font-medium text-[#FFA500]'>Đánh giá</h2>
                         <div className='text-lg pb-1.5'>
                             &ensp;•&ensp;
                             {comments?.length} Đánh giá

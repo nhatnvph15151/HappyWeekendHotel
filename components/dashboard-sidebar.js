@@ -17,6 +17,7 @@ import { Logo } from "./logo";
 import { NavItem } from "./nav-item";
 import CategoryIcon from "@mui/icons-material/Category";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import CommentIcon from "@mui/icons-material/Comment";
 import BedroomParentIcon from "@mui/icons-material/BedroomParent";
 
 const items = [
@@ -59,6 +60,11 @@ const items = [
     href: "/admin/facilities",
     icon: <CategoryIcon fontSize="small" />,
     title: "Facilities",
+  },
+  {
+    href: "/admin/comment",
+    icon: <CommentIcon fontSize="small" />,
+    title: "Comment"
   },
   {
     href: "/admin/404",

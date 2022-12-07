@@ -1,4 +1,5 @@
 export type OrderType = {
+    checkins: string
     _id?: number,
     name:string,
     email:string,

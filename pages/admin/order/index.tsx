@@ -3,14 +3,24 @@ import React from 'react'
 import { DashboardLayout } from '../../../components/dashboard-layout'
 import OrderHook from '../../../hook/use-order'
 import { OrderType } from '../../../types/order'
-
+import { Button, TablePagination, Tooltip } from '@mui/material'
 type Props = {}
 
 const index = (props: Props) => {
     const { data, error, mutate } = OrderHook()
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(8);
 
     if (!data) return <div>Loading...</div>
     if (error) return <div>Errors</div>
+     const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
     const statuss = (value: number) => {
         if (value == 0) {
             return <span className='rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Chờ Xác Nhận</span>
@@ -53,7 +63,7 @@ const index = (props: Props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data?.map((item: OrderType, index: number) => (
+                    {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: OrderType, index: number) => (
                         <tr >
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p className="text-gray-900 whitespace-no-wrap">
@@ -102,6 +112,17 @@ const index = (props: Props) => {
                     ))}
                 </tbody>
             </table>
+            <div className=" bottom-0 bg-white w-full border-t border">
+                            <TablePagination
+                                 rowsPerPageOptions={[]}
+                                 component="div"
+                                 count={data.length}
+                                 rowsPerPage={rowsPerPage}
+                                 page={page}
+                                 onPageChange={handleChangePage}
+                                 onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
+                        </div>
         </div>
     )
 }

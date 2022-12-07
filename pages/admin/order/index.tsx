@@ -13,7 +13,7 @@ const index = (props: Props) => {
 
     if (!data) return <div>Loading...</div>
     if (error) return <div>Errors</div>
-     const handleChangePage = (event: unknown, newPage: number) => {
+    const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
 
@@ -34,6 +34,15 @@ const index = (props: Props) => {
         else {
             return <span className='bg-red-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Hủy Phòng</span>
         }
+    }
+
+    const formatDate = (date: any) => {
+        const abc = new Date(date)
+        const dateformat =
+            ("0" + (abc?.getUTCDate() + 1)).slice(-2) + "/" +
+            ("0" + (abc?.getUTCMonth() + 1)).slice(-2) + "/" +
+            abc?.getUTCFullYear()
+        return dateformat
     }
     return (
         <div>
@@ -103,7 +112,7 @@ const index = (props: Props) => {
                             </td>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p className="text-gray-900 whitespace-no-wrap">
-                                    {item.checkins}
+                                    {formatDate(item.checkins)}
                                 </p>
                             </td>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -121,16 +130,16 @@ const index = (props: Props) => {
                 </tbody>
             </table>
             <div className=" bottom-0 bg-white w-full border-t border">
-                            <TablePagination
-                                 rowsPerPageOptions={[]}
-                                 component="div"
-                                 count={data.length}
-                                 rowsPerPage={rowsPerPage}
-                                 page={page}
-                                 onPageChange={handleChangePage}
-                                 onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
-                        </div>
+                <TablePagination
+                    rowsPerPageOptions={[]}
+                    component="div"
+                    count={data.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </div>
         </div>
     )
 }

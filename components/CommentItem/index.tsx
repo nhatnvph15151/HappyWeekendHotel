@@ -41,17 +41,17 @@ const CommentItem = ({ comment, isLogged, currentUser, onRemoveCmt }: CommentIte
   return (
     <div className='flex items-center my-3'>
       <div className='mr-3'>
-        <img src={`${comment.user.avatar}`} className='w-[60px] h-[60px] object-cover rounded-full flex-1' alt="" />
+        <img src={`${comment.user?.avatar}`} className='w-[60px] h-[60px] object-cover rounded-full flex-1' alt="" />
       </div>
       <div className='flex-1'>
         <span className='text-[#636366]'>{dayjs(comment.createdAt).format("DD/MM/YYYY")}</span>
         <div>
-          Khách hàng: <strong className='text-lg'>{comment.user.name}</strong>
+          Khách hàng: <strong className='text-lg'>{comment.user?.name}</strong>
         </div>
         <div>Nội dung: {comment.comment}</div>
       </div>
 
-      {isLogged && (currentUser?.role === 1 || currentUser?._id === comment.user._id) && (
+      {isLogged && (currentUser?.role === 1 || currentUser?._id === comment.user?._id) && (
         <button onClick={() => handleRemoveComment(comment._id)} className="p-2 border text-sm transition hover:text-white hover:bg-[#FFA500] hover:border-[#FFA500]">
           Xóa
         </button>

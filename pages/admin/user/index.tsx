@@ -71,7 +71,7 @@ const UserAdmin = (props: Props) => {
                                           <div className="flex items-center">
                                               <div className="flex-shrink-0">
                                                   <a href="#" className="block relative">
-                                                      <img alt="profil" src={item.password}  className="mx-auto object-cover rounded-full h-10 w-10 " />
+                                                      <img alt="profil" src={item.avatar}  className="mx-auto object-cover rounded-full h-10 w-10 " />
                                                   </a>
                                               </div>
                                               <div className="ml-3">

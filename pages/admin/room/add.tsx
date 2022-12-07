@@ -33,6 +33,16 @@ type formInput = {
   // image9: string,
   // price10: string,
   name: string
+  // price: [
+  //   {
+  //     brand: number,
+  //     title: string,
+  //     value: number
+  //   }
+  // ]
+  price0: number,
+  price1: number,
+  price2: number,
 }
 
 const AddRoom = (props: Props) => {
@@ -62,12 +72,41 @@ const AddRoom = (props: Props) => {
     setEditorLoaded(true);
   }, []);
   const themsp: SubmitHandler<any> = (data: formInput) => {
+    const newdata: any = {
+      // ...data,
+      category: data.category,
+      description: desc,
+      name: data.name,
+      price: [
+        {
+          brand: 0,
+          title: "Giá theo ngày",
+          value: data.price0
+        },
+        {
+          brand: 1,
+          title: "Giá qua đêm",
+          value: data.price1
+        },
+        {
+          brand: 2,
+          title: "Giá theo giờ",
+          value: data.price2
+        },
+      ],
+      image0: data.image0,
+      image1: data.image1,
+      image2: data.image2,
+      image3: data.image3,
+      image4: data.image4
+    }
+    console.log(newdata)
     const file = [
-      data.image0[0],
-      data.image1[0],
-      data.image2[0],
-      data.image3[0],
-      data.image4[0]
+      newdata.image0[0],
+      newdata.image1[0],
+      newdata.image2[0],
+      newdata.image3[0],
+      newdata.image4[0]
     ]
     setLoading(false)
     const previewFile: any[] = [];
@@ -87,12 +126,12 @@ const AddRoom = (props: Props) => {
         }, data: formData,
       })
         .then((res) => previewFile.push(res.data.url))
-        .then(()=>{
+        .then(() => {
           if (i == count) {
-            data.image = previewFile
-            data.description = desc
+            newdata.image = previewFile
+            // newdata.description = desc
             try {
-              room.add(data).then(() => {
+              room.add(newdata).then(() => {
                 setLoading(true)
                 router.push("/admin/room")
               }
@@ -124,9 +163,19 @@ const AddRoom = (props: Props) => {
             <input type="text" {...register("name")} name="name" id="name" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
             <label htmlFor="name" className="z-50 peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Tên phòng</label>
           </div>
-          <div className="relative z-0 mb-6 w-full group">
-            <input type="number" {...register("price")} name="price" id="price" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-            <label htmlFor="price" className="z-50 peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Giá phòng</label>
+          <div className='flex'>
+            <div className="relative z-0 mb-6 w-full group">
+              <input type="number" {...register('price0')} name="price0" id="price" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+              <label htmlFor="price" className="z-50 peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Giá theo ngày</label>
+            </div>
+            <div className="relative z-0 mb-6 w-full group mx-[30px]">
+              <input type="number" {...register("price1")} name="price1" id="price" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+              <label htmlFor="price" className="z-50 peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Giá qua đêm</label>
+            </div>
+            <div className="relative z-0 mb-6 w-full group">
+              <input type="number" {...register("price2")} name="price2" id="price" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+              <label htmlFor="price" className="z-50 peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Giá theo giờ</label>
+            </div>
           </div>
           <div className={`relative z-0 mb-6 w-full group overflow-hidden ${room.data ? "border rounded-md" : ""}`}>
             <p className="block p-2 mb-2 text-sm font-medium text-gray-900 dark:text-gray-300 bg-[#ccc]">Ảnh phòng</p>

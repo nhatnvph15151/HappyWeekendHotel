@@ -12,6 +12,7 @@ import { IconButton, Skeleton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import formatISO from 'date-fns/formatISO'
 import dayjs from 'dayjs';
+import { API_URL } from '../../constants';
 
 function DialogSearch(props: any, ref: any) {
     const [open, setOpen] = React.useState(false);
@@ -26,7 +27,7 @@ function DialogSearch(props: any, ref: any) {
                 const checkIn = dayjs(prop[0]).toISOString()
                 const checkOut = prop[1] ? dayjs(prop[1]).toISOString() : null
                 console.log(checkIn, checkOut);
-                await fetch(`http://localhost:4000/api/room?dateFrom=${checkIn}&dateTo=${checkOut}`)
+                await fetch(`${API_URL}/room?dateFrom=${checkIn}&dateTo=${checkOut}`)
                     .then((res) => res.json())
                     .then((result) => {
                         setData(result)

@@ -6,6 +6,7 @@ import {
     LocalizationProvider
 } from "@material-ui/pickers";
 import DateFnsUtils from "@material-ui/pickers/adapter/date-fns"; // choose your lib
+import { API_URL } from "../../constants";
 
 type props = {
     id: any,
@@ -20,7 +21,7 @@ export default function BasicDateRangePicker({ id, getDate, settotaldate }: prop
 
     useEffect(() => {
         const getData = async () => {
-            const data = await fetch('http://localhost:4000/api/dateBooked').then((res) => res.json())
+            const data = await fetch(`${API_URL}/dateBooked`).then((res) => res.json())
             setDataDate(data)
         }
         getData()

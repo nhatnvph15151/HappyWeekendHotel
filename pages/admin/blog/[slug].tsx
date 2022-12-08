@@ -9,6 +9,7 @@ import useBasic from '../../../hook/use-basic'
 import { useRouter } from 'next/router'
 import CKeditor from '../../../components/CkEditor'
 import App from '../../../components/CkEditor'
+import { API_URL } from '../../../constants'
 
 type Props = {}
 
@@ -46,7 +47,7 @@ const BlogUpdate = (props: Props) => {
 
   React.useEffect(() => {
     const imageLists = async () => {
-      const data = await (await fetch(`http://localhost:4000/api/images/${blog.data?.image}`)).json()
+      const data = await (await fetch(`${API_URL}/images/${blog.data?.image}`)).json()
       setImage(data[0].image)
     }
     imageLists()

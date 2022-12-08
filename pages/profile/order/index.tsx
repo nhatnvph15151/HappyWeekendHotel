@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { listOrderUser } from '../../../api/order'
+import ProfileLayout from '../../../components/Layout/ProfileLayout'
 import { OrderType } from '../../../types/order'
 import { OrderUser } from '../../../types/OrderUser'
 
@@ -160,4 +161,5 @@ const Orderlisst = (props: Props) => {
     )
 }
 
+Orderlisst.Layout = ProfileLayout;
 export default Orderlisst

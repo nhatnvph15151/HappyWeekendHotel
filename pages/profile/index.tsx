@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { update } from '../../api/users';
 import { useRouter } from 'next/router';
+import ProfileLayout from '../../components/Layout/ProfileLayout';
 
 type Form = {
     name: string,
@@ -230,4 +231,5 @@ const Profile = (props: Props) => {
     )
 }
 
+Profile.Layout = ProfileLayout;
 export default Profile

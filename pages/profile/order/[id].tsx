@@ -11,6 +11,7 @@ import { update } from '../../../api/order';
 import { remove } from '../../../api/bookedDate';
 import { getOnefac, listfac } from '../../../api/facilities';
 import { API_URL } from '../../../constants';
+import ProfileLayout from '../../../components/Layout/ProfileLayout';
 
 type Props = {}
 
@@ -188,4 +189,5 @@ const DtailOrderHistory = (props: Props) => {
     )
 }
 
+DtailOrderHistory.Layout = ProfileLayout;
 export default DtailOrderHistory

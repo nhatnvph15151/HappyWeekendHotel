@@ -7,6 +7,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { json } from 'node:stream/consumers';
 import { useRouter } from 'next/router';
+import { USER_ROLE } from '../../constants';
 type Props = {}
 
 const Header = (props: Props) => {
@@ -259,7 +260,7 @@ const Header = (props: Props) => {
                         'aria-labelledby': 'basic-button',
                       }}
                     >
-                      <Link href={'/profile'}>
+                      <Link href={`${user.role === USER_ROLE ? '/profile' : '/admin'}`}>
                         <MenuItem>
                           <div className='contents'><img width={50} className="rounded-full h-[50px] w-[50px] object-cover border-current" src={user.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
                           <div className="flex-col pl-3 w-[100%] items-start">

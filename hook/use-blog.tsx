@@ -2,12 +2,13 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { creat, remove, update } from "../api/blog";
+import { API_URL } from "../constants";
 import { Blog } from "../types/blog";
 
 const useBlog = (slug: any) => {
 
     const fetcher = (args: string) => axios.get(args).then(res => res.data)
-    const { data, error, mutate } = useSWR(slug ? `http://localhost:4000/api/blogs/${slug}` : "http://localhost:4000/api/blogs", fetcher);
+    const { data, error, mutate } = useSWR(slug ? `${API_URL}/blogs/${slug}` : `${API_URL}/blogs`, fetcher);
 
     // create
     const add = async (item: Blog) => {

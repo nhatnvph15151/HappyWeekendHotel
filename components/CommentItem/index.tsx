@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { UserType } from "../../types/user";
 import "sweetalert2/dist/sweetalert2.css";
 import Swal from "sweetalert2";
+import { ADMIN_ROLE } from "../../constants";
 
 /* eslint-disable @next/next/no-img-element */
 type CommentItemProps = {
@@ -51,7 +52,8 @@ const CommentItem = ({ comment, isLogged, currentUser, onRemoveCmt }: CommentIte
         <div>Nội dung: {comment.comment}</div>
       </div>
 
-      {isLogged && (currentUser?.role === 1 || currentUser?._id === comment.user?._id) && (
+      {/* admin có thể xóa bất kỳ cmt, user có thể xóa cmt của chính mình. */}
+      {isLogged && (currentUser?.role === ADMIN_ROLE || currentUser?._id === comment.user?._id) && (
         <button onClick={() => handleRemoveComment(comment._id)} className="p-2 border text-sm transition hover:text-white hover:bg-[#FFA500] hover:border-[#FFA500]">
           Xóa
         </button>

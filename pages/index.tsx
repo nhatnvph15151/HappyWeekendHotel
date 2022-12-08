@@ -24,8 +24,8 @@ import dayjs, { Dayjs } from 'dayjs'
 
 const Home: NextPage = () => {
   const date = new Date()
-  const [selectedDate, handleDateChange] = React.useState([date, null]);
-  const [value, setValue] = React.useState<Dayjs | null>(dayjs(date));
+  const [selectedDate, handleDateChange] = React.useState<any>([date, null]);
+  const [value, setValue] = React.useState<Dayjs | any>(dayjs(date));
 
   const room = useProducts("")
   const dialogRef = useRef<any>();

@@ -112,6 +112,7 @@ const Orderlisst = (props: Props) => {
                             </thead>
                             <tbody>
                                 {order?.map((item: OrderUser, index: number) => (
+                                    // eslint-disable-next-line react/jsx-key
                                     <tr >
                                         <td className="py-5 border-b border-gray-200 bg-white text-sm">
                                             <p className="text-gray-900 whitespace-no-wrap">
@@ -122,19 +123,19 @@ const Orderlisst = (props: Props) => {
                                             <div className="flex items-center">
                                                 <div className="ml-3">
                                                     <p className="text-gray-900 whitespace-no-wrap">
-                                                        {item?.room.name}
+                                                        {item?.room?.name}
                                                     </p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                             <p className="text-gray-900 whitespace-no-wrap">
-                                                <img width={100} src={`${item?.room.image?.[0]}`} alt="" />
+                                                <img width={100} src={`${item?.room?.image?.[0]}`} alt="" />
                                             </p>
                                         </td>
                                         <td className=" py-5 border-b border-gray-200 bg-white text-sm">
                                             <p className="text-gray-900 whitespace-no-wrap">
-                                                {item.room.description}
+                                                {item.room?.description}
                                             </p>
                                         </td>
                                         <td className=" py-5 border-b border-gray-200 bg-white text-sm">

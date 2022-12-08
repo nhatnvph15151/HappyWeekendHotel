@@ -10,6 +10,7 @@ import { DetailOrderType } from '../../../types/detailorder'
 import { update } from '../../../api/order';
 import { remove } from '../../../api/bookedDate';
 import { getOnefac, listfac } from '../../../api/facilities';
+import { API_URL } from '../../../constants';
 
 type Props = {}
 
@@ -24,7 +25,7 @@ const DtailOrderHistory = (props: Props) => {
         console.log(getUser)
         setUser(getUser)
         const get = async () => {
-            const { data } = await axios.get(`http://localhost:4000/api/order/${id}`)
+            const { data } = await axios.get(`${API_URL}/order/${id}`)
             setorder(data)
             console.log(orders?.room[0]._id)
         }

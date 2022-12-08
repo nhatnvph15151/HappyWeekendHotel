@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { API_URL } from '../../constants';
 
 type props = {
   id: any,
@@ -16,7 +17,7 @@ export default function DateBooked({ id, getDate, label }: props) {
   const [value, setValue] = React.useState<any>(null);
   useEffect(() => {
     const getData = async () => {
-      const data = await fetch('http://localhost:4000/api/dateBooked').then((res) => res.json())
+      const data = await fetch(`${API_URL}/dateBooked`).then((res) => res.json())
       setDataDate(data)
     }
     getData()

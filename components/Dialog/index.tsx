@@ -10,6 +10,7 @@ import { bangking } from "../../api/banking";
 type PostProps = {
 
 };
+
 const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
   const [displayBasic2, setDisplayBasic2] = useState<any>(false);
   const router = useRouter()
@@ -128,6 +129,8 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
                   onClick={() => { 
                     // router.push('/payment')
                     bangking().then((res:any)=>{router.push(`${res.redirect}`)})
+                    
+                 
                    }}
                 >Thanh toán trực tuyến</button>
               </div>

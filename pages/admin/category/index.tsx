@@ -10,6 +10,7 @@ import { DashboardLayout } from '../../../components/dashboard-layout';
 import useCategory from '../../../hook/useCategory';
 import Head from 'next/head';
 import Swal from 'sweetalert2'
+import ShowForPermission from '../../../components/Private/showForPermission';
 function CategoryAdmin() {
     const e = useCategory();
 
@@ -89,28 +90,30 @@ function CategoryAdmin() {
                 type: 'actions',
                 width: 150,
                 getActions: (params: any) => [
-                    <GridActionsCellItem
-                        key={1}
-                        icon={
-                            <Tooltip title="Edit">
-                                <IconButton>
-                                    <EditIcon />
-                                </IconButton>
-                            </Tooltip>}
-                        label="Edit"
-                        onClick={() => actionCrud.update(params.row, params)}
-                    />,
-                    <GridActionsCellItem
-                        key={2}
-                        icon={
-                            <Tooltip title="Delete">
-                                <IconButton>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Tooltip>}
-                        label="Delete"
-                        onClick={() => actionCrud.remove(params.id)}
-                    />
+                    <ShowForPermission key={1}>
+                        <GridActionsCellItem
+                            icon={
+                                <Tooltip title="Edit">
+                                    <IconButton>
+                                        <EditIcon />
+                                    </IconButton>
+                                </Tooltip>}
+                            label="Edit"
+                            onClick={() => actionCrud.update(params.row, params)}
+                        />
+                    </ShowForPermission> ,
+                    <ShowForPermission key={2}>
+                        <GridActionsCellItem
+                            icon={
+                                <Tooltip title="Delete">
+                                    <IconButton>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Tooltip>}
+                            label="Delete"
+                            onClick={() => actionCrud.remove(params.id)}
+                        />
+                    </ShowForPermission>
                 ],
             },
         ],
@@ -124,9 +127,13 @@ function CategoryAdmin() {
                     Customers
                 </title>
             </Head>
-            <Button variant='text' sx={{ color: "orange" }} onClick={() => actionCrud.create(1, "CREATE")}>
-                <AddIcon /> Thêm mới
-            </Button>
+
+            <ShowForPermission>
+                <Button variant='text' sx={{ color: "orange" }} onClick={() => actionCrud.create(1, "CREATE")}>
+                    <AddIcon /> Thêm mới
+                </Button>
+            </ShowForPermission>
+            
             <Category_admin_detail ref={refDetail} />
             <div className="h-[600px]">
                 <DataGrid

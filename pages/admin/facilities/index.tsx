@@ -7,6 +7,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import useFacilities from '../../../hook/facilities';
 import Swal from 'sweetalert2'
+import ShowForPermission from '../../../components/Private/showForPermission';
+import Head from 'next/head';
 type Props = {}
 
 const Utilities = (props: Props) => {
@@ -52,15 +54,18 @@ const Utilities = (props: Props) => {
         <div>
             <div>
                 <div className="container w-[100%] p-2">
-                    <head>
+                    <Head>
                         <title>Tiện ích</title>
-                    </head>
+                    </Head>
                     <div className="">
-                        <Link href={'/admin/utilities/add'}>
-                            <button type="button" className="text-white bg-[#111827] hover:bg-[#1118276b] focus:outline-none focus:ring-4 focus:ring-[#111827] font-medium rounded-xl text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-[#111827]">
-                                Thêm tiện ích mới <AddIcon />
-                            </button>
-                        </Link>
+                        <ShowForPermission>
+                            <Link href={'/admin/utilities/add'}>
+                                <button type="button" className="text-white bg-[#111827] hover:bg-[#1118276b] focus:outline-none focus:ring-4 focus:ring-[#111827] font-medium rounded-xl text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-[#111827]">
+                                    Thêm tiện ích mới <AddIcon />
+                                </button>
+                            </Link>
+                        </ShowForPermission>
+
                         <div className="inline-block sm:min-w-full w-[900px] shadow-xl rounded-xl h-[600px] relative border">
                             <div className="h-full overflow-y-auto overflow-x-auto pb-[50px]">
                                 <table className="table-auto w-full border">
@@ -72,8 +77,11 @@ const Utilities = (props: Props) => {
                                             <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
                                                 Name
                                             </th>
-                                            <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            </th>
+                                            
+                                            <ShowForPermission>
+                                                <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
+                                                </th>
+                                            </ShowForPermission>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -94,20 +102,22 @@ const Utilities = (props: Props) => {
                                                     </div>
                                                 </td>
 
-                                                <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                    <Link href={`/admin/utilities/${item._id}`}>
-                                                        <Tooltip title={`Chỉnh sửa ${item.name}`}>
-                                                            <Button className='text-[#111827]' variant="text" startIcon={<EditIcon />}>
-                                                                Edit
+                                                <ShowForPermission>
+                                                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                                                        <Link href={`/admin/utilities/${item._id}`}>
+                                                            <Tooltip title={`Chỉnh sửa ${item.name}`}>
+                                                                <Button className='text-[#111827]' variant="text" startIcon={<EditIcon />}>
+                                                                    Edit
+                                                                </Button>
+                                                            </Tooltip>
+                                                        </Link>
+                                                        <Tooltip title={`Xóa ${item.name}`}>
+                                                            <Button onClick={() => { remove(item._id) }} className='text-[red]' variant="text" startIcon={<DeleteIcon />}>
+                                                                Delete
                                                             </Button>
                                                         </Tooltip>
-                                                    </Link>
-                                                    <Tooltip title={`Xóa ${item.name}`}>
-                                                        <Button onClick={() => { remove(item._id) }} className='text-[red]' variant="text" startIcon={<DeleteIcon />}>
-                                                            Delete
-                                                        </Button>
-                                                    </Tooltip>
-                                                </td>
+                                                    </td>
+                                                </ShowForPermission>
                                             </tr>
                                         ))}
                                     </tbody>

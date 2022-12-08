@@ -2,12 +2,13 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { creat, remove, searchRoom, update, } from "../api/rooms";
+import { API_URL } from "../constants";
 import { ProductType } from "../types/products";
 
 const useProducts = (slug: any) => {
     
     const fetcher = (args: string) => axios.get(args).then(res => res.data)
-    const { data, error, mutate } = useSWR(slug ? `http://localhost:4000/api/rooms/${slug}` : "http://localhost:4000/api/rooms", fetcher);
+    const { data, error, mutate } = useSWR(slug ? `${API_URL}/rooms/${slug}` : `${API_URL}/rooms`, fetcher);
 
     // create
     const add = async (item: ProductType) => {

@@ -126,12 +126,16 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
               <div>
                 <button
                   className="px-4 py-2 rounded-md shadow-xl bg-[orange] text-white"
-                  onClick={() => { 
+                  onClick={() => {
                     // router.push('/payment')
-                    bangking().then((res:any)=>{router.push(`${res.redirect}`)})
-                    
-                 
-                   }}
+                    bangking({
+                      "total": data.total,
+                      "orderDescription": "",
+                      "orderType": "billpayment",
+                      "language": "vn",
+                      "bankCode": ""
+                    }).then((res: any) => { router.push(`${res.redirect}`) })
+                  }}
                 >Thanh toán trực tuyến</button>
               </div>
             </div>

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { listOrderUser } from '../../../api/order'
+import ProfileLayout from '../../../components/Layout/ProfileLayout'
 import { OrderType } from '../../../types/order'
 import { OrderUser } from '../../../types/OrderUser'
 
@@ -123,19 +124,19 @@ const Orderlisst = (props: Props) => {
                                             <div className="flex items-center">
                                                 <div className="ml-3">
                                                     <p className="text-gray-900 whitespace-no-wrap">
-                                                        {item?.room.name}
+                                                        {item?.room?.name}
                                                     </p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                             <p className="text-gray-900 whitespace-no-wrap">
-                                                <img width={100} src={`${item?.room.image?.[0]}`} alt="" />
+                                                <img width={100} src={`${item?.room?.image?.[0]}`} alt="" />
                                             </p>
                                         </td>
                                         <td className=" py-5 border-b border-gray-200 bg-white text-sm">
                                             <p className="text-gray-900 whitespace-no-wrap">
-                                                {item.room.description}
+                                                {item.room?.description}
                                             </p>
                                         </td>
                                         <td className=" py-5 border-b border-gray-200 bg-white text-sm">
@@ -160,4 +161,5 @@ const Orderlisst = (props: Props) => {
     )
 }
 
+Orderlisst.Layout = ProfileLayout;
 export default Orderlisst

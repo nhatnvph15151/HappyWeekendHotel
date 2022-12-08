@@ -30,7 +30,7 @@ import DialogConfirm from '../../components/Dialog'
 import { DateTimePicker, LocalizationProvider } from '@material-ui/pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs, { Dayjs } from 'dayjs'
-import { Tab, Tabs, Typography } from '@mui/material'
+import { Tab, Tabs, TextField, Typography } from '@mui/material'
 import BedtimeIcon from '@mui/icons-material/Bedtime';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -98,7 +98,7 @@ const BookingDetail = () => {
     const [status, setstatus] = React.useState<string>()
     // const [ckeckout, setckekout] = React.useState('')
     const [showModal, setShowModal] = React.useState(false);
-    const { register, handleSubmit, formState: { errors } } = useForm<Form>()
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<Form>()
     // const { creatstatus } = useStatus(setstatus)
     const [open, setOpen] = React.useState(false);
     const [open2, setOpen2] = React.useState(false);
@@ -129,7 +129,13 @@ const BookingDetail = () => {
         const getUser = JSON.parse(localStorage.getItem("user") as string || "{}");
         setIsLogged(!!getUser._id);
         setCurrentUser(getUser);
-    }, []);
+        const user: any = {
+            name: currentUser?.name,
+            email: currentUser?.email,
+            phone: currentUser?.phone
+        }
+        reset(currentUser)
+    }, [open, slug]);
 
     const isStepOptional = (step: number) => {
         return step === 1;

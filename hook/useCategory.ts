@@ -1,3 +1,4 @@
+import { API_URL } from './../constants/index';
 import axios from "axios";
 import { useRouter } from "next/router"
 import useSWR from "swr";
@@ -7,7 +8,7 @@ const useCategory = () => {
     const router = useRouter();
     const { id } = router.query
     const fetcher = (url: any) => axios.get(url).then(res => res.data)
-    const { mutate, data, error } = useSWR(id ? `http://localhost:4000/api/categories` : "http://localhost:4000/api/categories", fetcher)
+    const { mutate, data, error } = useSWR(id ? `${API_URL}/categories` : `${API_URL}/categories`, fetcher)
 
     const create = async (item: any) => {
         const products = await creat(item);

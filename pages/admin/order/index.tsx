@@ -75,7 +75,7 @@ const index = (props: Props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: OrderType, index: number) => (
+                    {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: any, index: number) => (
                         <tr >
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p className="text-gray-900 whitespace-no-wrap">

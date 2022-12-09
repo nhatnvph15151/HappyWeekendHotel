@@ -47,7 +47,9 @@ const ProductsAdmin = (props: Props) => {
                             'Đã xóa!',
                             'Phòng này đã xóa thành công'
                         )
-        })}})
+                    })
+            }
+        })
     }
 
     return (
@@ -132,7 +134,7 @@ const ProductsAdmin = (props: Props) => {
                                                         </Tooltip>
                                                     </Link>
                                                     <Tooltip title={`Xóa ${item.name}`}>
-                                                        <Button onClick={() => { remove(item._id)}} className='text-[red]' variant="text" startIcon={<DeleteIcon />}>
+                                                        <Button onClick={() => { remove(item._id) }} className='text-[red]' variant="text" startIcon={<DeleteIcon />}>
                                                             Delete
                                                         </Button>
                                                     </Tooltip>
@@ -145,13 +147,13 @@ const ProductsAdmin = (props: Props) => {
                         </div>
                         <div className="absolute bottom-0 bg-white w-full border-t border">
                             <TablePagination
-                                 rowsPerPageOptions={[]}
-                                 component="div"
-                                 count={data.length}
-                                 rowsPerPage={rowsPerPage}
-                                 page={page}
-                                 onPageChange={handleChangePage}
-                                 onRowsPerPageChange={handleChangeRowsPerPage}
+                                rowsPerPageOptions={[]}
+                                component="div"
+                                count={data.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
                             />
                         </div>
                     </div>

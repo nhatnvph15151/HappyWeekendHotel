@@ -39,7 +39,7 @@ const Profile = (props: Props) => {
         setUser(getUser)
     }, [])
     let imageUpdate = ""
-    const Edit: SubmitHandler<Form> = async data => {
+    const Edit: SubmitHandler<any> = async data => {
         console.log(data)
         console.log(data.avatar?.[0])
         if (data.avatar?.[0] != 'h') {
@@ -206,7 +206,7 @@ const Profile = (props: Props) => {
                             </div>
                             <div className='relative z-0 w-full group'>
                                 <label htmlFor="" className="z-50 peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Giới tính</label>
-                                <select name="" id="" className='mt-[20px] w-full' {...register('gender')}>
+                                <select id="" className='mt-[20px] w-full' {...register('gender')}>
                                     <option value="1">Nam</option>
                                     <option value="2">Nữ</option>
                                     <option value="3">Khác</option>

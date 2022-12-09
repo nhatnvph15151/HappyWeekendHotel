@@ -107,7 +107,7 @@ const BookingDetail = () => {
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
     const [facilities, setfacilities] = useState<any[]>([])
-    const [chaprice, setchaprice] = useState<number>()
+    const [chaprice, setchaprice] = useState<any>()
     const [totaldate, settotaldate] = useState<number>(0)
     const [currentUser, setCurrentUser] = useState<UserType>();
     const [isLogged, setIsLogged] = useState(false);

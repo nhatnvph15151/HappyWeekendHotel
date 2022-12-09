@@ -11,7 +11,7 @@ import { API_URL } from "../../constants";
 type props = {
     id: any,
     getDate: any
-    settotaldate: number
+    settotaldate: any
 }
 
 export default function BasicDateRangePicker({ id, getDate, settotaldate }: props) {

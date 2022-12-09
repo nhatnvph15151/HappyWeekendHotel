@@ -10,6 +10,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import Swal from 'sweetalert2'
 import Head from 'next/head';
 import ShowForPermission from '../../../components/Private/showForPermission';
+import { update } from '../../../api/rooms';
+import { useRouter } from 'next/router';
 
 type Props = {}
 
@@ -17,7 +19,7 @@ const ProductsAdmin = (props: Props) => {
     const { data, error, dele } = useProducts("")
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(2);
-
+    const router = useRouter()
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -28,7 +30,6 @@ const ProductsAdmin = (props: Props) => {
     };
     if (!data) return <div>Loading...</div>
     if (error) return <div>Error</div>
-
     function remove(id: any) {
         return Swal.fire({
             title: 'Chắc chắn xóa?',
@@ -51,7 +52,43 @@ const ProductsAdmin = (props: Props) => {
             }
         })
     }
-
+    const status = (value: any, id: any) => {
+        if (value == true) {
+            return (
+                <div className='flex'>
+                    <div className='bg-green-500 text-white text-center px-[10px] py-[5px] font-bold rounded-lg'>Active</div>
+                    <button onClick={() => {
+                        const product: any = {
+                            status: false,
+                            _id: id
+                        }
+                        update(product).then(() => {
+                            router.push('/admin').then(() => {
+                                router.push('/admin/room')
+                            })
+                        })
+                    }} className='bg-orange-200 text-slate-100 text-center px-[10px] py-[5px] font-bold rounded-lg'>Inactive</button>
+                </div>
+            )
+        } else if (value == false) {
+            return (
+                <div className='flex'>
+                    <div className='bg-orange-500 text-white text-center px-[10px] py-[5px] font-bold rounded-lg'>Inactive</div>
+                    <button onClick={() => {
+                        const product: any = {
+                            status: true,
+                            _id: id
+                        }
+                        update(product).then(() => {
+                            router.push('/admin').then(() => {
+                                router.push('/admin/room')
+                            })
+                        })
+                    }} className='bg-green-300 text-slate-100 text-center px-[10px] py-[5px] font-bold rounded-lg'>Active</button>
+                </div>
+            )
+        }
+    }
     return (
         <div>
             <div className="container w-[100%] p-2">
@@ -77,14 +114,15 @@ const ProductsAdmin = (props: Props) => {
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
                                             Name
                                         </th>
-                                        <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            price
-                                        </th>
+
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
                                             image
                                         </th>
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
                                             description
+                                        </th>
+                                        <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
+                                            Status
                                         </th>
                                         <ShowForPermission>
                                             <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
@@ -122,6 +160,11 @@ const ProductsAdmin = (props: Props) => {
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
                                                     {item.description}
+                                                </p>
+                                            </td>
+                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                                                <p className="text-gray-900 whitespace-no-wrap">
+                                                    {status(item.status, item._id)}
                                                 </p>
                                             </td>
                                             <ShowForPermission>

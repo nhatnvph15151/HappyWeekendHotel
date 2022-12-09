@@ -24,7 +24,7 @@ const Signup = (props: Props) => {
     const router = useRouter();
     const onSubmit: SubmitHandler<form> = data => {
         console.log(data);
-        const newdata = { ...data, role: 0 }
+        const newdata: any = { ...data, role: 0 }
         const file = newdata.avatar[0]
         const formData = new FormData()
 

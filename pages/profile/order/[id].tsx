@@ -16,8 +16,8 @@ import ProfileLayout from '../../../components/Layout/ProfileLayout';
 type Props = {}
 
 const DtailOrderHistory = (props: Props) => {
-    const [user, setUser] = useState({})
-    const [orders, setorder] = useState<DetailOrderType>()
+    const [user, setUser] = useState<any>({})
+    const [orders, setorder] = useState<any>()
     const [facilities, setfacilities] = useState<any>()
     const router = useRouter()
     const { id } = router.query
@@ -43,7 +43,7 @@ const DtailOrderHistory = (props: Props) => {
         }
         abc()
     }, [orders?.room[0]._id])
-    const statuss = (value: number) => {
+    const statuss = (value: any) => {
         if (value == 0) {
             return <span className='float-right rounded-full py-[5px] px-[15px] bg-sky-500 text-center text-white font-medium'>Chờ Xác Nhận</span>
         } else if (value == 1) {
@@ -107,7 +107,7 @@ const DtailOrderHistory = (props: Props) => {
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='#' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                     </svg>
-                       <span className='pl-[10px] font-normal text-lg'>Đăng Xuất</span></a></div>
+                        <span className='pl-[10px] font-normal text-lg'>Đăng Xuất</span></a></div>
 
                 </div>
                 <div className="profile_account relative w-[768px]">

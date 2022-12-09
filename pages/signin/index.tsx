@@ -17,7 +17,7 @@ const Signin = (props: Props) => {
   const { register, handleSubmit, formState: { errors } } = useForm<form>();
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<form> = data => {
+  const onSubmit: SubmitHandler<any> = data => {
     // console.log(data)
     signin(data).then((res: any) => {
       localStorage.setItem('user', JSON.stringify(res.user))

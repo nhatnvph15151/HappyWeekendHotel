@@ -10,7 +10,7 @@ import { OrderUser } from '../../../types/OrderUser'
 type Props = {}
 
 const Orderlisst = (props: Props) => {
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState<any>({})
     const [order, setorder] = useState([])
     const [status, setStatus] = useState(false)
     const router = useRouter();
@@ -29,14 +29,14 @@ const Orderlisst = (props: Props) => {
                 setStatus(false)
             } else {
                 setStatus(true)
-                const data = await listOrderUser(getUser._id)
+                const data: any = await listOrderUser(getUser._id)
                 setorder(data)
             }
         }
         get()
     }, [])
     console.log(order)
-    const statuss = (value: number) => {
+    const statuss = (value: any) => {
         if (value == 0) {
             return <span className='rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Chờ Xác Nhận</span>
         } else if (value == 1) {

@@ -7,7 +7,7 @@ import { faStar, faUtensils, faSpa, faShirt, faShower, faBell, faCar, faWifi } f
 import { ProductType } from '../../types/products'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import useStatus from '../../hook/use-status'
-import { creatOrder } from '../../api/order'
+import { checkUserBookRoom, creatOrder } from '../../api/order'
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -113,6 +113,8 @@ const BookingDetail = () => {
     const [isLogged, setIsLogged] = useState(false);
     const [comment, setComment] = useState<string>();
     const [errComment, setErrComment] = useState<string>();
+    // trạng thái user đã sử dụng - trả phòng chưa.
+    const [isBooked, setIsBooked] = useState(false);
 
     useEffect(() => {
         const getfacilities = async () => {
@@ -136,6 +138,19 @@ const BookingDetail = () => {
         }
         reset(currentUser)
     }, [open, slug]);
+
+    useEffect(() => {
+        if (isLogged) {
+            (async () => {
+                const { isBooked } = await checkUserBookRoom({
+                    user: currentUser?._id!,
+                    room: product?._id
+                });
+
+                setIsBooked(isBooked);
+            })()
+        }
+    }, [currentUser?._id, isLogged, product?._id])
 
     const isStepOptional = (step: number) => {
         return step === 1;
@@ -341,15 +356,7 @@ const BookingDetail = () => {
                     </div>
 
                     {/* form comment */}
-                    {!isLogged ? (
-                        <div className="mt-5">
-                            Vui lòng
-                            <Link href="/signin">
-                                <button className="bg-[#FFA500] mx-1 px-2 py-1 rounded text-white text-sm font-semibold transition duration-200 ease-linear hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">đăng nhập</button>
-                            </Link>
-                            để nhận xét
-                        </div>
-                    ) : (
+                    {isLogged && isBooked && (
                         <form className="px-3 py-2 border-2 border-[#FFA500] mt-3" onSubmit={handleSubmitComment}>
                             <h2 className="font-semibold text-xl">{!comments?.length ? `Hãy là người đầu tiên bình luận về "${product?.name}"` : `Bình luận về "${product?.name}"`}</h2>
 

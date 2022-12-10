@@ -40,7 +40,7 @@ import CommentItem from '../../components/CommentItem'
 import Link from 'next/link'
 import { UserType } from '../../types/user'
 import useComment from '../../hook/use-comment'
-import { CommentType } from '../../types/comment'
+import { CommentType, CommentType2 } from '../../types/comment'
 
 type ProductProps = {
     product: ProductType
@@ -124,6 +124,7 @@ const BookingDetail = () => {
     const [isLogged, setIsLogged] = useState(false);
     // trạng thái user đã sử dụng - trả phòng chưa.
     const [isBooked, setIsBooked] = useState(false);
+    const [isCommented, setIsCommented] = useState(false);
 
     useEffect(() => {
         const getfacilities = async () => {
@@ -148,6 +149,7 @@ const BookingDetail = () => {
         reset(currentUser)
     }, [open, slug]);
 
+    // check trạng thái đặt phòng.
     useEffect(() => {
         if (isLogged) {
             (async () => {
@@ -160,6 +162,14 @@ const BookingDetail = () => {
             })()
         }
     }, [currentUser?._id, isLogged, product?._id])
+
+    // check trạng thái đã từng comment chưa.
+    useEffect(() => {
+        if (isLogged) {
+            const isCommented = comments?.some((cmt: CommentType2) => cmt.user._id === currentUser?._id);
+            setIsCommented(isCommented);
+        }
+    }, [isLogged, comments, currentUser?._id]);
 
     const isStepOptional = (step: number) => {
         return step === 1;
@@ -357,7 +367,7 @@ const BookingDetail = () => {
                     </div>
 
                     {/* form comment */}
-                    {isLogged && isBooked && (
+                    {isLogged && isBooked && !isCommented && (
                         <form key={2} className="px-3 py-2 border-2 border-[#FFA500] mt-3" onSubmit={handleSubmit2(handleSubmitComment)}>
                             <h2 className="font-semibold text-xl">{!comments?.length ? `Hãy là người đầu tiên bình luận về "${product?.name}"` : `Bình luận về "${product?.name}"`}</h2>
                             <div className="mt-2">

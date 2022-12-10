@@ -23,3 +23,8 @@ export const update = (item:OrderType) => {
     const url = `order/${item._id}/edit`
     return instance.put(url, item)
 }
+
+export const checkUserBookRoom = (data: { user: string; room: string }): Promise<{ isBooked: boolean }> => {
+    const url = "order/checkUserBookRoom";
+    return instance.post(url, data);
+}

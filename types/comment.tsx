@@ -7,6 +7,7 @@ export type CommentType = {
   user: UserType | string;
   createdAt?: Date;
   room: string;
+  star: string;
 }
 
 export type CommentType2 = {

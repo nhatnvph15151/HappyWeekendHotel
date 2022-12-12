@@ -6,10 +6,14 @@ import { listOrderUser } from '../../../api/order'
 import ProfileLayout from '../../../components/Layout/ProfileLayout'
 import { OrderType } from '../../../types/order'
 import { OrderUser } from '../../../types/OrderUser'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from '@fortawesome/free-solid-svg-icons'
+import styles from '../../../styles/room.module.css'
+
 
 type Props = {}
 
-const Orderlisst = (props: Props) => {
+const RoomLike = (props: Props) => {
     const [user, setUser] = useState<any>({})
     const [order, setorder] = useState([])
     const [status, setStatus] = useState(false)
@@ -88,71 +92,83 @@ const Orderlisst = (props: Props) => {
                 </div>
                 <div className="profile_account relative w-[768px]">
                     <div className="flex flex-row justify-between mb-[32px]">
-                        <h2 className='text-[40px] font-bold'>Phòng Đặt của tôi</h2>
+                        <h2 className='text-[40px] font-bold'>Phòng yêu thích</h2>
                     </div>
-
-                    <div>
-                        <table className="min-w-full leading-normal scroll">
-                            <thead>
-                                <tr>
-                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                                        STT
-                                    </th>
-                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                                        Tên phòng
-                                    </th>
-                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                                        Ảnh
-                                    </th>
-                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                                        Thông tin
-                                    </th>
-                                    <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {order?.map((item: OrderUser, index: number) => (
-                                    // eslint-disable-next-line react/jsx-key
-                                    <tr >
-                                        <td className="py-5 border-b border-gray-200 bg-white text-sm">
-                                            <p className="text-gray-900 whitespace-no-wrap">
-                                                {index + 1}
-                                            </p>
-                                        </td>
-                                        <td className="py-5 border-b border-gray-200 bg-white text-sm">
-                                            <div className="flex items-center">
-                                                <div className="ml-3">
-                                                    <p className="text-gray-900 whitespace-no-wrap">
-                                                        {item?.room?.name}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                            <p className="text-gray-900 whitespace-no-wrap">
-                                                <img width={100} src={`${item?.room?.image?.[0]}`} alt="" />
-                                            </p>
-                                        </td>
-                                        <td className=" py-5 border-b border-gray-200 bg-white text-sm">
-                                            <p className="text-gray-900 whitespace-no-wrap">
-                                                {item.room?.description}
-                                            </p>
-                                        </td>
-                                        <td className=" py-5 border-b border-gray-200 bg-white text-sm">
-                                            <p className="text-gray-900 whitespace-no-wrap">
-                                                <div className=''>
-                                                    {statuss(item.statusorder)}
-                                                </div>
-                                            </p>
-                                        </td>
-                                        <td className=" border-b border-gray-200 bg-white text-sm">
-                                            <Link href={`/profile/order/${item._id}`}><button className='bg-gray-600 rounded-full px-[10px] py-[5px] bg-sky-500 text-center text-white font-medium'>Detail</button></Link>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                    <div className={styles.content_left1}>
+                        <div className='grid grid-cols-2 items-center'>
+                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                                <div>
+                                    <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
+                                </div>
+                                <div className='text-card'>
+                                    <div className='font-bold text-xl py-3'>VENICE 2 HOTEL</div>
+                                </div>
+                                <div className='flex justify-between'>
+                                    <span> <FontAwesomeIcon icon={faStar} className='text-orange-400' /> 5(2194) Đông Anh  </span>
+                                    <button className='underline font-medium hover:text-[#636366]'> Bỏ thích</button>
+                                </div>
+                            </div>
+                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                                <div>
+                                    <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
+                                </div>
+                                <div className='text-card'>
+                                    <div className='font-bold text-xl py-3'>VENICE 2 HOTEL</div>
+                                </div>
+                                <div className='flex justify-between'>
+                                    <span> <FontAwesomeIcon icon={faStar} className='text-orange-400' /> 5(2194) Đông Anh  </span>
+                                    <button className='underline font-medium hover:text-[#636366]'> Bỏ thích</button>
+                                </div>
+                            </div>
+                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                                <div>
+                                    <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
+                                </div>
+                                <div className='text-card'>
+                                    <div className='font-bold text-xl py-3'>VENICE 2 HOTEL</div>
+                                </div>
+                                <div className='flex justify-between'>
+                                    <span> <FontAwesomeIcon icon={faStar} className='text-orange-400' /> 5(2194) Đông Anh  </span>
+                                    <button className='underline font-medium hover:text-[#636366]'> Bỏ thích</button>
+                                </div>
+                            </div>
+                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                                <div>
+                                    <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
+                                </div>
+                                <div className='text-card'>
+                                    <div className='font-bold text-xl py-3'>VENICE 2 HOTEL</div>
+                                </div>
+                                <div className='flex justify-between'>
+                                    <span> <FontAwesomeIcon icon={faStar} className='text-orange-400' /> 5(2194) Đông Anh  </span>
+                                    <button className='underline font-medium hover:text-[#636366]'> Bỏ thích</button>
+                                </div>
+                            </div>
+                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                                <div>
+                                    <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
+                                </div>
+                                <div className='text-card'>
+                                    <div className='font-bold text-xl py-3'>VENICE 2 HOTEL</div>
+                                </div>
+                                <div className='flex justify-between'>
+                                    <span> <FontAwesomeIcon icon={faStar} className='text-orange-400' /> 5(2194) Đông Anh  </span>
+                                    <button className='underline font-medium hover:text-[#636366]'> Bỏ thích</button>
+                                </div>
+                            </div>
+                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                                <div>
+                                    <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
+                                </div>
+                                <div className='text-card'>
+                                    <div className='font-bold text-xl py-3'>VENICE 2 HOTEL</div>
+                                </div>
+                                <div className='flex justify-between'>
+                                    <span> <FontAwesomeIcon icon={faStar} className='text-orange-400' /> 5(2194) Đông Anh  </span>
+                                    <button className='underline font-medium hover:text-[#636366]'> Bỏ thích</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -161,5 +177,5 @@ const Orderlisst = (props: Props) => {
     )
 }
 
-Orderlisst.Layout = ProfileLayout;
-export default Orderlisst
+RoomLike.Layout = ProfileLayout;
+export default RoomLike

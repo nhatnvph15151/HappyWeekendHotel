@@ -1,7 +1,7 @@
 import { Blog } from "../types/blog";
 import instance from "./instance";
 
-export const remove = (_id:number) => {
+export const remove = (_id: string) => {
     const url = `blogs/${_id}/delete`;
     return instance.delete(url)
 }

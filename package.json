@@ -46,6 +46,7 @@
     "@mui/material": "^5.10.5",
     "@mui/x-data-grid": "latest",
     "@mui/x-date-pickers": "^5.0.0",
+    "@types/ckeditor__ckeditor5-build-classic": "^29.0.1",
     "@types/node": "18.7.17",
     "@types/react": "18.0.19",
     "@types/react-date-range": "^1.4.4",

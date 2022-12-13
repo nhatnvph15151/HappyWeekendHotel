@@ -1,6 +1,6 @@
 import axios from "axios";
 import useSWR from "swr";
-import { creat, remove, update } from "../api/blog";
+import { create, remove, update } from "../api/blog";
 import { API_URL } from "../constants";
 import { Blog } from "../types/blog";
 
@@ -11,7 +11,7 @@ const useBlog = (slug?: string) => {
 
     // create
     const add = async (item: Blog) => {
-        const blogs = await creat(item);
+        const blogs = await create(item);
         mutate([...data, blogs]);
     };
     // delete

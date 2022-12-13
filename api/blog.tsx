@@ -15,7 +15,7 @@ export const getOne = (slug: any | undefined) => {
     return instance.get(url);
 }
 
-export const creat = (blog: Blog) => {
+export const create = (blog: Blog) => {
     const url = `blogs`;
     return instance.post(url, blog)
 }

@@ -1,469 +1,230 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {faMoon, faHourglassStart, faHouseChimney} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
+import useBlog from '../../hook/use-blog'
+import { Blog } from '../../types/blog'
+import useCategoryBlog from '../../hook/use-categoryBlog'
+import { CategoryBlog, CategoryWithBlog } from '../../types/categoryBlog'
+import dayjs from 'dayjs'
+import Head from 'next/head'
 
 type Props = {}
 
 const BlogPage = (props: Props) => {
-  return (
-    <div className='w-[80%] mx-auto py-2'>
-        <div className="blog-img__total flex gap-1">
-            <Link href="/">
-                <div className="w-[50%] relative cursor-pointer">
-                    <div className='absolute bottom-0 left-0 right-0 text-white font-semibold leading-tight p-3'>
-                        <h2 className='limit-2 text-lg'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quae esse a dignissimos ex non ut distinctio quisquam suscipit! Facilis eius incidunt nobis rerum non veritatis quod animi et, consequatur voluptatem!</h2>
-                    </div>
-                    <img src="https://picsum.photos/600/500" className='w-full h-full object-cover' alt="" />
-                </div>
-            </Link>
+    const { data: dataBlogs } = useBlog();
+    const { data: cateBlog } = useCategoryBlog();
 
-            <div className="grid w-[50%] grid-cols-2 gap-1">
-                <div className="relative cursor-pointer">
-                    <div className='absolute bottom-0 left-0 right-0 text-white font-semibold leading-tight p-3'>
-                        <h2 className='limit-2 text-lg'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quae esse a dignissimos ex non ut distinctio quisquam suscipit! Facilis eius incidunt nobis rerum non veritatis quod animi et, consequatur voluptatem!</h2>
-                    </div>
-                    <img src="https://picsum.photos/400/300" className='w-[300px] h-[300px] object-cover block' alt="" />
-                </div>
-                <div className="relative cursor-pointer">
-                    <div className='absolute bottom-0 left-0 right-0 text-white font-semibold leading-tight p-3'>
-                        <h2 className='limit-2 text-lg'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quae esse a dignissimos ex non ut distinctio quisquam suscipit! Facilis eius incidunt nobis rerum non veritatis quod animi et, consequatur voluptatem!</h2>
-                    </div>
-                    <img src="https://picsum.photos/200/800" className='w-[300px] h-[300px] object-cover block' alt="" />
-                </div>
-                <div className="relative cursor-pointer">
-                    <div className='absolute bottom-0 left-0 right-0 text-white font-semibold leading-tight p-3'>
-                        <h2 className='limit-2 text-lg'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quae esse a dignissimos ex non ut distinctio quisquam suscipit! Facilis eius incidunt nobis rerum non veritatis quod animi et, consequatur voluptatem!</h2>
-                    </div>
-                    <img src="https://picsum.photos/500/300" className='w-[300px] h-[300px] object-cover block' alt="" />
-                </div>
-                <div className="relative cursor-pointer">
-                    <div className='absolute bottom-0 left-0 right-0 text-white font-semibold leading-tight p-3'>
-                        <h2 className='limit-2 text-lg'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quae esse a dignissimos ex non ut distinctio quisquam suscipit! Facilis eius incidunt nobis rerum non veritatis quod animi et, consequatur voluptatem!</h2>
-                    </div>
-                    <img src="https://picsum.photos/300/400" className='w-[300px] h-[300px] object-cover block' alt="" />
-                </div>
-            </div>
-        </div>
-        <div className="mt-[50px] flex items-start mb-10">
-            <div className="w-[75%] pr-5">
-                <div className='mb-10'>
-                    <div>
-                        <Link href="">
-                            <h2 className='inline-block text-2xl font-semibold text-[#FFA500] cursor-pointer uppercase'>Khách sạn Ruy Sang</h2>
+    // 5 bài blog mới nhất.
+    const [data5Blog, setData5Blog] = useState<Blog[]>([]);
+    // ds blog theo danh mục.
+    const [categoryWithBlog, setCategoryWithBlog] = useState<CategoryWithBlog[]>([]);
+
+    // lấy 5 blog mới nhất
+    useEffect(() => {
+        setData5Blog(dataBlogs?.slice(0, 5));
+    }, [dataBlogs]);
+
+    // lấy danh sách danh mục blog và danh sách blog tương ứng.
+    useEffect(() => {
+        if (dataBlogs?.length && cateBlog?.length) {
+            // lặp mảng category blog => filter lấy ra blog theo category
+            const categoryWithBlog = cateBlog.map((cate: CategoryBlog) => {
+                const blogByCate = dataBlogs.filter((blog: Blog) => blog.category._id === cate._id);
+                
+                return {
+                    ...cate,
+                    blogs: blogByCate
+                }
+            });
+
+            setCategoryWithBlog(categoryWithBlog);
+        }
+    }, [dataBlogs, cateBlog]);
+
+    const formatDate = (date?: Date) => {
+        let monthToText;
+        const month = new Date(date!).getMonth() + 1;
+        switch ((month)) {
+            case 1:
+                monthToText = "Một";
+                break;
+            case 2:
+                monthToText = "Hai";
+                break;
+            case 3:
+                monthToText = "Ba";
+                break;
+            case 4:
+                monthToText = "Tư";
+                break;
+            case 5:
+                monthToText = "Năm";
+                break;
+            case 6:
+                monthToText = "Sáu";
+                break;
+            case 7:
+                monthToText = "Bảy";
+                break;
+            case 8:
+                monthToText = "Tám";
+                break;
+            case 9:
+                monthToText = "Chín";
+                break;
+            case 10:
+                monthToText = "Mười";
+                break;
+            case 11:
+                monthToText = "Mười Một";
+                break;
+            case 12:
+                monthToText = "Mười Hai";
+                break;
+            default:
+                break;
+        }
+        return dayjs(date).format(`DD [Tháng] [${monthToText}], YYYY`);
+    }
+
+    if (!dataBlogs) return <div className='w-[80%] mx-auto py-2'>Loading...</div>;
+
+    return (
+        <>
+            <Head>
+                <title>Bài viết</title>
+            </Head>
+            <div className='w-[80%] mx-auto py-2'>
+                <div className="blog-img__total flex gap-1">
+                    {/* check xem có data chưa. */}
+                    {data5Blog && data5Blog[0] && (
+                        <Link href={`/blog/${data5Blog[0].slug}`}>
+                            <div className="w-[50%] relative cursor-pointer">
+                                <div className='absolute bottom-0 left-0 right-0 text-white font-semibold leading-tight p-3'>
+                                    <h2 className='limit-2 text-lg'>{data5Blog[0].title}</h2>
+                                </div>
+                                <img src={data5Blog[0].image} className='w-full h-full object-cover' alt="" />
+                            </div>
                         </Link>
-                        <div className="mt-[5px] w-[100%] h-[3px] bg-[#ddd] relative">
-                            <div className="absolute top-0 left-0 bottom-0 right-[700px] bg-[#FFA500]"></div>
-                        </div>
-                    </div>
-                    <div className="flex gap-5">
-                        <div className="mt-[30px] w-[55%]">
-                            <Link href="/">
-                                <div className="cursor-pointer">
-                                    <img src="https://picsum.photos/400/500" className='w-full h-[400px] object-cover' alt="" />
+                    )}
+
+                    <div className="grid w-[50%] grid-cols-2 gap-1">
+                        {data5Blog?.slice(1).map((blog, index) => (
+                            <Link key={index} href={`/blog/${blog.slug}`}>
+                                <div className="relative cursor-pointer">
+                                    <div className='absolute bottom-0 left-0 right-0 text-white font-semibold leading-tight p-3'>
+                                        <h2 className='limit-2 text-lg'>{blog.title}</h2>
+                                    </div>
+                                    <img src={blog.image} className='w-[300px] h-[300px] object-cover block' alt={blog.title} />
                                 </div>
                             </Link>
-                            <div className="pt-[10px]">
-                                <Link href="">
-                                    <h3 className='text-2xl font-semibold hover:text-[#FFA500] cursor-pointer limit-2'>Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng</h3>
-                                </Link>
-                            </div>
-                            <div className="flex gap-5 mt-[10px]">
-                                <p className='text-[#8a8a8a]'>by <a href="" className='hover:text-[#FFA500]'>KhooiDev</a></p>
-                                <p className='text-[#8a8a8a]'>9 Tháng Mười, 2022</p>
-                            </div>
-                            <div className="pt-[10px] limit-3">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, vitae voluptate corporis veniam minus, distinctio libero enim impedit consectetur fugiat ea! Quo odio culpa nesciunt officia! Quae error aperiam incidunt!
-                            </div>
-                            <div className="pt-[10px]">
-                                <Link href="">
-                                    <p className='text-[#ff6400] hover:opacity-[0.7] cursor-pointer'>View All</p>
-                                </Link>
-                            </div>
-                        </div>
-                        
-                        <div className="mt-[22px] w-[45%]">
-                            <div className="grid grid-cols-1 divide-y">
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eos tenetur hic ipsa consectetur, voluptates accusamus commodi, porro ducimus harum maxime unde nulla nesciunt dolores, ea pariatur at totam fugit exercitationem.</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
-
-                <div className='mb-10'>
-                    <div>
-                        <Link href="">
-                            <h2 className='inline-block text-2xl font-semibold text-[#FFA500] cursor-pointer uppercase'>Khách sạn Ruy Sang</h2>
-                        </Link>
-                        <div className="mt-[5px] w-[100%] h-[3px] bg-[#ddd] relative">
-                            <div className="absolute top-0 left-0 bottom-0 right-[700px] bg-[#FFA500]"></div>
-                        </div>
+                <div className="mt-[50px] flex items-start mb-10">
+                    <div className="w-[75%] pr-5">
+                        {categoryWithBlog?.map((item, index) => {
+                            if (item.blogs.length) {
+                                return (
+                                    <div className='mb-10' key={index}>
+                                        <div>
+                                            <Link href={`/blog/danh-muc/${item.slug}`}>
+                                                <h2 className='inline-block text-2xl font-semibold text-[#FFA500] cursor-pointer uppercase'>{item.name}</h2>
+                                            </Link>
+                                            <div className="mt-[5px] w-[100%] h-[3px] bg-[#ddd] relative">
+                                                <div className="absolute top-0 left-0 bottom-0 right-[700px] bg-[#FFA500]"></div>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-5">
+                                            <div className="mt-[30px] w-[55%]">
+                                                <Link href={`/blog/${item.blogs[0].slug}`}>
+                                                    <div className="cursor-pointer">
+                                                        <img src={item.blogs[0].image} className='w-full h-[400px] object-cover' alt={item.blogs[0].title} />
+                                                    </div>
+                                                </Link>
+                                                <div className="pt-[10px]">
+                                                    <Link href={`/blog/${item.blogs[0].slug}`}>
+                                                        <h3 className='text-2xl font-semibold hover:text-[#FFA500] cursor-pointer limit-2'>{item.blogs[0].title}</h3>
+                                                    </Link>
+                                                </div>
+                                                <div className="flex gap-5 mt-[10px]">
+                                                    <p className='text-[#8a8a8a]'>by <span className='hover:text-[#FFA500]'>{item.blogs[0].user?.name}</span></p>
+                                                    <p className='text-[#8a8a8a]'>{formatDate(item.blogs[0]?.createdAt)}</p>
+                                                </div>
+                                                <div className="pt-[10px] limit-3">
+                                                    
+                                                </div>
+                                                <div className="pt-[10px]">
+                                                    <Link href={`/blog/danh-muc/${item.slug}`}>
+                                                        <p className='text-[#ff6400] hover:opacity-[0.7] cursor-pointer'>View All</p>
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="mt-[22px] w-[45%]">
+                                                <div className="grid grid-cols-1 divide-y">
+                                                    {item.blogs.slice(1, 5).map((blog, index) => (
+                                                        <div className="flex gap-3 py-2" key={index}>
+                                                            <Link href={`/blog/${blog.slug}`}>
+                                                                <div className="cursor-pointer">
+                                                                    <img src={blog.image} className='w-[150px] h-[150px] object-cover' alt={blog.title} />
+                                                                </div>
+                                                            </Link>
+                                                            <div className="flex-1">
+                                                                <Link href={`/blog/${blog.slug}`}>
+                                                                    <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>{blog.title}</h2>
+                                                                </Link>
+                                                                <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        })}
                     </div>
-                    <div className="flex gap-5">
-                        <div className="mt-[30px] w-[55%]">
-                            <Link href="/">
-                                <div className="cursor-pointer">
-                                    <img src="https://picsum.photos/400/500" className='w-full h-[400px] object-cover' alt="" />
-                                </div>
-                            </Link>
-                            <div className="pt-[10px]">
-                                <Link href="">
-                                    <h3 className='text-2xl font-semibold hover:text-[#FFA500] cursor-pointer limit-2'>Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng</h3>
-                                </Link>
-                            </div>
-                            <div className="flex gap-5 mt-[10px]">
-                                <p className='text-[#8a8a8a]'>by <a href="" className='hover:text-[#FFA500]'>KhooiDev</a></p>
-                                <p className='text-[#8a8a8a]'>9 Tháng Mười, 2022</p>
-                            </div>
-                            <div className="pt-[10px] limit-3">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, vitae voluptate corporis veniam minus, distinctio libero enim impedit consectetur fugiat ea! Quo odio culpa nesciunt officia! Quae error aperiam incidunt!
-                            </div>
-                            <div className="pt-[10px]">
-                                <Link href="">
-                                    <p className='text-[#ff6400] hover:opacity-[0.7] cursor-pointer'>View All</p>
-                                </Link>
-                            </div>
-                        </div>
-                        
-                        <div className="mt-[22px] w-[45%]">
-                            <div className="grid grid-cols-1 divide-y">
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
 
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eos tenetur hic ipsa consectetur, voluptates accusamus commodi, porro ducimus harum maxime unde nulla nesciunt dolores, ea pariatur at totam fugit exercitationem.</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-                            </div>
+                    <div className="sticky top-[100px] w-[25%] pl-2">
+                        <div className="">
+                            <img src="/sansale-t12-55-sidebar-banner.jpg" className='w-[100%]' alt="" />
                         </div>
-                    </div>
-                </div>
-
-                <div className='mb-10'>
-                    <div>
-                        <Link href="">
-                            <h2 className='inline-block text-2xl font-semibold text-[#FFA500] cursor-pointer uppercase'>Khách sạn Ruy Sang</h2>
-                        </Link>
-                        <div className="mt-[5px] w-[100%] h-[3px] bg-[#ddd] relative">
-                            <div className="absolute top-0 left-0 bottom-0 right-[700px] bg-[#FFA500]"></div>
+                        <div className="bg-[#FFA500] mt-[25px] p-2 w-[40%] text-center">
+                            <p className='text-white'>HOTEL LIST</p>
+                            <div className=""></div>
                         </div>
-                    </div>
-                    <div className="flex gap-5">
-                        <div className="mt-[30px] w-[55%]">
-                            <Link href="/">
-                                <div className="cursor-pointer">
-                                    <img src="https://picsum.photos/400/500" className='w-full h-[400px] object-cover' alt="" />
-                                </div>
-                            </Link>
-                            <div className="pt-[10px]">
+                        <div className="border-spacing-1 border border-[#FFA500]"></div>
+                        <div className="mt-2 grid grid-cols-1 divide-y">
+                            <div className="flex items-center gap-3 py-2">
+                                <FontAwesomeIcon icon={faHourglassStart}  className='text-[#FFA500]'/>
                                 <Link href="">
-                                    <h3 className='text-2xl font-semibold hover:text-[#FFA500] cursor-pointer limit-2'>Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng</h3>
+                                    <p className='cursor-pointer transition hover:text-[#FFA500] hover:underline'>Khách sạn theo giờ</p>
                                 </Link>
                             </div>
-                            <div className="flex gap-5 mt-[10px]">
-                                <p className='text-[#8a8a8a]'>by <a href="" className='hover:text-[#FFA500]'>KhooiDev</a></p>
-                                <p className='text-[#8a8a8a]'>9 Tháng Mười, 2022</p>
-                            </div>
-                            <div className="pt-[10px] limit-3">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, vitae voluptate corporis veniam minus, distinctio libero enim impedit consectetur fugiat ea! Quo odio culpa nesciunt officia! Quae error aperiam incidunt!
-                            </div>
-                            <div className="pt-[10px]">
+
+                            <div className="flex items-center gap-3 py-2">
+                                <FontAwesomeIcon icon={faMoon}  className='text-[#FFA500]'/>
                                 <Link href="">
-                                    <p className='text-[#ff6400] hover:opacity-[0.7] cursor-pointer'>View All</p>
+                                    <p className='cursor-pointer transition hover:text-[#FFA500] hover:underline'>Khách qua đêm</p>
                                 </Link>
                             </div>
-                        </div>
-                        
-                        <div className="mt-[22px] w-[45%]">
-                            <div className="grid grid-cols-1 divide-y">
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
 
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eos tenetur hic ipsa consectetur, voluptates accusamus commodi, porro ducimus harum maxime unde nulla nesciunt dolores, ea pariatur at totam fugit exercitationem.</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className='mb-10'>
-                    <div>
-                        <Link href="">
-                            <h2 className='inline-block text-2xl font-semibold text-[#FFA500] cursor-pointer uppercase'>Khách sạn Ruy Sang</h2>
-                        </Link>
-                        <div className="mt-[5px] w-[100%] h-[3px] bg-[#ddd] relative">
-                            <div className="absolute top-0 left-0 bottom-0 right-[700px] bg-[#FFA500]"></div>
-                        </div>
-                    </div>
-                    <div className="flex gap-5">
-                        <div className="mt-[30px] w-[55%]">
-                            <Link href="/">
-                                <div className="cursor-pointer">
-                                    <img src="https://picsum.photos/400/500" className='w-full h-[400px] object-cover' alt="" />
-                                </div>
-                            </Link>
-                            <div className="pt-[10px]">
+                            <div className="flex items-center gap-3 py-2">
+                                <FontAwesomeIcon icon={faHouseChimney}  className='text-[#FFA500]'/>
                                 <Link href="">
-                                    <h3 className='text-2xl font-semibold hover:text-[#FFA500] cursor-pointer limit-2'>Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng Danh sách khách sạn quận 2 không nên bỏ qua khi đi nghỉ dưỡng</h3>
+                                    <p className='cursor-pointer transition hover:text-[#FFA500] hover:underline'>Khách sạn theo ngày</p>
                                 </Link>
-                            </div>
-                            <div className="flex gap-5 mt-[10px]">
-                                <p className='text-[#8a8a8a]'>by <a href="" className='hover:text-[#FFA500]'>KhooiDev</a></p>
-                                <p className='text-[#8a8a8a]'>9 Tháng Mười, 2022</p>
-                            </div>
-                            <div className="pt-[10px] limit-3">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, vitae voluptate corporis veniam minus, distinctio libero enim impedit consectetur fugiat ea! Quo odio culpa nesciunt officia! Quae error aperiam incidunt!
-                            </div>
-                            <div className="pt-[10px]">
-                                <Link href="">
-                                    <p className='text-[#ff6400] hover:opacity-[0.7] cursor-pointer'>View All</p>
-                                </Link>
-                            </div>
-                        </div>
-                        
-                        <div className="mt-[22px] w-[45%]">
-                            <div className="grid grid-cols-1 divide-y">
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eos tenetur hic ipsa consectetur, voluptates accusamus commodi, porro ducimus harum maxime unde nulla nesciunt dolores, ea pariatur at totam fugit exercitationem.</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-3 py-2">
-                                    <Link href="">
-                                        <div className="cursor-pointer">
-                                            <img src="https://picsum.photos/400/200" className='w-[150px] h-[150px] object-cover' alt="" />
-                                        </div>
-                                    </Link>
-                                    <div className="flex-1">
-                                        <Link href="">
-                                            <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>10 khách sạn Bình Thạnh có không gian nghỉ dưỡng cực chất</h2>
-                                        </Link>
-                                        <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div className="sticky top-[100px] w-[25%] pl-2">
-                <div className="">
-                    <img src="/sansale-t12-55-sidebar-banner.jpg" className='w-[100%]' alt="" />
-                </div>
-                <div className="bg-[#FFA500] mt-[25px] p-2 w-[40%] text-center">
-                    <p className='text-white'>HOTEL LIST</p>
-                    <div className=""></div>
-                </div>
-                <div className="border-spacing-1 border border-[#FFA500]"></div>
-                <div className="mt-2 grid grid-cols-1 divide-y">
-                    <div className="flex items-center gap-3 py-2">
-                        <FontAwesomeIcon icon={faHourglassStart}  className='text-[#FFA500]'/>
-                        <Link href="">
-                            <p className='cursor-pointer transition hover:text-[#FFA500] hover:underline'>Khách sạn theo giờ</p>
-                        </Link>
-                    </div>
-
-                    <div className="flex items-center gap-3 py-2">
-                        <FontAwesomeIcon icon={faMoon}  className='text-[#FFA500]'/>
-                        <Link href="">
-                            <p className='cursor-pointer transition hover:text-[#FFA500] hover:underline'>Khách qua đêm</p>
-                        </Link>
-                    </div>
-
-                    <div className="flex items-center gap-3 py-2">
-                        <FontAwesomeIcon icon={faHouseChimney}  className='text-[#FFA500]'/>
-                        <Link href="">
-                            <p className='cursor-pointer transition hover:text-[#FFA500] hover:underline'>Khách sạn theo ngày</p>
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-  )
+        </>
+    )
 }
 
 export default BlogPage

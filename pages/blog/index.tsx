@@ -9,6 +9,7 @@ import useCategoryBlog from '../../hook/use-categoryBlog'
 import { CategoryBlog, CategoryWithBlog } from '../../types/categoryBlog'
 import dayjs from 'dayjs'
 import Head from 'next/head'
+import BlogSidebar from '../../components/BlogSidebar'
 
 type Props = {}
 
@@ -190,36 +191,7 @@ const BlogPage = (props: Props) => {
                     </div>
 
                     <div className="sticky top-[100px] w-[25%] pl-2">
-                        <div className="">
-                            <img src="/sansale-t12-55-sidebar-banner.jpg" className='w-[100%]' alt="" />
-                        </div>
-                        <div className="bg-[#FFA500] mt-[25px] p-2 w-[40%] text-center">
-                            <p className='text-white'>HOTEL LIST</p>
-                            <div className=""></div>
-                        </div>
-                        <div className="border-spacing-1 border border-[#FFA500]"></div>
-                        <div className="mt-2 grid grid-cols-1 divide-y">
-                            <div className="flex items-center gap-3 py-2">
-                                <FontAwesomeIcon icon={faHourglassStart}  className='text-[#FFA500]'/>
-                                <Link href="">
-                                    <p className='cursor-pointer transition hover:text-[#FFA500] hover:underline'>Khách sạn theo giờ</p>
-                                </Link>
-                            </div>
-
-                            <div className="flex items-center gap-3 py-2">
-                                <FontAwesomeIcon icon={faMoon}  className='text-[#FFA500]'/>
-                                <Link href="">
-                                    <p className='cursor-pointer transition hover:text-[#FFA500] hover:underline'>Khách qua đêm</p>
-                                </Link>
-                            </div>
-
-                            <div className="flex items-center gap-3 py-2">
-                                <FontAwesomeIcon icon={faHouseChimney}  className='text-[#FFA500]'/>
-                                <Link href="">
-                                    <p className='cursor-pointer transition hover:text-[#FFA500] hover:underline'>Khách sạn theo ngày</p>
-                                </Link>
-                            </div>
-                        </div>
+                        <BlogSidebar />
                     </div>
                 </div>
             </div>

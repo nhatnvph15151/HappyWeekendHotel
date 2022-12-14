@@ -1,8 +1,12 @@
+import { CategoryBlog } from "./categoryBlog";
+import { UserType } from "./user";
+
 export type Blog = {
-    _id?: number;
-    name: string,
-    title: string,
-    content: string,
-    img: string,
-    category: string,
+    _id?: string;
+    title: string;
+    content: string;
+    image: string;
+    category: CategoryBlog;
+    slug?: string;
+    user?: UserType;
 }

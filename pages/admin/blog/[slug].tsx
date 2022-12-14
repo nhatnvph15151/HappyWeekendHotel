@@ -18,7 +18,7 @@ type formInput = {
   title: string;
   category: string;
   image: FileList;
-  description: string;
+  desc: string;
 }
 
 const Editor = dynamic(() => import("../../../components/Editor"), { ssr: false });
@@ -82,7 +82,7 @@ const UpdateBlog = (props: Props) => {
       _id: blogDetail._id,
       title: data.title,
       content,
-      description: data.description,
+      desc: data.desc,
       image,
       category: data.category as any
     });
@@ -119,8 +119,8 @@ const UpdateBlog = (props: Props) => {
 
           <div className="relative z-0 mb-6 w-full group">
             <label htmlFor="content" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Mô tả ngắn</label>
-            <textarea {...register("description", { required: "Vui lòng nhập mô tả bài viết" })} id="content" rows={4} className="outline-none block p-2.5 w-full text-sm rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Mô tả ngắn..."></textarea>
-            <div className="text-sm mt-0.5 text-red-500">{errors.description?.message}</div>
+            <textarea {...register("desc", { required: "Vui lòng nhập mô tả bài viết" })} id="content" rows={4} className="outline-none block p-2.5 w-full text-sm rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Mô tả ngắn..."></textarea>
+            <div className="text-sm mt-0.5 text-red-500">{errors.desc?.message}</div>
           </div>
 
           <div className="relative z-0 mb-6 w-full group">

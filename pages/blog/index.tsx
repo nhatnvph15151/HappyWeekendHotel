@@ -155,7 +155,7 @@ const BlogPage = (props: Props) => {
                                                     <p className='text-[#8a8a8a]'>{formatDate(item.blogs[0]?.createdAt)}</p>
                                                 </div>
                                                 <div className="pt-[10px] limit-3">
-                                                    
+                                                   {item.blogs[0].desc} 
                                                 </div>
                                                 <div className="pt-[10px]">
                                                     <Link href={`/blog/danh-muc/${item.slug}`}>
@@ -177,7 +177,7 @@ const BlogPage = (props: Props) => {
                                                                 <Link href={`/blog/${blog.slug}`}>
                                                                     <h2 className='leading-6 text-lg font-semibold hover:text-[#FFA500] cursor-pointer limit-3'>{blog.title}</h2>
                                                                 </Link>
-                                                                <p className='pt-[10px]'>6 Tháng Mười, 2022</p>
+                                                                <p className='pt-[10px]'>{formatDate(blog.createdAt)}</p>
                                                             </div>
                                                         </div>
                                                     ))}

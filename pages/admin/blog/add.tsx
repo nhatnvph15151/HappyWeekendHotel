@@ -48,12 +48,14 @@ const AddBlog = (props: Props) => {
   }
 
   const handleAddBlog: SubmitHandler<formInput> = async (data: formInput) => {
+    // check validate content.
+    if (errContent) return;
+
     // upload ảnh
     const formData = new FormData();
     formData.append("file", data.image[0]);
     formData.append("upload_preset", "hzeskmhn");
     const { data: { url } }: any = await axios.post("https://api.cloudinary.com/v1_1/dkhutgvlb/image/upload", formData);
-    console.log(url);
 
     await add({
       title: data.title,

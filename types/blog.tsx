@@ -1,4 +1,5 @@
 import { CategoryBlog } from "./categoryBlog";
+import { UserType } from "./user";
 
 export type Blog = {
     _id?: string;
@@ -7,4 +8,5 @@ export type Blog = {
     image: string;
     category: CategoryBlog;
     slug?: string;
+    user?: UserType;
 }

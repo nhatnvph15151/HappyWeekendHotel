@@ -83,6 +83,9 @@ const BlogAdmin = (props: Props) => {
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
                                             Category
                                         </th>
+                                        <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
+                                            Author
+                                        </th>
                                         <ShowForPermission>
                                             <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
                                             </th>
@@ -112,6 +115,11 @@ const BlogAdmin = (props: Props) => {
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
                                                     {item.category.name}
+                                                </p>
+                                            </td>
+                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                                                <p className="text-gray-900 whitespace-no-wrap">
+                                                    {item.user?.name}
                                                 </p>
                                             </td>
                                             

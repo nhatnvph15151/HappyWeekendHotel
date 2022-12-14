@@ -11,7 +11,12 @@ const useBlog = (slug?: string) => {
 
     // create
     const add = async (item: Blog) => {
+        // thêm id user vào data post lên api.
+        const currentUser = JSON.parse(localStorage.getItem("user") as string);
+        item.user = currentUser._id;
+
         const blogs = await create(item);
+        blogs.user = currentUser;
         mutate([...data, blogs]);
     };
     // delete

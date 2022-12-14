@@ -34,11 +34,17 @@ const UpdateBlog = (props: Props) => {
   const [preview, setPreview] = useState("/placeholder-image.jpg");
   
   useEffect(() => {
-    reset({
-      ...blogDetail,
-      category: blogDetail?.category?._id,
-    });
-    setContent(blogDetail?.content || "");
+    // check blogDetail có dữ liệu chưa.
+    if (blogDetail) {
+      reset({
+        ...blogDetail,
+        category: blogDetail.category?._id,
+      });
+      setContent(blogDetail.content);
+
+      // có ảnh blog => set preview.
+      blogDetail.image && setPreview(blogDetail.image)
+    }
   }, [blogDetail, reset]);
 
   // check người dùng nhập nội dung bài viết chưa.
@@ -57,6 +63,9 @@ const UpdateBlog = (props: Props) => {
   }
 
   const handleUpdateBlog: SubmitHandler<formInput> = async (data: formInput) => {
+    // check validate content.
+    if (errContent) return;
+
     // upload ảnh
     // kiểm tra có chọn ảnh không.
     let image: any = data.image;
@@ -167,7 +176,7 @@ const UpdateBlog = (props: Props) => {
           <div className='mb-6'>
             <label className="block text-sm font-medium text-gray-700">Preview</label>
             <div className='mt-1'>
-              <img src={preview || blogDetail?.image} alt="" className='w-[150px] h-[150px] object-cover' />
+              <img src={preview} alt="" className='w-[150px] h-[150px] object-cover' />
             </div>
           </div>
 

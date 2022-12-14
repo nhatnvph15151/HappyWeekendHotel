@@ -10,4 +10,5 @@ export type Blog = {
     slug?: string;
     user?: UserType;
     createdAt?: Date;
+    description: string;
 }

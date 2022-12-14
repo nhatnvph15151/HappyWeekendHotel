@@ -9,4 +9,5 @@ export type Blog = {
     category: CategoryBlog;
     slug?: string;
     user?: UserType;
+    description: string;
 }

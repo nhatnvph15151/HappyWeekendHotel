@@ -128,6 +128,7 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
                   className="px-4 py-2 rounded-md shadow-xl bg-[orange] text-white"
                   onClick={() => {
                     // router.push('/payment')
+                    order()
                     bangking({
                       "total": data.total,
                       "orderDescription": "",

@@ -10,12 +10,14 @@ import { DetailOrderType } from '../../../types/detailorder'
 import { update } from '../../../api/order';
 import { remove } from '../../../api/bookedDate';
 import { getOnefac, listfac } from '../../../api/facilities';
+import { API_URL } from '../../../constants';
+import ProfileLayout from '../../../components/Layout/ProfileLayout';
 
 type Props = {}
 
 const DtailOrderHistory = (props: Props) => {
-    const [user, setUser] = useState({})
-    const [orders, setorder] = useState<DetailOrderType>()
+    const [user, setUser] = useState<any>({})
+    const [orders, setorder] = useState<any>()
     const [facilities, setfacilities] = useState<any>()
     const router = useRouter()
     const { id } = router.query
@@ -24,7 +26,7 @@ const DtailOrderHistory = (props: Props) => {
         console.log(getUser)
         setUser(getUser)
         const get = async () => {
-            const { data } = await axios.get(`http://localhost:4000/api/order/${id}`)
+            const { data } = await axios.get(`${API_URL}/order/${id}`)
             setorder(data)
             console.log(orders?.room[0]._id)
         }
@@ -41,7 +43,7 @@ const DtailOrderHistory = (props: Props) => {
         }
         abc()
     }, [orders?.room[0]._id])
-    const statuss = (value: number) => {
+    const statuss = (value: any) => {
         if (value == 0) {
             return <span className='float-right rounded-full py-[5px] px-[15px] bg-sky-500 text-center text-white font-medium'>Chờ Xác Nhận</span>
         } else if (value == 1) {
@@ -98,15 +100,9 @@ const DtailOrderHistory = (props: Props) => {
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='/profile/order' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg><span className='pl-[10px] font-normal text-lg'>Đặt phòng của tôi</span></a></div>
-                    <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='#' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
+                    <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='/profile/room_like' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                     </svg><span className='pl-[10px] font-normal text-lg'>Danh sách yêu thích</span></a></div>
-                    <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='#' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                    </svg><span className='pl-[10px] font-normal text-lg'>Tem của tôi</span></a></div>
-                    <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='#' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                    </svg><span className='pl-[10px] font-normal text-lg'>Coupon của tôi </span></a></div>
                     <hr className='my-[16px]' />
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='#' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
@@ -187,4 +183,5 @@ const DtailOrderHistory = (props: Props) => {
     )
 }
 
+DtailOrderHistory.Layout = ProfileLayout;
 export default DtailOrderHistory

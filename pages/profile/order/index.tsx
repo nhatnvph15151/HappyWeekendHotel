@@ -3,13 +3,14 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { listOrderUser } from '../../../api/order'
+import ProfileLayout from '../../../components/Layout/ProfileLayout'
 import { OrderType } from '../../../types/order'
 import { OrderUser } from '../../../types/OrderUser'
 
 type Props = {}
 
 const Orderlisst = (props: Props) => {
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState<any>({})
     const [order, setorder] = useState([])
     const [status, setStatus] = useState(false)
     const router = useRouter();
@@ -28,14 +29,14 @@ const Orderlisst = (props: Props) => {
                 setStatus(false)
             } else {
                 setStatus(true)
-                const data = await listOrderUser(getUser._id)
+                const data: any = await listOrderUser(getUser._id)
                 setorder(data)
             }
         }
         get()
     }, [])
     console.log(order)
-    const statuss = (value: number) => {
+    const statuss = (value: any) => {
         if (value == 0) {
             return <span className='rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Chờ Xác Nhận</span>
         } else if (value == 1) {
@@ -64,7 +65,7 @@ const Orderlisst = (props: Props) => {
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='/profile/order' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg><span className='pl-[10px] font-normal text-lg'>Đặt phòng của tôi</span></a></div>
-                    <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='#' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
+                    <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='/profile/room_like' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                     </svg><span className='pl-[10px] font-normal text-lg'>Danh sách yêu thích</span></a></div>
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='#' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
@@ -80,6 +81,7 @@ const Orderlisst = (props: Props) => {
                         <span onClick={() => {
                             setStatus(false)
                             localStorage.removeItem('user')
+                            router.push('/')
                         }} className='pl-[10px] font-normal text-lg'>
                             Đăng Xuất</span></a></div>
 
@@ -94,16 +96,16 @@ const Orderlisst = (props: Props) => {
                             <thead>
                                 <tr>
                                     <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-
+                                        STT
                                     </th>
                                     <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                                        Name
+                                        Tên phòng
                                     </th>
                                     <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                                        image
+                                        Ảnh
                                     </th>
                                     <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-                                        desc
+                                        Thông tin
                                     </th>
                                     <th scope="col" className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
                                     </th>
@@ -111,6 +113,7 @@ const Orderlisst = (props: Props) => {
                             </thead>
                             <tbody>
                                 {order?.map((item: OrderUser, index: number) => (
+                                    // eslint-disable-next-line react/jsx-key
                                     <tr >
                                         <td className="py-5 border-b border-gray-200 bg-white text-sm">
                                             <p className="text-gray-900 whitespace-no-wrap">
@@ -121,19 +124,19 @@ const Orderlisst = (props: Props) => {
                                             <div className="flex items-center">
                                                 <div className="ml-3">
                                                     <p className="text-gray-900 whitespace-no-wrap">
-                                                        {item?.room.name}
+                                                        {item?.room?.name}
                                                     </p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                             <p className="text-gray-900 whitespace-no-wrap">
-                                                <img width={100} src={`${item?.room.image?.[0]}`} alt="" />
+                                                <img width={100} src={`${item?.room?.image?.[0]}`} alt="" />
                                             </p>
                                         </td>
                                         <td className=" py-5 border-b border-gray-200 bg-white text-sm">
                                             <p className="text-gray-900 whitespace-no-wrap">
-                                                {item.room.description}
+                                                {item.room?.description}
                                             </p>
                                         </td>
                                         <td className=" py-5 border-b border-gray-200 bg-white text-sm">
@@ -158,4 +161,5 @@ const Orderlisst = (props: Props) => {
     )
 }
 
+Orderlisst.Layout = ProfileLayout;
 export default Orderlisst

@@ -7,9 +7,19 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { json } from 'node:stream/consumers';
 import { useRouter } from 'next/router';
+import { USER_ROLE } from '../../constants';
 type Props = {}
 
 const Header = (props: Props) => {
+  const [anchorEl2, setAnchorEl2] = React.useState<null | HTMLElement>(null);
+  const open2 = Boolean(anchorEl2);
+  const handleClick2 = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl2(event.currentTarget);
+  };
+  const handleClose2 = () => {
+    setAnchorEl2(null);
+  };
+
   const router = useRouter()
   const query = router.query
   const [status, setStatus] = useState(false)
@@ -69,56 +79,35 @@ const Header = (props: Props) => {
             <Link href="/" >
               <img className='w-[70px] cursor-pointer' src="https://res.cloudinary.com/djsbi0bma/image/upload/v1644211111/samples/cloudinary-icon.png" alt="" />
             </Link>
-            <span className='flex items-center cursor-pointer relative group px-6'>
+            <Button
+              id="basic-button"
+              aria-controls={open2 ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open2 ? 'true' : undefined}
+              onClick={handleClick2}
+              className='bg-[#ffff] hover:bg-[#ffff] text-[black] normal-case text-base mx-6'
+            >
               Danh mục nhà nghỉ
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 pl-[5px]">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
               </svg>
-              <div className="absolute top-[75px] duration-300 opacity-0 left-[0] invisible p-2 bg-[#fff] drop-shadow rounded shadow-xl group-hover:opacity-100 group-hover:top-[55px] group-hover:visible after:content-[''] after:absolute after:w-[100%] after:h-full after:top-[-30px] after:left-0">
-                <ul>
-                  <li>
-                    <Link href="/">
-                      <span className='flex'>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                        </svg>
-                        Tình yêu
-                      </span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/">
-                      <span className='flex'>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                        </svg>
-                        Tình yêu
-                      </span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/">
-                      <span className='flex'>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                        </svg>
-                        Tình yêu
-                      </span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/">
-                      <span className='flex'>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                        </svg>
-                        Tình yêu
-                      </span>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </span>
+            </Button>
+            <Menu
+              className='w-[100%]'
+              id="basic-menu"
+              anchorEl={anchorEl2}
+              open={open2}
+              onClose={handleClose2}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+
+            >
+              <MenuItem className='w-[100%]' onClick={handleClose2}>HappyWeekend Room</MenuItem>
+              <MenuItem onClick={handleClose2}>Tình yêu</MenuItem>
+              <MenuItem onClick={handleClose2}>Sang trọng</MenuItem>
+              <MenuItem onClick={handleClose2}>Du lịch</MenuItem>
+            </Menu>
           </div>
           {
             !showSearch && <div className={`${visible ? "visible scale-100 translate-y-0 opacity-100" : "invisible scale-150 translate-y-10 opacity-0"} duration-300`}>
@@ -259,7 +248,7 @@ const Header = (props: Props) => {
                         'aria-labelledby': 'basic-button',
                       }}
                     >
-                      <Link href={'/profile'}>
+                      <Link href={`${user.role === USER_ROLE ? '/profile' : '/admin'}`}>
                         <MenuItem>
                           <div className='contents'><img width={50} className="rounded-full h-[50px] w-[50px] object-cover border-current" src={user.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
                           <div className="flex-col pl-3 w-[100%] items-start">

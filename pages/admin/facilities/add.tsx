@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import { json } from 'stream/consumers'
 import useFacilities from '../../../hook/facilities'
 import { mutate } from 'swr'
+import AdminShowForPermissionLayout from '../../../components/Layout/AdminShowForPermissionLayout'
 
 const App = dynamic(() => import('../../../components/CkEditor'), {
     ssr: false
@@ -143,5 +144,5 @@ function AddUtilities({ }: Props) {
         </div>
     )
 }
-AddUtilities.Layout = DashboardLayout
+AddUtilities.Layout = AdminShowForPermissionLayout;
 export default AddUtilities

@@ -52,11 +52,6 @@ const items = [
     title: "Order",
   },
   {
-    href: "/admin/category/blog",
-    icon: <CategoryIcon fontSize="small" />,
-    title: "Category Blog",
-  },
-  {
     href: "/admin/facilities",
     icon: <CategoryIcon fontSize="small" />,
     title: "Facilities",

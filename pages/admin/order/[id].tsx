@@ -9,19 +9,20 @@ import { OrderType } from '../../../types/order'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { remove } from '../../../api/bookedDate'
 import { getOnefac, listfac } from '../../../api/facilities'
+import { API_URL } from '../../../constants'
 type Props = {}
 type Form = {
     statusorder: number
 }
 const DetailOrder = (props: Props) => {
-    const [order, setorder] = useState<DetailOrderType>()
+    const [order, setorder] = useState<any>()
     const [facilities, setfacilities] = useState<any>([])
     const { register, handleSubmit, formState: { errors } } = useForm<Form>()
     const router = useRouter()
     const { id } = router.query
     useEffect(() => {
         const get = async () => {
-            const { data } = await axios.get(`http://localhost:4000/api/order/${id}`)
+            const { data } = await axios.get(`${API_URL}/order/${id}`)
             setorder(data)
             console.log(data)
         }

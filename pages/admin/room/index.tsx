@@ -8,6 +8,10 @@ import useProducts from '../../../hook/use-product'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Swal from 'sweetalert2'
+import Head from 'next/head';
+import ShowForPermission from '../../../components/Private/showForPermission';
+import { update } from '../../../api/rooms';
+import { useRouter } from 'next/router';
 
 type Props = {}
 
@@ -15,7 +19,7 @@ const ProductsAdmin = (props: Props) => {
     const { data, error, dele } = useProducts("")
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(2);
-
+    const router = useRouter()
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -26,7 +30,6 @@ const ProductsAdmin = (props: Props) => {
     };
     if (!data) return <div>Loading...</div>
     if (error) return <div>Error</div>
-
     function remove(id: any) {
         return Swal.fire({
             title: 'Chắc chắn xóa?',
@@ -45,21 +48,61 @@ const ProductsAdmin = (props: Props) => {
                             'Đã xóa!',
                             'Phòng này đã xóa thành công'
                         )
-        })}})
+                    })
+            }
+        })
     }
-
+    const status = (value: any, id: any) => {
+        if (value == true) {
+            return (
+                <div className='flex'>
+                    <div className='bg-green-500 text-white text-center px-[10px] py-[5px] font-bold rounded-lg'>Active</div>
+                    <button onClick={() => {
+                        const product: any = {
+                            status: false,
+                            _id: id
+                        }
+                        update(product).then(() => {
+                            router.push('/admin').then(() => {
+                                router.push('/admin/room')
+                            })
+                        })
+                    }} className='bg-orange-200 text-slate-100 text-center px-[10px] py-[5px] font-bold rounded-lg'>Inactive</button>
+                </div>
+            )
+        } else if (value == false) {
+            return (
+                <div className='flex'>
+                    <div className='bg-orange-500 text-white text-center px-[10px] py-[5px] font-bold rounded-lg'>Inactive</div>
+                    <button onClick={() => {
+                        const product: any = {
+                            status: true,
+                            _id: id
+                        }
+                        update(product).then(() => {
+                            router.push('/admin').then(() => {
+                                router.push('/admin/room')
+                            })
+                        })
+                    }} className='bg-green-300 text-slate-100 text-center px-[10px] py-[5px] font-bold rounded-lg'>Active</button>
+                </div>
+            )
+        }
+    }
     return (
         <div>
             <div className="container w-[100%] p-2">
-                <head>
+                <Head>
                     <title>Rooms</title>
-                </head>
+                </Head>
                 <div className="">
-                    <Link href={'/admin/room/add'}>
-                        <button type="button" className="text-white bg-[#111827] hover:bg-[#1118276b] focus:outline-none focus:ring-4 focus:ring-[#111827] font-medium rounded-xl text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-[#111827]">
-                            Tạo phòng mới <AddIcon />
-                        </button>
-                    </Link>
+                    <ShowForPermission>
+                        <Link href={'/admin/room/add'}>
+                            <button type="button" className="text-white bg-[#111827] hover:bg-[#1118276b] focus:outline-none focus:ring-4 focus:ring-[#111827] font-medium rounded-xl text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-[#111827]">
+                                Tạo phòng mới <AddIcon />
+                            </button>
+                        </Link>
+                    </ShowForPermission>
                     <div className="inline-block sm:min-w-full w-[900px] shadow-xl rounded-xl h-[600px] relative border">
                         <div className="h-full overflow-y-auto overflow-x-auto pb-[50px]">
                             <table className="table-auto w-full border">
@@ -71,9 +114,7 @@ const ProductsAdmin = (props: Props) => {
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
                                             Name
                                         </th>
-                                        <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            price
-                                        </th>
+
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
                                             image
                                         </th>
@@ -81,7 +122,12 @@ const ProductsAdmin = (props: Props) => {
                                             description
                                         </th>
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
+                                            Status
                                         </th>
+                                        <ShowForPermission>
+                                            <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
+                                            </th>
+                                        </ShowForPermission>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -117,19 +163,26 @@ const ProductsAdmin = (props: Props) => {
                                                 </p>
                                             </td>
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                <Link href={`/admin/room/${item.slug}`}>
-                                                    <Tooltip title={`Chỉnh sửa ${item.name}`}>
-                                                        <Button className='text-[#111827]' variant="text" startIcon={<EditIcon />}>
-                                                            Edit
+                                                <p className="text-gray-900 whitespace-no-wrap">
+                                                    {status(item.status, item._id)}
+                                                </p>
+                                            </td>
+                                            <ShowForPermission>
+                                                <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                                                    <Link href={`/admin/room/${item.slug}`}>
+                                                        <Tooltip title={`Chỉnh sửa ${item.name}`}>
+                                                            <Button className='text-[#111827]' variant="text" startIcon={<EditIcon />}>
+                                                                Edit
+                                                            </Button>
+                                                        </Tooltip>
+                                                    </Link>
+                                                    <Tooltip title={`Xóa ${item.name}`}>
+                                                        <Button onClick={() => { remove(item._id) }} className='text-[red]' variant="text" startIcon={<DeleteIcon />}>
+                                                            Delete
                                                         </Button>
                                                     </Tooltip>
-                                                </Link>
-                                                <Tooltip title={`Xóa ${item.name}`}>
-                                                    <Button onClick={() => { remove(item._id)}} className='text-[red]' variant="text" startIcon={<DeleteIcon />}>
-                                                        Delete
-                                                    </Button>
-                                                </Tooltip>
-                                            </td>
+                                                </td>
+                                            </ShowForPermission>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -137,13 +190,13 @@ const ProductsAdmin = (props: Props) => {
                         </div>
                         <div className="absolute bottom-0 bg-white w-full border-t border">
                             <TablePagination
-                                 rowsPerPageOptions={[]}
-                                 component="div"
-                                 count={data.length}
-                                 rowsPerPage={rowsPerPage}
-                                 page={page}
-                                 onPageChange={handleChangePage}
-                                 onRowsPerPageChange={handleChangeRowsPerPage}
+                                rowsPerPageOptions={[]}
+                                component="div"
+                                count={data.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
                             />
                         </div>
                     </div>

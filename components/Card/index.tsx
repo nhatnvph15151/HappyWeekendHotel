@@ -12,7 +12,7 @@ export default function ActionAreaCard({ newsList }: props) {
     <div className={`flex justify-between flex-wrap`}>
       {newsList?.length == 0 ? <div className='flex h-[100vh] w-full items-center'>Không có phòng nào thỏa mãn yêu cầu</div> : newsList?.map((item: any, index: any) => {
         return (
-          <div className='mb-4' key={index}>
+          <div className={`mb-4 ${item.status ? '' : 'hidden'}`} key={index}>
             <Link href={`/booking_detail/${item.slug}`}>
               <CardActionArea sx={{ display: "flex", flexDirection: "column", alignContent: "space-between", justifyContent: "space-between" }}>
                 <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">

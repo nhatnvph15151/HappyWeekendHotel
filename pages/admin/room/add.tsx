@@ -9,6 +9,7 @@ import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { json } from 'stream/consumers'
+import AdminShowForPermissionLayout from '../../../components/Layout/AdminShowForPermissionLayout'
 
 const App = dynamic(() => import('../../../components/CkEditor'), {
   ssr: false
@@ -251,5 +252,5 @@ const AddRoom = (props: Props) => {
   )
 }
 
-AddRoom.Layout = DashboardLayout
+AddRoom.Layout = AdminShowForPermissionLayout;
 export default AddRoom

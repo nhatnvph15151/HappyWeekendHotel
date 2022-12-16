@@ -1,11 +1,12 @@
 import axios from "axios";
 import useSWR from "swr";
 import { creat, remove, update } from "../api/basic";
+import { API_URL } from "../constants";
 
 const useImagLists = (slug: any) => {
     
     const fetcher = (args: string) => axios.get(args).then(res => res.data)
-    const { data, error, mutate } = useSWR(`http://localhost:4000/api/images/${slug}`, fetcher);
+    const { data, error, mutate } = useSWR(`${API_URL}/images/${slug}`, fetcher);
 
     // create
     const add = async (item: any) => {

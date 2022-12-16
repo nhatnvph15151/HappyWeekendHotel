@@ -32,14 +32,24 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
       setDisplayBasic2(true)
     }
   }))
-  console.log();
+  console.log(data);
   const order = async () => {
+    console.log(data);
     await creat(datebooks)
       .then((res: any) => {
         const newdata = {
-          ...data,
-          status: res._id
+          status: res._id,
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          total: data.total,
+          checkins: data.checkins,
+          checkouts: data.checkouts,
+          room: data.room,
+          statusorder: data.statusorder,
+          user: data.user
         }
+        console.log(res._id)
         const disabledDateBooked = async () => {
           await creatOrder(newdata)
             .then(() => {

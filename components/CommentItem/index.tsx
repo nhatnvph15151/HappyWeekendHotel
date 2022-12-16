@@ -3,6 +3,9 @@ import { UserType } from "../../types/user";
 import "sweetalert2/dist/sweetalert2.css";
 import Swal from "sweetalert2";
 import { ADMIN_ROLE } from "../../constants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as starRegular } from "@fortawesome/free-regular-svg-icons";
 
 /* eslint-disable @next/next/no-img-element */
 type CommentItemProps = {
@@ -11,6 +14,7 @@ type CommentItemProps = {
     createdAt: Date;
     comment: string;
     _id: string;
+    star: string;
   };
   isLogged: boolean;
   currentUser?: UserType;
@@ -39,17 +43,44 @@ const CommentItem = ({ comment, isLogged, currentUser, onRemoveCmt }: CommentIte
     })
   }
 
+  const renderStar = (star: number) => {
+    return (
+      <>
+        {Array.apply(null, new Array(star)).map((_, index) => (
+          <div className="text-[#ff6400]" key={index}>
+            <FontAwesomeIcon icon={faStar} />
+          </div>
+        ))}
+
+        {Array.apply(null, new Array(5 - star)).map((_, index) => (
+          <div className="text-gray-400" key={index}>
+            <FontAwesomeIcon icon={starRegular} />
+          </div>
+        ))}
+      </>
+    )
+  }
+
   return (
     <div className='flex items-center my-3'>
-      <div className='mr-3'>
-        <img src={`${comment.user?.avatar}`} className='w-[60px] h-[60px] object-cover rounded-full flex-1' alt="" />
-      </div>
-      <div className='flex-1'>
-        <span className='text-[#636366]'>{dayjs(comment.createdAt).format("DD/MM/YYYY")}</span>
-        <div>
-          Khách hàng: <strong className='text-lg'>{comment.user?.name}</strong>
+      <div className="flex-1">
+        <div className="flex items-center">
+          <div className='mr-3'>
+            <img src={`${comment.user?.avatar}`} className='w-[60px] h-[60px] object-cover rounded-full flex-1' alt="" />
+          </div>
+          <div className='flex-1'>
+            <span className='text-[#636366]'>{dayjs(comment.createdAt).format("DD/MM/YYYY")}</span>
+            <div>
+              Khách hàng: <strong className='text-lg'>{comment.user?.name}</strong>
+            </div>
+
+            <div className="flex">
+              <span className="mr-1">Đánh giá:</span> {renderStar(+comment.star)}
+            </div>
+          </div>
         </div>
-        <div>Nội dung: {comment.comment}</div>
+
+        <div className="mt-2">{comment.comment}</div>
       </div>
 
       {/* admin có thể xóa bất kỳ cmt, user có thể xóa cmt của chính mình. */}

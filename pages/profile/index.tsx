@@ -39,7 +39,7 @@ const Profile = (props: Props) => {
         setUser(getUser)
     }, [])
     let imageUpdate = ""
-    const Edit: SubmitHandler<Form> = async data => {
+    const Edit: SubmitHandler<any> = async data => {
         console.log(data)
         console.log(data.avatar?.[0])
         if (data.avatar?.[0] != 'h') {
@@ -93,7 +93,7 @@ const Profile = (props: Props) => {
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='/profile/order' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg><span className='pl-[10px] font-normal text-lg'>Đặt phòng của tôi</span></a></div>
-                    <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
+                    <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='/profile/room_like' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                     </svg><span className='pl-[10px] font-normal text-lg'>Danh sách yêu thích</span></a></div>
                     <div className="account__sidebar--link flex flex-row hover:bg-gray-200 hover:text-amber-500 px-[24px] py-[10px]"><a href='#' className=' flex flex-row justify-center'><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-[20px] h-[20px] block m-auto inline">
@@ -206,7 +206,7 @@ const Profile = (props: Props) => {
                             </div>
                             <div className='relative z-0 w-full group'>
                                 <label htmlFor="" className="z-50 peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Giới tính</label>
-                                <select name="" id="" className='mt-[20px] w-full' {...register('gender')}>
+                                <select id="" className='mt-[20px] w-full' {...register('gender')}>
                                     <option value="1">Nam</option>
                                     <option value="2">Nữ</option>
                                     <option value="3">Khác</option>

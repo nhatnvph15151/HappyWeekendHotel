@@ -7,7 +7,7 @@ import { faStar, faUtensils, faSpa, faShirt, faShower, faBell, faCar, faWifi } f
 import { ProductType } from '../../types/products'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import useStatus from '../../hook/use-status'
-import { creatOrder } from '../../api/order'
+import { checkUserBookRoom, creatOrder } from '../../api/order'
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -40,7 +40,7 @@ import CommentItem from '../../components/CommentItem'
 import Link from 'next/link'
 import { UserType } from '../../types/user'
 import useComment from '../../hook/use-comment'
-import { CommentType } from '../../types/comment'
+import { CommentType, CommentType2 } from '../../types/comment'
 
 type ProductProps = {
     product: ProductType
@@ -51,6 +51,11 @@ type Form = {
     phone: number
     ckeckins: any
     ckeckouts: any
+}
+
+type FormComment = {
+    comment: string;
+    star: string;
 }
 
 interface TabPanelProps {
@@ -99,6 +104,12 @@ const BookingDetail = () => {
     // const [ckeckout, setckekout] = React.useState('')
     const [showModal, setShowModal] = React.useState(false);
     const { register, handleSubmit, formState: { errors }, reset } = useForm<Form>()
+    const {
+        register: register2,
+        handleSubmit: handleSubmit2,
+        formState: { errors: errors2 },
+        reset: reset2
+    } = useForm<FormComment>()
     // const { creatstatus } = useStatus(setstatus)
     const [open, setOpen] = React.useState(false);
     const [open2, setOpen2] = React.useState(false);
@@ -107,12 +118,13 @@ const BookingDetail = () => {
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
     const [facilities, setfacilities] = useState<any[]>([])
-    const [chaprice, setchaprice] = useState<number>()
+    const [chaprice, setchaprice] = useState<any>()
     const [totaldate, settotaldate] = useState<number>(0)
     const [currentUser, setCurrentUser] = useState<UserType>();
     const [isLogged, setIsLogged] = useState(false);
-    const [comment, setComment] = useState<string>();
-    const [errComment, setErrComment] = useState<string>();
+    // trạng thái user đã sử dụng - trả phòng chưa.
+    const [isBooked, setIsBooked] = useState(false);
+    const [isCommented, setIsCommented] = useState(false);
 
     useEffect(() => {
         const getfacilities = async () => {
@@ -136,6 +148,28 @@ const BookingDetail = () => {
         }
         reset(currentUser)
     }, [open, slug]);
+
+    // check trạng thái đặt phòng.
+    useEffect(() => {
+        if (isLogged) {
+            (async () => {
+                const { isBooked } = await checkUserBookRoom({
+                    user: currentUser?._id!,
+                    room: product?._id
+                });
+
+                setIsBooked(isBooked);
+            })()
+        }
+    }, [currentUser?._id, isLogged, product?._id])
+
+    // check trạng thái đã từng comment chưa.
+    useEffect(() => {
+        if (isLogged) {
+            const isCommented = comments?.some((cmt: CommentType2) => cmt.user._id === currentUser?._id);
+            setIsCommented(isCommented);
+        }
+    }, [isLogged, comments, currentUser?._id]);
 
     const isStepOptional = (step: number) => {
         return step === 1;
@@ -247,23 +281,15 @@ const BookingDetail = () => {
     }
 
     // submit comment
-    const handleSubmitComment = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        const commentData = comment?.trim();
-        if (!commentData) {
-            setErrComment("Vui lòng nhập nội dung bình luận");
-        } else {
-            setErrComment("")
-        }
-
+    const handleSubmitComment: SubmitHandler<FormComment> = async ({ star, comment }) => {
         await addComment({
-            comment: commentData!,
+            comment,
             user: currentUser?._id as any,
-            room: product._id
+            room: product._id,
+            star
         });
-        setComment("");
         toastr.success("Bình luận thành công");
+        reset2();
     }
 
     return (
@@ -341,23 +367,81 @@ const BookingDetail = () => {
                     </div>
 
                     {/* form comment */}
-                    {!isLogged ? (
-                        <div className="mt-5">
-                            Vui lòng
-                            <Link href="/signin">
-                                <button className="bg-[#FFA500] mx-1 px-2 py-1 rounded text-white text-sm font-semibold transition duration-200 ease-linear hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">đăng nhập</button>
-                            </Link>
-                            để nhận xét
-                        </div>
-                    ) : (
-                        <form className="px-3 py-2 border-2 border-[#FFA500] mt-3" onSubmit={handleSubmitComment}>
+                    {isLogged && isBooked && !isCommented && (
+                        <form key={2} className="px-3 py-2 border-2 border-[#FFA500] mt-3" onSubmit={handleSubmit2(handleSubmitComment)}>
                             <h2 className="font-semibold text-xl">{!comments?.length ? `Hãy là người đầu tiên bình luận về "${product?.name}"` : `Bình luận về "${product?.name}"`}</h2>
+                            <div className="mt-2">
+                                <label className="block text-sm font-semibold">Đánh giá của bạn *</label>
+                                <div className="stars">
+                                    <input
+                                        type="radio"
+                                        hidden
+                                        {...register2("star", { required: "Vui lòng chọn mức đánh giá" })}
+                                        className="form__comment-star-number"
+                                        id="star-5"
+                                        value="5"
+                                    />
+                                    <label htmlFor="star-5" title="5 sao" className="star__item">
+                                        <FontAwesomeIcon icon={faStar} />
+                                    </label>
+
+                                    <input
+                                        type="radio"
+                                        hidden
+                                        {...register2("star", { required: "Vui lòng chọn mức đánh giá" })}
+                                        className="form__comment-star-number"
+                                        id="star-4"
+                                        value="4"
+                                    />
+                                    <label htmlFor="star-4" title="4 sao" className="star__item">
+                                        <FontAwesomeIcon icon={faStar} />
+                                    </label>
+
+                                    <input
+                                        type="radio"
+                                        hidden
+                                        {...register2("star", { required: "Vui lòng chọn mức đánh giá" })}
+                                        className="form__comment-star-number"
+                                        id="star-3"
+                                        value="3"
+                                    />
+                                    <label htmlFor="star-3" title="3 sao" className="star__item">
+                                        <FontAwesomeIcon icon={faStar} />
+                                    </label>
+
+                                    <input
+                                        type="radio"
+                                        hidden
+                                        {...register2("star", { required: "Vui lòng chọn mức đánh giá" })}
+                                        className="form__comment-star-number"
+                                        id="star-2"
+                                        value="2"
+                                    />
+                                    <label htmlFor="star-2" title="2 sao" className="star__item">
+                                        <FontAwesomeIcon icon={faStar} />
+                                    </label>
+
+                                    <input
+                                        type="radio"
+                                        hidden
+                                        {...register2("star", { required: "Vui lòng chọn mức đánh giá" })}
+                                        className="form__comment-star-number"
+                                        id="star-1"
+                                        value="1"
+                                    />
+                                    <label htmlFor="star-1" title="1 sao" className="star__item">
+                                        <FontAwesomeIcon icon={faStar} />
+                                    </label>
+                                </div>
+                                <div className="text-sm mt-0.5 text-red-500">{errors2.star?.message}</div>
+                            </div>
 
                             <div className="mt-2">
                                 <label htmlFor="form__comment-content" className="block text-sm font-semibold">Nhận xét của bạn</label>
-                                <textarea id="form__comment-content" value={comment} onChange={(e) => setComment(e.target.value)} cols={30} rows={10} name="content" className="w-full outline-none border mt-1 px-3 py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-none focus:shadow-[0_0_5px_#ccc]" placeholder="Nhập nội dung bình luận" />
-                                {errComment && <div className="text-sm mt-0.5 text-red-500">{errComment}</div>}
+                                <textarea id="form__comment-content" {...register2("comment", { required: "Vui lòng nhập nội dung bình luận" })} cols={30} rows={10} className="w-full outline-none border mt-1 px-3 py-1 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-none focus:shadow-[0_0_5px_#ccc]" placeholder="Nhập nội dung bình luận" />
+                                <div className="text-sm mt-0.5 text-red-500">{errors2.comment?.message}</div>
                             </div>
+
                             <button className="my-3 px-4 py-2 bg-[#FFA500] font-semibold uppercase text-white text-sm transition ease-linear duration-300 hover:shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]">Gửi đi</button>
                         </form>
                     )}
@@ -452,7 +536,7 @@ const BookingDetail = () => {
                                     <DialogContentText>
                                         Những thông tin này sẽ giúp chúng tôi liên hệ và trợ giúp bạn dễ dàng hơn
                                     </DialogContentText>
-                                    <form action="" onSubmit={handleSubmit(onsubmit)}>
+                                    <form action="" key={1} onSubmit={handleSubmit(onsubmit)}>
                                         <div className="mb-6">
                                             <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Họ và tên <span>*</span></label>
                                             <input {...register('name', { required: true })} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />

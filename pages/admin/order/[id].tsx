@@ -15,7 +15,7 @@ type Form = {
     statusorder: number
 }
 const DetailOrder = (props: Props) => {
-    const [order, setorder] = useState<DetailOrderType>()
+    const [order, setorder] = useState<any>()
     const [facilities, setfacilities] = useState<any>([])
     const { register, handleSubmit, formState: { errors } } = useForm<Form>()
     const router = useRouter()

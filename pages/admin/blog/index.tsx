@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 import { Button, TablePagination, Tooltip } from '@mui/material'
 import Link from 'next/link'
-import React from 'react'
+import { useState } from 'react'
 import { DashboardLayout } from '../../../components/dashboard-layout'
 import AddIcon from '@mui/icons-material/Add';
 import useBlog from '../../../hook/use-blog'
@@ -8,15 +9,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Swal from 'sweetalert2'
 import ShowForPermission from '../../../components/Private/showForPermission';
+import Head from 'next/head';
+import { Blog } from '../../../types/blog';
 
 type Props = {}
 
 const BlogAdmin = (props: Props) => {
-    const { data, error, dele } = useBlog("")
-    const [page, setPage] = React.useState(2);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const { data, error, dele } = useBlog();
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    const handleChangePage = (event: any, newPage: any) => {
+    const handleChangePage = (event: any, newPage: number) => {
         setPage(newPage);
     };
 
@@ -51,10 +54,10 @@ const BlogAdmin = (props: Props) => {
     return (
         <div>
             <div className="container w-[100%] p-2">
-                <head>
+                <Head>
                     <title>Blog</title>
-                </head>
-                <div className="">
+                </Head>
+                <div>
                     <ShowForPermission>
                         <Link href={'/admin/blog/add'}>
                             <button type="button" className="text-white bg-[#111827] hover:bg-[#1118276b] focus:outline-none focus:ring-4 focus:ring-[#111827] font-medium rounded-xl text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-[#111827]">
@@ -72,19 +75,16 @@ const BlogAdmin = (props: Props) => {
                                             #
                                         </th>
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            Name
-                                        </th>
-                                        <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
                                             Title
                                         </th>
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            Content
-                                        </th>
-                                        <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            Img
+                                            Thumbnail
                                         </th>
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
                                             Category
+                                        </th>
+                                        <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
+                                            Author
                                         </th>
                                         <ShowForPermission>
                                             <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
@@ -93,53 +93,46 @@ const BlogAdmin = (props: Props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data?.map((item: any, index: any) => (
+                                    {/* cắt mảng => phân trang. */}
+                                    {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: Blog, index: number) => (
                                         <tr key={item._id} className="cursor-pointer select-none">
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
-                                                    {index + 1}
-                                                </p>
-                                            </td>
-                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                <div className="flex items-center">
-                                                    <div className="ml-3">
-                                                        <p className="text-gray-900 whitespace-no-wrap">
-                                                            {item.name}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                <p className="text-gray-900 whitespace-no-wrap">
-                                                    {item.title}
+                                                    {index + 1 + page * rowsPerPage}
                                                 </p>
                                             </td>
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
-                                                    {item.content}
+                                                    {/* giới hạn title. */}
+                                                    {item.title.length > 40 ? `${item.title.slice(0, 40)}...` : item.title}
                                                 </p>
                                             </td>
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <div className="w-[50px] h-[50px] rounded-xl overflow-hidden shadow-xl">
-                                                    <img src={item.image[0] ? item?.image[0] : "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80"} className="w-[100px] h-[100px]" alt="" />
+                                                    <img src={item.image} className="w-[100px] h-[100px] object-cover" alt="" />
                                                 </div>
                                             </td>
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
-                                                    {item.category}
+                                                    {item.category.name}
+                                                </p>
+                                            </td>
+                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                                                <p className="text-gray-900 whitespace-no-wrap">
+                                                    {item.user?.name}
                                                 </p>
                                             </td>
                                             
                                             <ShowForPermission>
                                                 <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                     <Link href={`/admin/blog/${item.slug}`}>
-                                                        <Tooltip title={`Chỉnh sửa ${item.name}`}>
+                                                        <Tooltip title={`Chỉnh sửa ${item.title}`}>
                                                             <Button className='text-[#111827]' variant="text" startIcon={<EditIcon />}>
                                                                 Edit
                                                             </Button>
                                                         </Tooltip>
                                                     </Link>
-                                                    <Tooltip title={`Xóa ${item.name}`}>
+                                                    <Tooltip title={`Xóa ${item.title}`}>
                                                         <Button onClick={() => { remove(item._id) }} className='text-[red]' variant="text" startIcon={<DeleteIcon />}>
                                                             Delete
                                                         </Button>
@@ -153,9 +146,8 @@ const BlogAdmin = (props: Props) => {
                         </div>
                         <div className="absolute bottom-0 bg-white w-full border-t border">
                             <TablePagination
-                                className=''
                                 component="div"
-                                count={100}
+                                count={data.length}
                                 page={page}
                                 onPageChange={handleChangePage}
                                 rowsPerPage={rowsPerPage}

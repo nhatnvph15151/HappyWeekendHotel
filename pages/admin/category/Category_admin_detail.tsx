@@ -130,33 +130,6 @@ function Category_admin_detail(props: any, ref: any) {
                                                 </div>
                                             )}
                                         </div>
-                                        <div className='pb-4'>
-                                            <label htmlFor="">Over night</label> <br />
-                                            <input {...register('overnight', { required: true, minLength: 1 })} type="number" placeholder='Over night' className='border p-2 w-full' name="overnight" id="" />
-                                            {Object.keys(errors).length !== 0 && (
-                                                <div>
-                                                    {errors.overNight?.type === "required" && <p className='text-red-600'>Over night sản phẩm không được bỏ trống</p>}
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className='pb-4'>
-                                            <label htmlFor="">Date time</label> <br />
-                                            <input {...register('daytime', { required: true, minLength: 1 })} type="number" placeholder='Date time' className='border p-2 w-full' name="daytime" id="" />
-                                            {Object.keys(errors).length !== 0 && (
-                                                <div>
-                                                    {errors.dateTime?.type === "required" && <p className='text-red-600'>dateTime phẩm không được bỏ trống</p>}
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className='pb-4'>
-                                            <label htmlFor="">Price</label> <br />
-                                            <input type="number" placeholder='Product Price' className='border p-2 w-full' name="dayprice" id="" {...register('dayprice')} />
-                                        </div>
-                                        <div className='pb-4'>
-                                            <label htmlFor="">Image</label> <br />
-                                            <input type="file" autoComplete='img' placeholder='Product name' className='border p-4 w-[200px]' name="image" id="" {...register('image')} />
-                                            <img src="" id='preview' alt="" />
-                                        </div>
                                         <div>
                                         </div>
                                         <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">

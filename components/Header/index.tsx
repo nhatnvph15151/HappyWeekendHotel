@@ -21,11 +21,11 @@ const Header = (props: Props) => {
   };
 
   const router = useRouter()
-  const query = router.query
+  const query = router.asPath
   const [status, setStatus] = useState(false)
   const [user, setUser] = useState<any>({})
   const [showSearch, setShowSearch] = useState(false)
-
+  
   useEffect(() => {
     const getUser = JSON.parse(localStorage.getItem('user') as string)
     if (getUser == 0 || getUser == null) {
@@ -54,7 +54,7 @@ const Header = (props: Props) => {
     window.addEventListener("scroll", toggleVisible)
   }, [])
   useEffect(() => {
-    if (Object.keys(query).length == 0) {
+    if (query === "/") {
       setShowSearch(false)
     }
     else {

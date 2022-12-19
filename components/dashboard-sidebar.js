@@ -19,6 +19,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import CommentIcon from "@mui/icons-material/Comment";
 import BedroomParentIcon from "@mui/icons-material/BedroomParent";
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 
 const items = [
   {
@@ -55,6 +56,11 @@ const items = [
     href: "/admin/facilities",
     icon: <CategoryIcon fontSize="small" />,
     title: "Facilities",
+  },
+  {
+    href: "/admin/voucher",
+    icon: <LocalOfferIcon fontSize="small" />,
+    title: "Voucher",
   },
   {
     href: "/admin/comment",

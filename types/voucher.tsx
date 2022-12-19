@@ -4,7 +4,7 @@ export type Voucher = {
     code: string;
     quantity: number;
     discount: number;
-    activeTime: Date;
-    expriedTime: Date;
-    users: string[];
+    activeTime: string;
+    expriedTime: string;
+    users?: string[];
 }

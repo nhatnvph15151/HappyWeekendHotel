@@ -18,7 +18,7 @@ type Props = {}
 const ProductsAdmin = (props: Props) => {
     const { data, error, dele } = useProducts("")
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(2);
+    const [rowsPerPage, setRowsPerPage] = React.useState(8);
     const router = useRouter()
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);

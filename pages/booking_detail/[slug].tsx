@@ -311,7 +311,7 @@ const BookingDetail = () => {
             setErrVoucher("Voucher không tồn tại");
             isValid = false;
         } else {
-            const { quantity, activeTime, expriedTime } = voucherData;
+            const { quantity, activeTime, expriedTime, users } = voucherData;
             const today = new Date().getTime();
             const activeTimeGetTime = new Date(activeTime).getTime();
             const expriedTimeGetTime = new Date(expriedTime).getTime();
@@ -327,6 +327,10 @@ const BookingDetail = () => {
             } else if (today > expriedTimeGetTime) {
                 // check thời hạn sử dụng voucher
                 setErrVoucher("Voucher đã hết hạn");
+                isValid = false;
+            } else if (users?.includes(currentUser?._id!)) {
+                // check user đã từng sử dụng voucher chưa.
+                setErrVoucher("Bạn đã sử dụng Voucher này trước đó");
                 isValid = false;
             } else {
                 // check điều kiện sử dụng: đã đặt phòng 1 lần.

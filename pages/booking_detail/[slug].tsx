@@ -131,7 +131,7 @@ const BookingDetail = () => {
     // voucher code
     const [voucher, setVoucher] = useState<string>("");
     const [errVoucher, setErrVoucher] = useState<string>();
-    
+
     const [voucherData, setVoucherData] = useState<Voucher | null>(null);
 
     useEffect(() => {
@@ -315,7 +315,7 @@ const BookingDetail = () => {
             const today = new Date().getTime();
             const activeTimeGetTime = new Date(activeTime).getTime();
             const expriedTimeGetTime = new Date(expriedTime).getTime();
-            
+
             // check số lượng voucher hiện còn.
             if (quantity <= 0) {
                 setErrVoucher("Voucher đã hết lượt sử dụng");
@@ -335,7 +335,7 @@ const BookingDetail = () => {
             } else {
                 // check điều kiện sử dụng: đã đặt phòng 1 lần.
                 const { isBooked } = await checkUserBookRoom({ user: currentUser?._id! });
-                if (!isBooked)  {
+                if (!isBooked) {
                     setErrVoucher("Bạn không đủ điều kiện sử dụng Voucher");
                     isValid = false;
                 } else {
@@ -377,20 +377,20 @@ const BookingDetail = () => {
                 <div className="content-text__booking">
                     <div className="new-content__booking">
                         <div className="flex justify-between items-center">
-                            <h1 className='text-[#FFA500] text-4xl font-semibold'>{product?.name}</h1>
+                            <h1 className='text-[#FFA500] mb:text-4xl mbs:text-2xl font-semibold'>{product?.name}</h1>
 
                             <button className={`bg-[orange] px-4 py-2 rounded-md duration-300 ${open ? 'invisible translate-y-[-20px] opacity-0' : 'visible translate-y-0 opacity-100'}`} onClick={handleClickOpen}>
                                 Đặt phòng
                             </button>
                         </div>
-                        <h2 className=' text-2xl font-semibold'>{product?.category?.name}</h2>
+                        <h2 className=' mb:text-2xl mbs:text-xl font-semibold'>{product?.category?.name}</h2>
                     </div>
                 </div>
-                <div className="relative mx-auto mt-6 w-full overflow-hidden rounded-md flex h-[500px]">
+                <div className="relative mx-auto mt-6 w-full overflow-hidden rounded-md mb:flex-row flex mbs:flex-col h-[auto]">
                     <div className="basis-4/5 hover:opacity-70 duration-150">
                         <img className='w-full' src={product?.image ? product.image[0] : ""} alt="" />
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 mbs:flex mbs:flex-row  mb:flex-col">
                         {product?.image?.map((item: any, index: any) => (
                             <div key={index} className={`${index == 0 ? "hidden" : ""} hover:opacity-70 duration-150 border`}>
                                 <img
@@ -412,10 +412,10 @@ const BookingDetail = () => {
                 </div>
                 <div className='mt-[50px]'>
                     <h1 className='text-[35px] font-medium text-[#FFA500]'>Giá Phòng</h1>
-                    <div className='flex mt-[30px]'>
+                    <div className='flex mt-[30px] mbs:mt-[10px] mb:mt-[30px] mbs:flex-col mb:flex-row'>
                         {
                             product?.price?.map((item: any) => (
-                                <div className='px-[30px]'>
+                                <div className='mb:px-[30px] mbs:px-[0px]'>
                                     <span className='font-medium text-[20px] text-red-500'>{item.title}:</span>
                                     <span className='ml-[10px] text-[18px] text-red-500'>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(item.value)}</span>
                                 </div>
@@ -423,12 +423,12 @@ const BookingDetail = () => {
                         }
                     </div>
                 </div>
-                <div className='mt-[50px]'>
+                <div className='mt-[50px] mbs:mt-[20px] mb:mt-[50px]'>
                     <h1 className='text-[35px] font-medium text-[#FFA500]'>Tiện Ích</h1>
-                    <div className='grid grid-cols-3 gap-10 mb-[50px]'>
+                    <div className='grid mb:grid-cols-3 mb:gap-10 mbs:gap-4 mb:mb-[50px] mbs:mb-[10px] mbs:grid-cols-1 '>
                         {facilities.map((item: any) => (
-                            <div className='flex ml-[70px]  mt-[30px]'>
-                                <img width={45} className='mr-[20px] sepia' src={`${item.image}`} alt="" />
+                            <div className='flex mb:ml-[70px] mb:mt-[30px] mbs:ml-[0px] mbs:mt-[10px]'>
+                                <img width={45} className='mr-[20px] sepia mbs:w-[30px] mb:w-[45px]' src={`${item.image}`} alt="" />
                                 <p className='self-center text-[18px] text-gray-500 font-medium'>{item.name}</p>
                             </div>
                         ))}
@@ -526,15 +526,18 @@ const BookingDetail = () => {
                     )}
 
                     {/* danh sách comment */}
-                    <div className='grid grid-cols-3 gap-5 my-7'>
+                    <div className='flex flex-wrap '>
                         {comments?.slice(0, LIMIT_SHOW_COMMENT).map((cmt: CommentType) => {
-                            return <CommentItem
-                                key={cmt._id}
-                                comment={cmt as any}
-                                isLogged={isLogged}
-                                currentUser={currentUser}
-                                onRemoveCmt={removeComment}
-                            />
+                            // eslint-disable-next-line react/jsx-key
+                            return <div className='border-2 mx-[5px] mbs:w-[100%] mb:w-[33.3%]'>
+                                <CommentItem
+                                    key={cmt._id}
+                                    comment={cmt as any}
+                                    isLogged={isLogged}
+                                    currentUser={currentUser}
+                                    onRemoveCmt={removeComment}
+                                />
+                            </div>
                         })}
                     </div>
 
@@ -692,7 +695,7 @@ const BookingDetail = () => {
                                                     <span>{voucherData.code} (-{formatCurrency(voucherData.discount)})</span>
                                                 </div>
                                             )}
-                                            
+
                                             <div className='mt-[10px] font-bold text-[18px] text-orange-500'>
                                                 Tổng: {totaldate ? formatCurrency((chaprice * totaldate) - (+`${!errVoucher?.trim().length && voucherData ? voucherData?.discount : 0}`)) : formatCurrency(0)}
                                             </div>

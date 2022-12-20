@@ -72,7 +72,7 @@ const Header = (props: Props) => {
   };
 
   return (
-    <header className='shadow-xl sticky top-0 bg-[#fff] z-50'>
+    <header className='shadow-xl sticky top-0 bg-[#fff] z-50 '>
       <div className="w-[80%] mx-auto py-2 ">
         <div className="flex justify-between items-center my-2">
           <div className="flex">

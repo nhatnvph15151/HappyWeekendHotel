@@ -686,7 +686,7 @@ const BookingDetail = () => {
                                                 <span>{formatCurrency(chaprice * totaldate)}</span>
                                             </div>
 
-                                            {voucherData && (
+                                            {!errVoucher?.trim().length && voucherData && (
                                                 <div className='mt-[10px] font-medium text-gray-500'>
                                                     <span>Voucher: </span>
                                                     <span>{voucherData.code} (-{formatCurrency(voucherData.discount)})</span>
@@ -694,7 +694,7 @@ const BookingDetail = () => {
                                             )}
                                             
                                             <div className='mt-[10px] font-bold text-[18px] text-orange-500'>
-                                                Tổng: {totaldate ? formatCurrency((chaprice * totaldate) - (voucherData?.discount || 0)) : formatCurrency(0)}
+                                                Tổng: {totaldate ? formatCurrency((chaprice * totaldate) - (+`${!errVoucher?.trim().length && voucherData ? voucherData?.discount : 0}`)) : formatCurrency(0)}
                                             </div>
                                             <TabPanel value={value} index={2}>
                                                 <div className='mt-6'>

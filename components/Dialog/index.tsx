@@ -71,6 +71,12 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
       })
   }
 
+  // format tiền.
+  const formatCurrency = (currency: number) => {
+    const tempCurrency = +currency >= 0 ? currency : 0;
+    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(tempCurrency)
+  };
+
   return (
     <div>
       <Dialog
@@ -104,9 +110,19 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
                   <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Tên phòng đặt</label> </td>
                   <td className="py-[5px] pl-[42px] text-[#424241]">{room}</td>
                 </tr>
+                <tr className="bg-[#F5FAFF]">
+                  <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Tạm tính</label> </td>
+                  <td className="py-[5px] pl-[42px] text-[#424241]">{formatCurrency(data.total)}</td>
+                </tr>
+                {data.voucher && (
+                  <tr className="bg-[#F5FAFF]">
+                    <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Voucher</label> </td>
+                    <td className="py-[5px] pl-[42px] text-[#424241]">{data.voucher.code} (-{formatCurrency(data.voucher.discount)})</td>
+                  </tr>
+                )}
                 <tr className=" bg-[#ffffff]">
                   <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Tổng tiền</label> </td>
-                  <td className="py-[5px] pl-[42px] text-[#424241]">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(data.total)}</td>
+                  <td className="py-[5px] pl-[42px] text-[#424241]">{formatCurrency(data.total - (data.voucher?.discount || 0))}</td>
                 </tr>
                 <tr className="bg-[#F5FAFF] ">
                   <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Check In</label> </td>

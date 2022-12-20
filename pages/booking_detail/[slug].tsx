@@ -41,6 +41,8 @@ import Link from 'next/link'
 import { UserType } from '../../types/user'
 import useComment from '../../hook/use-comment'
 import { CommentType, CommentType2 } from '../../types/comment'
+import { getVoucherByCode } from '../../api/voucher';
+import { Voucher } from '../../types/voucher';
 
 type ProductProps = {
     product: ProductType
@@ -126,6 +128,12 @@ const BookingDetail = () => {
     const [isBooked, setIsBooked] = useState(false);
     const [isCommented, setIsCommented] = useState(false);
 
+    // voucher code
+    const [voucher, setVoucher] = useState<string>("");
+    const [errVoucher, setErrVoucher] = useState<string>();
+    
+    const [voucherData, setVoucherData] = useState<Voucher | null>(null);
+
     useEffect(() => {
         const getfacilities = async () => {
             await getOnefac(`${product?._id}`).then((res: any) => {
@@ -148,6 +156,12 @@ const BookingDetail = () => {
         }
         reset(currentUser)
     }, [open, slug]);
+
+    // set giá phòng.
+    useEffect(() => {
+        // kiểm tra product ko phải [] => set price
+        if (product && !Array.isArray(product)) setchaprice(product.price[0].value);
+    }, [product])
 
     // check trạng thái đặt phòng.
     useEffect(() => {
@@ -221,6 +235,8 @@ const BookingDetail = () => {
     };
     const handleClose = () => {
         setOpen(false);
+        setVoucher("");
+        setVoucherData(null);
     };
     const handleClose2 = () => {
         setOpen2(false);
@@ -250,6 +266,13 @@ const BookingDetail = () => {
     };
 
     const onsubmit: SubmitHandler<Form> = async data => {
+        let tempVoucher;
+        if (voucher.trim()) {
+            const { isValid, voucherData } = await validateVoucher();
+            if (!isValid) return;
+            tempVoucher = voucherData;
+        }
+
         const user = JSON.parse(localStorage.getItem('user') as string)?._id
         const total = chaprice * totaldate
 
@@ -262,6 +285,7 @@ const BookingDetail = () => {
             status: status,
             checkins: date[0],
             checkouts: date[1],
+            voucher: tempVoucher
         }
         const dateBooked: any = {
             dateFrom: date[0],
@@ -273,6 +297,51 @@ const BookingDetail = () => {
         setdataorder(neworder)
         openDialogConfirm()
         handleClose()
+    }
+
+    // validate voucher
+    const validateVoucher = async () => {
+        let isValid = true;
+        const code = voucher.trim();
+
+        // get thông tin voucher
+        const voucherData = await getVoucherByCode(code);
+        setVoucherData(voucherData);
+        if (!voucherData) {
+            setErrVoucher("Voucher không tồn tại");
+            isValid = false;
+        } else {
+            const { quantity, activeTime, expriedTime } = voucherData;
+            const today = new Date().getTime();
+            const activeTimeGetTime = new Date(activeTime).getTime();
+            const expriedTimeGetTime = new Date(expriedTime).getTime();
+            
+            // check số lượng voucher hiện còn.
+            if (quantity <= 0) {
+                setErrVoucher("Voucher đã hết lượt sử dụng");
+                isValid = false;
+            } else if (today < activeTimeGetTime) {
+                // check thời gian sử dụng voucher
+                setErrVoucher("Voucher chưa đến thời gian sử dụng");
+                isValid = false;
+            } else if (today > expriedTimeGetTime) {
+                // check thời hạn sử dụng voucher
+                setErrVoucher("Voucher đã hết hạn");
+                isValid = false;
+            } else {
+                // check điều kiện sử dụng: đã đặt phòng 1 lần.
+                const { isBooked } = await checkUserBookRoom({ user: currentUser?._id! });
+                if (!isBooked)  {
+                    setErrVoucher("Bạn không đủ điều kiện sử dụng Voucher");
+                    isValid = false;
+                } else {
+                    setErrVoucher("");
+                    isValid = true;
+                }
+            }
+        }
+
+        return { isValid, voucherData };
     }
 
     const changePrice = (value: number) => {
@@ -291,6 +360,12 @@ const BookingDetail = () => {
         toastr.success("Bình luận thành công");
         reset2();
     }
+
+    // format tiền.
+    const formatCurrency = (currency: number) => {
+        const tempCurrency = +currency >= 0 ? currency : 0;
+        return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(tempCurrency)
+    };
 
     return (
         <div className='w-[80%] mx-auto py-2'>
@@ -564,11 +639,31 @@ const BookingDetail = () => {
                                                 </div>
                                             )}
                                         </div>
+
+                                        {/* voucher */}
+                                        {isLogged && (
+                                            <div className="mb-6">
+                                                <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Voucher</label>
+                                                <input value={voucher} onChange={(e) => {
+                                                    const voucher = e.target.value;
+                                                    setVoucher(voucher);
+                                                    if (!voucher.trim()) {
+                                                        setErrVoucher("");
+                                                        setVoucherData(null);
+                                                    }
+                                                }} type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                                <div>
+                                                    {errVoucher?.trim() && <p className='text-red-600'>{errVoucher}</p>}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* tab */}
                                         <Box sx={{ width: '100%' }}>
                                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                                    {product?.price?.map((item: any) => (
-                                                        <Tab icon={<CalendarMonthIcon />} onClick={() => {
+                                                    {product?.price?.map((item: any, index: number) => (
+                                                        <Tab key={index} icon={<CalendarMonthIcon />} onClick={() => {
                                                             setchaprice(item.value)
                                                         }} iconPosition="start" label={`${item.title}`} {...a11yProps(item.brand)} />
                                                     ))}
@@ -577,7 +672,26 @@ const BookingDetail = () => {
                                                     <Tab icon={<AccessTimeIcon />} iconPosition="start" label="Theo giờ" {...a11yProps(2)} /> */}
                                                 </Tabs>
                                             </Box>
-                                            <div className='flex mt-[10px] font-medium text-gray-500'>Giá phòng: {new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(chaprice)} <div className='ml-[40px]'>Số ngày ở: {totaldate}</div> </div><div className='mt-[10px] font-bold text-[18px] text-orange-500'>Tổng: {totaldate ? new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(chaprice * totaldate) : 0}</div>
+                                            <div className='flex mt-[10px] font-medium text-gray-500'>
+                                                Giá phòng: {formatCurrency(chaprice)}
+                                                <div className='ml-[40px]'>Số ngày ở: {totaldate}</div>
+                                            </div>
+
+                                            <div className='mt-[10px] font-medium text-gray-500'>
+                                                <span>Tạm tính: </span>
+                                                <span>{formatCurrency(chaprice * totaldate)}</span>
+                                            </div>
+
+                                            {voucherData && (
+                                                <div className='mt-[10px] font-medium text-gray-500'>
+                                                    <span>Voucher: </span>
+                                                    <span>{voucherData.code} (-{formatCurrency(voucherData.discount)})</span>
+                                                </div>
+                                            )}
+                                            
+                                            <div className='mt-[10px] font-bold text-[18px] text-orange-500'>
+                                                Tổng: {totaldate ? formatCurrency((chaprice * totaldate) - (voucherData?.discount || 0)) : formatCurrency(0)}
+                                            </div>
                                             <TabPanel value={value} index={2}>
                                                 <div className='mt-6'>
                                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -628,7 +742,8 @@ const BookingDetail = () => {
                         ref={dialogConfirmRef}
                         data={dataorder}
                         datebooks={datebook}
-                        room={product?.name} />
+                        room={product?.name}
+                    />
                 </div>
 
                 {/* dialog comment */}

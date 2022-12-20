@@ -48,7 +48,7 @@ const RoomPage = (props: Props) => {
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     return (
         <div className={styles.scroll}>
-            <div className='container w-[80%] mx-[auto] flex flex-col'>
+            <div className='w-[80%] mx-[auto] flex flex-col mbs:w-[95%] mb:w-[80%]'>
                 <div className="search-filter flex justify-between">
                     <div className="search"></div>
                     <div className="filter my-[10px]"><Button onClick={handleOpen2}><a className='border-current hover:text-orange-400 px-2 py-1 text-[black] my-[auto] rounded-2 bg-[#f2f2f7] rounded-lg'>
@@ -69,7 +69,7 @@ const RoomPage = (props: Props) => {
                                     <hr className='mt-2' />
                                 </Typography>
                                 <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                                    <div className="container p-5 flex flex-col">
+                                    <div className="p-5 flex flex-col">
 
                                         <div className="sort border-b border-[#d1d1d6] mb-5 pb-5">
                                             <h2 className='text-2xl font-bold'>Sắp xếp</h2>
@@ -95,7 +95,7 @@ const RoomPage = (props: Props) => {
                                         <div className="utility ">
                                             <h2 className='text-2xl font-bold'>Tiện ích</h2>
                                             <div className="list-utility">
-                                                <ul className='flex flex-wrap'>
+                                                <ul className='flex flex-wrap mbs:text-sm mb:text-xl'>
                                                     <li className='w-[50%]'>
                                                         <Checkbox {...label} defaultChecked />
                                                         <span>Wi-Fi miễn phí</span>
@@ -114,15 +114,7 @@ const RoomPage = (props: Props) => {
                                                     </li>
                                                     <li className='w-[50%]'>
                                                         <Checkbox {...label} defaultChecked />
-                                                        <span>Dịch vụ dọn phòng mỗi ngày</span>
-                                                    </li>
-                                                    <li className='w-[50%]'>
-                                                        <Checkbox {...label} defaultChecked />
                                                         <span>Tiện nghi là/ủi</span>
-                                                    </li>
-                                                    <li className='w-[50%]'>
-                                                        <Checkbox {...label} defaultChecked />
-                                                        <span>Dịch vụ lưu trữ/bảo quản hành lý </span>
                                                     </li>
                                                     <li className='w-[50%]'>
                                                         <Checkbox {...label} defaultChecked />
@@ -172,18 +164,18 @@ const RoomPage = (props: Props) => {
                             </Box>
                         </Modal></div>
                 </div>
-                <div className="main bg-[#f2f2f7]  mb-[20px] flex justify-between">
+                <div className="main bg-[#f2f2f7]  mb-[20px] flex justify-between mbs:flex-col mb:flex-row ">
                     <div className={styles.content_left}>
                         {
                             room.data?.map((item: any, index: any) => {
                                 return (
                                     <>
                                         <div className="card  m-3 bg-[white] object-cover border rounded-lg ">
-                                            <div className="box h-[224px] p-2 flex ">
-                                                <div className="img  w-[33%]  mr-[10px] rounded-lg overflow-hidden ">
-                                                    <img className='object-cover h-[100%]' src={item.image || 'https://s3.go2joy.vn/1000w/hotel/12563/2848_1656662865_62beab51c14f8.jpg'} alt="" />
+                                            <div className="box h-[fitcontent] p-2 flex mbs:flex-col mb:flex-row">
+                                                <div className="img  w-[33%]  mr-[10px] rounded-lg overflow-hidden mbs:h-[206px] mbs:w-[100%] mb:w-[33%] mb:h-[auto] ">
+                                                    <img className='object-cover h-[100%] w-[100%]' src={item.image || 'https://s3.go2joy.vn/1000w/hotel/12563/2848_1656662865_62beab51c14f8.jpg'} alt="" />
                                                 </div>
-                                                <div className="text w-[66.6%]">
+                                                <div className="text w-[66.6%] mbs:w-[100%] mb:w-[66.6%]">
                                                     <div className="text-top w-[100%] flex justify-between mb-[5px]">
                                                         <h4>{item.name}</h4>
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className='w-6 h-6'>
@@ -217,7 +209,7 @@ const RoomPage = (props: Props) => {
                                                                 </svg>
                                                                 <span className='px-1 '>hà nội</span>
                                                             </div>
-                                                            <div className='font-bold'> <del className='font-normal'>250.000</del> {item.price}</div>
+                                                            <div className='font-bold'> <span className='font-normal'>250.000</span> {item.price}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -229,7 +221,7 @@ const RoomPage = (props: Props) => {
                             )
                         }
                     </div>
-                    <div className="content-right h-[100vh] overflow-hidden w-[39.7%] bg-[yellow]">
+                    <div className="content-right h-[100vh] overflow-hidden w-[39.7%] bg-[yellow] mbs:w-[100%] mb:w-[39.7%]">
                         <iframe className='h-[100%]' src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.863981044336!2d105.7445984148835!3d21.038127785993215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313454b991d80fd5%3A0x53cefc99d6b0bf6f!2sFPT%20Polytechnic%20Hanoi!5e0!3m2!1sen!2s!4v1665651057540!5m2!1sen!2s" width={600} height={450} style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
                     </div>
                 </div>

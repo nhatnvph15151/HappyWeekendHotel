@@ -25,7 +25,7 @@ const Header = (props: Props) => {
   const [status, setStatus] = useState(false)
   const [user, setUser] = useState<any>({})
   const [showSearch, setShowSearch] = useState(false)
-  
+
   useEffect(() => {
     const getUser = JSON.parse(localStorage.getItem('user') as string)
     if (getUser == 0 || getUser == null) {

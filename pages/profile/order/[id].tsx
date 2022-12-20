@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -6,10 +7,10 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.css";
 import { Button } from 'primereact/button'
 import React, { useEffect, useState } from 'react'
-import { DetailOrderType } from '../../../types/detailorder'
 import { update } from '../../../api/order';
+import { update as updateVoucher } from '../../../api/voucher';
 import { remove } from '../../../api/bookedDate';
-import { getOnefac, listfac } from '../../../api/facilities';
+import { getOnefac } from '../../../api/facilities';
 import { API_URL } from '../../../constants';
 import ProfileLayout from '../../../components/Layout/ProfileLayout';
 
@@ -23,23 +24,19 @@ const DtailOrderHistory = (props: Props) => {
     const { id } = router.query
     useEffect(() => {
         const getUser = JSON.parse(localStorage.getItem('user') as string)
-        console.log(getUser)
         setUser(getUser)
         const get = async () => {
             const { data } = await axios.get(`${API_URL}/order/${id}`)
             setorder(data)
-            console.log(orders?.room[0]._id)
         }
 
         get()
-
     }, [id])
     useEffect(() => {
         const abc = async () => {
             await getOnefac(orders?.room[0]._id).then((res: any) => {
                 setfacilities(res)
             })
-            console.log(facilities)
         }
         abc()
     }, [orders?.room[0]._id])
@@ -57,7 +54,7 @@ const DtailOrderHistory = (props: Props) => {
             return <span className='ml-[15px] bg-red-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Hủy Phòng</span>
         }
     }
-    const onsubmit = () => {
+    const onsubmit = async () => {
         const newdata: any = {
             statusorder: 4,
             _id: id,
@@ -70,10 +67,16 @@ const DtailOrderHistory = (props: Props) => {
             room: orders?.room[0]._id,
             user: orders?.order.user
         }
-        console.log(newdata)
-        update(newdata).then((res: any) => {
-            console.log(res?.status)
-            console.log(res?.statusorder)
+
+        // tăng số lượng voucher khi hủy phòng.
+        if (orders.order.voucher) {
+            await updateVoucher({
+                ...orders.order.voucher,
+                quantity: orders.order.voucher.quantity + 1
+            });
+        }
+
+        await update(newdata).then((res: any) => {
             if (res?.statusorder == 4 || res?.statusorder == 3) {
                 remove(res?.status).then(() => {
                     router.push('/profile/order')
@@ -81,10 +84,14 @@ const DtailOrderHistory = (props: Props) => {
             } else {
                 router.push('/profile/order')
             }
-
         })
     }
-    console.log(orders?.room[0].image)
+
+    // format tiền.
+    const formatCurrency = (currency: number) => {
+        const tempCurrency = +currency >= 0 ? currency : 0;
+        return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(tempCurrency)
+    };
     return (
         <div>
             <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
@@ -130,8 +137,8 @@ const DtailOrderHistory = (props: Props) => {
                                     </div>
                                 ))} */}
                                 <div className='grid grid-cols-2 gap-2'>
-                                    {orders?.room[0].image?.map((item: any) => (
-                                        <img width={250} src={item} alt="" />
+                                    {orders?.room[0].image?.map((item: any, index: number) => (
+                                        <img key={index} width={250} src={item} alt="" />
                                     ))}
                                 </div>
                                 {/* <p className='pt-[20px] pb-[10px] text-[17px] font-medium'>Giá: {order?.room[0].price} VND</p> */}
@@ -139,8 +146,8 @@ const DtailOrderHistory = (props: Props) => {
                                 <p className='text-[20px] font-medium mb-[20px] mt-[20px]'>Tiền ích : </p>
                                 <div className='flex'>
                                     <div className='grid grid-cols-2 gap-4'>
-                                        {facilities?.map((item: any) => (
-                                            <div className='flex'>
+                                        {facilities?.map((item: any, index: number) => (
+                                            <div key={index} className='flex'>
                                                 <img width={20} src={`${item?.image}`} alt="" />
                                                 <p className='ml-[5px]'>{item.name}</p>
                                             </div>
@@ -153,9 +160,23 @@ const DtailOrderHistory = (props: Props) => {
                             <div className='py-[30px] w-[500px] h-[100%] px-[40px] border-solid border-2 border-indigo-600 rounded-xl'>
                                 <h1 className='text-center text-[20px] font-bold mb-[25px]'>Thông tin </h1>
                                 <p className='text-[17px] font-medium'>Check In <span className='float-right'>{orders?.order.checkins?.slice(0, 10)}</span></p>
-                                <p className='py-[10px] text-[17px] font-medium'>Check out <span className='float-right'>{orders?.order.checkouts?.slice(0, 10)}</span></p>
-                                <p className='font-medium text-[20px] text-orange-600'>Tổng tiền <span className='float-right'> {new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(orders?.order.total)}</span> </p>
-                                <p className='py-[30px] text-[17px] font-medium'>Trạng thái {statuss(orders?.order.statusorder)}</p>
+                                <p className='py-[10px] text-[17px] font-medium'>
+                                    Check out <span className='float-right'>{orders?.order.checkouts?.slice(0, 10)}</span>
+                                </p>
+                                <p className='py-[10px] text-[17px] font-medium'>
+                                    Tạm tính <span className='float-right'>{formatCurrency(orders?.order.total)}</span>
+                                </p>
+                                {orders?.order.voucher && (
+                                    <p className='py-[10px] text-[17px] font-medium'>
+                                        Voucher <span className='float-right'>{orders?.order.voucher.code} (-{formatCurrency(orders?.order.voucher?.discount)})</span>
+                                    </p>
+                                )}
+                                <p className='font-medium text-[20px] text-orange-600'>
+                                    Tổng tiền <span className='float-right'>{formatCurrency(orders?.order.total - (orders?.order.voucher?.discount || 0))}</span>
+                                </p>
+                                <p className='py-[30px] text-[17px] font-medium'>
+                                    Trạng thái {statuss(orders?.order.statusorder)}
+                                </p>
                                 <div className='flex mt-[30px]'>
                                     <div >
                                         <Button

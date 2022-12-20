@@ -10,8 +10,14 @@ export const getAll = () => {
     const url = `voucher`;
     return instance.get(url);
 }
-export const getOne = (slug: any | undefined) => {
-    const url = `voucher/${slug}`;
+
+export const getOne = (id?: string) => {
+    const url = `voucher/${id}`;
+    return instance.get(url);
+}
+
+export const getVoucherByCode = (code: string): Promise<Voucher> => {
+    const url = `voucher/getByCode/${code}`;
     return instance.get(url);
 }
 

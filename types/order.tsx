@@ -1,3 +1,5 @@
+import { Voucher } from "./voucher"
+
 export type OrderType = {
     checkins: string
     _id?: number,
@@ -8,5 +10,6 @@ export type OrderType = {
     total:number,
     room:string,
     user:string,
-    status:string
+    status:string,
+    voucher: Voucher
 }

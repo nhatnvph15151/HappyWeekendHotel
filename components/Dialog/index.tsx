@@ -62,7 +62,7 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
         await disabledDateBooked();
 
         // giảm số lượng voucher, lưu id user sử dụng voucher.
-        if (data.user) {
+        if (data.user && data.voucher) {
           const users = [...data.voucher.users, data.user];
           await update({
             ...data.voucher,

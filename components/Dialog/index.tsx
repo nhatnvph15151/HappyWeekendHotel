@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { Button, Dialog, DialogActions, DialogTitle, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { bangking } from "../../api/banking";
+import { update } from "../../api/voucher";
 
 type PostProps = {
 
@@ -36,8 +37,8 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
   const order = async () => {
     console.log(data);
     await creat(datebooks)
-      .then((res: any) => {
-        const newdata = {
+      .then(async (res: any) => {
+        const newdata: any = {
           status: res._id,
           name: data.name,
           email: data.email,
@@ -47,21 +48,34 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
           checkouts: data.checkouts,
           room: data.room,
           statusorder: data.statusorder,
-          user: data.user
+          user: data.user,
         }
+
+        if (data.voucher) {
+          newdata.voucher = data.voucher._id;
+        }
+
         console.log(res._id)
         const disabledDateBooked = async () => {
           await creatOrder(newdata)
-            .then(() => {
-              Swal.fire(
-                'Đặt phòng thành công',
-                'Thông tin chi tiết sẽ được gửi tới email của bạn.',
-                'success'
-              )
-              handleClose()
-            })
         }
-        disabledDateBooked()
+        await disabledDateBooked();
+
+        // giảm số lượng voucher, lưu id user sử dụng voucher.
+        if (data.user) {
+          const users = [...data.voucher.users, data.user];
+          await update({
+            ...data.voucher,
+            quantity: data.voucher.quantity - 1 >= 0 ? data.voucher.quantity - 1 : 0,
+            users
+          })
+        }
+        Swal.fire(
+          'Đặt phòng thành công',
+          'Thông tin chi tiết sẽ được gửi tới email của bạn.',
+          'success'
+        )
+        handleClose();
       })
       .catch(() => {
         Swal.fire({
@@ -156,7 +170,7 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
                     // router.push('/payment')
                     order()
                     bangking({
-                      "total": data.total,
+                      "total": data.total - data.voucher.discount >= 0 ? data.total - data.voucher.discount : 0,
                       "orderDescription": "",
                       "orderType": "billpayment",
                       "language": "vn",

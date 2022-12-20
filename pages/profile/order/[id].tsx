@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -29,6 +30,7 @@ const DtailOrderHistory = (props: Props) => {
             const { data } = await axios.get(`${API_URL}/order/${id}`)
             setorder(data)
             console.log(orders?.room[0]._id)
+            console.log(data)
         }
 
         get()
@@ -84,6 +86,12 @@ const DtailOrderHistory = (props: Props) => {
 
         })
     }
+
+    // format tiền.
+    const formatCurrency = (currency: number) => {
+        const tempCurrency = +currency >= 0 ? currency : 0;
+        return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(tempCurrency)
+    };
     console.log(orders?.room[0].image)
     return (
         <div>
@@ -130,8 +138,8 @@ const DtailOrderHistory = (props: Props) => {
                                     </div>
                                 ))} */}
                                 <div className='grid grid-cols-2 gap-2'>
-                                    {orders?.room[0].image?.map((item: any) => (
-                                        <img width={250} src={item} alt="" />
+                                    {orders?.room[0].image?.map((item: any, index: number) => (
+                                        <img key={index} width={250} src={item} alt="" />
                                     ))}
                                 </div>
                                 {/* <p className='pt-[20px] pb-[10px] text-[17px] font-medium'>Giá: {order?.room[0].price} VND</p> */}
@@ -139,8 +147,8 @@ const DtailOrderHistory = (props: Props) => {
                                 <p className='text-[20px] font-medium mb-[20px] mt-[20px]'>Tiền ích : </p>
                                 <div className='flex'>
                                     <div className='grid grid-cols-2 gap-4'>
-                                        {facilities?.map((item: any) => (
-                                            <div className='flex'>
+                                        {facilities?.map((item: any, index: number) => (
+                                            <div key={index} className='flex'>
                                                 <img width={20} src={`${item?.image}`} alt="" />
                                                 <p className='ml-[5px]'>{item.name}</p>
                                             </div>
@@ -153,9 +161,23 @@ const DtailOrderHistory = (props: Props) => {
                             <div className='py-[30px] w-[500px] h-[100%] px-[40px] border-solid border-2 border-indigo-600 rounded-xl'>
                                 <h1 className='text-center text-[20px] font-bold mb-[25px]'>Thông tin </h1>
                                 <p className='text-[17px] font-medium'>Check In <span className='float-right'>{orders?.order.checkins?.slice(0, 10)}</span></p>
-                                <p className='py-[10px] text-[17px] font-medium'>Check out <span className='float-right'>{orders?.order.checkouts?.slice(0, 10)}</span></p>
-                                <p className='font-medium text-[20px] text-orange-600'>Tổng tiền <span className='float-right'> {new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(orders?.order.total)}</span> </p>
-                                <p className='py-[30px] text-[17px] font-medium'>Trạng thái {statuss(orders?.order.statusorder)}</p>
+                                <p className='py-[10px] text-[17px] font-medium'>
+                                    Check out <span className='float-right'>{orders?.order.checkouts?.slice(0, 10)}</span>
+                                </p>
+                                <p className='py-[10px] text-[17px] font-medium'>
+                                    Tạm tính <span className='float-right'>{formatCurrency(orders?.order.total)}</span>
+                                </p>
+                                {orders?.order.voucher && (
+                                    <p className='py-[10px] text-[17px] font-medium'>
+                                        Voucher <span className='float-right'>{orders?.order.voucher.code} (-{formatCurrency(orders?.order.voucher?.discount)})</span>
+                                    </p>
+                                )}
+                                <p className='font-medium text-[20px] text-orange-600'>
+                                    Tổng tiền <span className='float-right'>{formatCurrency(orders?.order.total - (orders?.order.voucher?.discount || 0))}</span>
+                                </p>
+                                <p className='py-[30px] text-[17px] font-medium'>
+                                    Trạng thái {statuss(orders?.order.statusorder)}
+                                </p>
                                 <div className='flex mt-[30px]'>
                                     <div >
                                         <Button

@@ -11,7 +11,7 @@ type Props = {}
 const UserAdmin = (props: Props) => {
     const {data, error, dele } = userUser()
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(4);
+    const [rowsPerPage, setRowsPerPage] = React.useState(8);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);

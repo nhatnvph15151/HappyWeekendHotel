@@ -1,14 +1,13 @@
+/* eslint-disable @next/next/no-img-element */
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { detail, update } from '../../../api/order'
+import { update } from '../../../api/order'
+import { update as updateVoucher } from '../../../api/voucher'
 import { DashboardLayout } from '../../../components/dashboard-layout'
-import OrderHook from '../../../hook/use-order'
-import { DetailOrderType } from '../../../types/detailorder'
-import { OrderType } from '../../../types/order'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { remove } from '../../../api/bookedDate'
-import { getOnefac, listfac } from '../../../api/facilities'
+import { getOnefac } from '../../../api/facilities'
 import { API_URL } from '../../../constants'
 type Props = {}
 type Form = {
@@ -75,7 +74,7 @@ const DetailOrder = (props: Props) => {
         }
     }
 
-    const onsubmit: SubmitHandler<Form> = data => {
+    const onsubmit: SubmitHandler<Form> = async data => {
         const newdata: any = {
             ...data,
             _id: id,
@@ -88,11 +87,16 @@ const DetailOrder = (props: Props) => {
             room: order?.room[0]._id,
             user: order?.order.user
         }
-        console.log(newdata)
-        update(newdata).then((res: any) => {
-            console.log(res?.status)
-            console.log(res?.statusorder)
+        
+        // tăng số lượng voucher khi hủy phòng.
+        if (data.statusorder == 4 && order.order.voucher) {
+            await updateVoucher({
+                ...order.order.voucher,
+                quantity: order.order.voucher.quantity + 1
+            });
+        }
 
+        await update(newdata).then((res: any) => {
             if (res?.statusorder == 4 || res?.statusorder == 3) {
                 remove(res?.status).then(() => {
                     router.push('/admin/order')
@@ -100,9 +104,15 @@ const DetailOrder = (props: Props) => {
             } else {
                 router.push('/admin/order')
             }
-
         })
     }
+
+    // format tiền.
+    const formatCurrency = (currency: number) => {
+        const tempCurrency = +currency >= 0 ? currency : 0;
+        return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(tempCurrency)
+    };
+
     return (
         <div>
             <div className='flex'>
@@ -113,8 +123,8 @@ const DetailOrder = (props: Props) => {
                             <h1 className='text-[25px] font-medium'>{order?.room[0].name}</h1>
                         </div>
                         <div className='py-[20px] flex grid grid-cols-2 gap-4'>
-                            {order?.room[0].image?.map((item: any) => (
-                                <img width={400} src={`${item}`} alt="" />
+                            {order?.room[0].image?.map((item: any, index: number) => (
+                                <img width={400} src={`${item}`} alt="" key={index} />
                             ))}
 
                         </div>
@@ -136,8 +146,8 @@ const DetailOrder = (props: Props) => {
                             <div className='ml-[30px]'>
                                 <h1 className='text-[18px] font-medium'>Tiện ích</h1>
                                 <div className='grid grid-cols-2 gap-4 mt-[10px]'>
-                                    {facilities?.map((item: any) => (
-                                        <div className='flex '>
+                                    {facilities?.map((item: any, index: number) => (
+                                        <div className='flex' key={index}>
                                             <img width={30} src={item.image} alt="" />
                                             <p className=' ml-[5px] self-center'>{item.name}</p>
                                         </div>
@@ -154,21 +164,31 @@ const DetailOrder = (props: Props) => {
                 <div className='w-2/5 p-[30px]' >
                     <h1 className='text-[30px] font-bold text-center'>Thông tin khách hàng</h1>
                     <div className='py-[50px] px-[30px] w-[350px]'>
-                        <div>
+                        <div className='pb-[20px]'>
                             <span className='font-medium'>Name:</span>
                             <span className='float-right'> {order?.order.name}</span>
                         </div>
-                        <div className='py-[10px]'>
+                        <div className='pb-[20px]'>
                             <span className='font-medium'>Phone:</span>
                             <span className='float-right'> 0{order?.order.phone}</span>
                         </div>
-                        <div>
+                        <div className='pb-[20px]'>
                             <span className='font-medium'>Email:</span>
                             <span className='float-right'> {order?.order.email}</span>
                         </div>
-                        <div className='py-[20px]'>
+                        <div className='pb-[20px]'>
+                            <span className='font-medium'>Tạm tính:</span>
+                            <span className='float-right'>{formatCurrency(order?.order.total)}</span>
+                        </div>
+                        {order?.order.voucher && (
+                            <div className='pb-[20px]'>
+                                <span className='font-medium'>Voucher:</span>
+                                <span className='float-right'>{order?.order.voucher.code} (-{formatCurrency(order?.order.voucher?.discount)})</span>
+                            </div>
+                        )}
+                        <div className='pb-[20px]'>
                             <span className='font-medium text-[20px] text-orange-600'>Tổng tiền:</span>
-                            <span className='float-right font-medium text-[18px] font-sans text-orange-600'>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(order?.order.total)}</span>
+                            <span className='float-right font-medium text-[18px] font-sans text-orange-600'>{formatCurrency(order?.order.total - (order?.order.voucher?.discount || 0))}</span>
                         </div>
                         <div>
                             <div className='py-[10px]'>

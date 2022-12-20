@@ -10,7 +10,7 @@ type props = {
 export default function ActionAreaCard({ newsList }: props) {
   return (
     <div className={`flex justify-between flex-wrap`}>
-      {newsList?.map((item: any, index: any) => {
+      {newsList?.length == 0 ? <div className='flex h-[100vh] w-full items-center'>Không có phòng nào thỏa mãn yêu cầu</div> : newsList?.map((item: any, index: any) => {
         return (
           <div className={`mb-4 ${item.status ? '' : 'hidden'}`} key={index}>
             <Link href={`/booking_detail/${item.slug}`}>

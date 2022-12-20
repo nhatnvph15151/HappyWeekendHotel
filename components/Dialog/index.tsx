@@ -6,10 +6,12 @@ import { useRouter } from "next/router";
 import { Button, Dialog, DialogActions, DialogTitle, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { bangking } from "../../api/banking";
+import { update } from "../../api/voucher";
 
 type PostProps = {
 
 };
+
 const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
   const [displayBasic2, setDisplayBasic2] = useState<any>(false);
   const router = useRouter()
@@ -31,26 +33,49 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
       setDisplayBasic2(true)
     }
   }))
-  console.log();
+  console.log(data);
   const order = async () => {
+    console.log(data);
     await creat(datebooks)
-      .then((res: any) => {
-        const newdata = {
-          ...data,
-          status: res._id
+      .then(async (res: any) => {
+        const newdata: any = {
+          status: res._id,
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          total: data.total,
+          checkins: data.checkins,
+          checkouts: data.checkouts,
+          room: data.room,
+          statusorder: data.statusorder,
+          user: data.user,
         }
+
+        if (data.voucher) {
+          newdata.voucher = data.voucher._id;
+        }
+
+        console.log(res._id)
         const disabledDateBooked = async () => {
           await creatOrder(newdata)
-            .then(() => {
-              Swal.fire(
-                'Đặt phòng thành công',
-                'Thông tin chi tiết sẽ được gửi tới email của bạn.',
-                'success'
-              )
-              handleClose()
-            })
         }
-        disabledDateBooked()
+        await disabledDateBooked();
+
+        // giảm số lượng voucher, lưu id user sử dụng voucher.
+        if (data.user && data.voucher) {
+          const users = [...data.voucher.users, data.user];
+          await update({
+            ...data.voucher,
+            quantity: data.voucher.quantity - 1 >= 0 ? data.voucher.quantity - 1 : 0,
+            users
+          })
+        }
+        Swal.fire(
+          'Đặt phòng thành công',
+          'Thông tin chi tiết sẽ được gửi tới email của bạn.',
+          'success'
+        )
+        handleClose();
       })
       .catch(() => {
         Swal.fire({
@@ -59,6 +84,12 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
         })
       })
   }
+
+  // format tiền.
+  const formatCurrency = (currency: number) => {
+    const tempCurrency = +currency >= 0 ? currency : 0;
+    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(tempCurrency)
+  };
 
   return (
     <div>
@@ -93,9 +124,19 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
                   <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Tên phòng đặt</label> </td>
                   <td className="py-[5px] pl-[42px] text-[#424241]">{room}</td>
                 </tr>
+                <tr className="bg-[#F5FAFF]">
+                  <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Tạm tính</label> </td>
+                  <td className="py-[5px] pl-[42px] text-[#424241]">{formatCurrency(data.total)}</td>
+                </tr>
+                {data.voucher && (
+                  <tr className="bg-[#F5FAFF]">
+                    <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Voucher</label> </td>
+                    <td className="py-[5px] pl-[42px] text-[#424241]">{data.voucher.code} (-{formatCurrency(data.voucher.discount)})</td>
+                  </tr>
+                )}
                 <tr className=" bg-[#ffffff]">
                   <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Tổng tiền</label> </td>
-                  <td className="py-[5px] pl-[42px] text-[#424241]">{new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(data.total)}</td>
+                  <td className="py-[5px] pl-[42px] text-[#424241]">{formatCurrency(data.total - (data.voucher?.discount || 0))}</td>
                 </tr>
                 <tr className="bg-[#F5FAFF] ">
                   <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Check In</label> </td>
@@ -127,8 +168,9 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
                   className="px-4 py-2 rounded-md shadow-xl bg-[orange] text-white"
                   onClick={() => {
                     // router.push('/payment')
+                    order()
                     bangking({
-                      "total": data.total,
+                      "total": data.total - data.voucher.discount >= 0 ? data.total - data.voucher.discount : 0,
                       "orderDescription": "",
                       "orderType": "billpayment",
                       "language": "vn",

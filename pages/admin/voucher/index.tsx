@@ -1,39 +1,40 @@
 /* eslint-disable @next/next/no-img-element */
 import { Button, TablePagination, Tooltip } from '@mui/material'
 import Link from 'next/link'
-import React from 'react'
+import { useState } from 'react'
 import { DashboardLayout } from '../../../components/dashboard-layout'
 import AddIcon from '@mui/icons-material/Add';
-import useProducts from '../../../hook/use-product'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Swal from 'sweetalert2'
-import Head from 'next/head';
 import ShowForPermission from '../../../components/Private/showForPermission';
-import { update } from '../../../api/rooms';
-import { useRouter } from 'next/router';
+import Head from 'next/head';
+import { Voucher } from '../../../types/voucher';
+import useVoucher from '../../../hook/use-voucher';
+import dayjs from 'dayjs';
 
 type Props = {}
 
-const ProductsAdmin = (props: Props) => {
-    const { data, error, dele } = useProducts("")
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(8);
-    const router = useRouter()
-    const handleChangePage = (event: unknown, newPage: number) => {
+const VoucherManagement = (props: Props) => {
+    const { data, error, dele } = useVoucher();
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const handleChangePage = (event: any, newPage: number) => {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(+event.target.value);
+    const handleChangeRowsPerPage = (event: any) => {
+        setRowsPerPage(parseInt(event.target.value, 0));
         setPage(0);
     };
     if (!data) return <div>Loading...</div>
     if (error) return <div>Error</div>
+
     function remove(id: any) {
         return Swal.fire({
             title: 'Chắc chắn xóa?',
-            text: "Xóa sẽ mất toàn bộ dữ liệu phòng này!",
+            text: "Xóa sẽ mất toàn bộ dữ liệu voucher này!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -46,63 +47,36 @@ const ProductsAdmin = (props: Props) => {
                     .then(() => {
                         Swal.fire(
                             'Đã xóa!',
-                            'Phòng này đã xóa thành công'
+                            'Voucher này đã xóa thành công'
                         )
-                    })
-            }
-        })
+        })}})
     }
-    const status = (value: any, id: any) => {
-        if (value == true) {
-            return (
-                <div className='flex'>
-                    <div className='bg-green-500 text-white text-center px-[10px] py-[5px] font-bold rounded-lg'>Active</div>
-                    <button onClick={() => {
-                        const product: any = {
-                            status: false,
-                            _id: id
-                        }
-                        update(product).then(() => {
-                            router.push('/admin').then(() => {
-                                router.push('/admin/room')
-                            })
-                        })
-                    }} className='bg-orange-200 text-slate-100 text-center px-[10px] py-[5px] font-bold rounded-lg'>Inactive</button>
-                </div>
-            )
-        } else if (value == false) {
-            return (
-                <div className='flex'>
-                    <div className='bg-orange-500 text-white text-center px-[10px] py-[5px] font-bold rounded-lg'>Inactive</div>
-                    <button onClick={() => {
-                        const product: any = {
-                            status: true,
-                            _id: id
-                        }
-                        update(product).then(() => {
-                            router.push('/admin').then(() => {
-                                router.push('/admin/room')
-                            })
-                        })
-                    }} className='bg-green-300 text-slate-100 text-center px-[10px] py-[5px] font-bold rounded-lg'>Active</button>
-                </div>
-            )
-        }
+
+    // format số tiền giảm.
+    const formatCurrency = (currency: number) => {
+        return currency.toLocaleString("it-IT", { style: "currency", currency: "VND" });
+    };
+
+    // format thời gian.
+    const formatDate = (date: Date) => {
+        return dayjs(date).format("DD:MM:YYYY HH:mm:ss");
     }
+
     return (
         <div>
             <div className="container w-[100%] p-2">
                 <Head>
-                    <title>Rooms</title>
+                    <title>Voucher</title>
                 </Head>
-                <div className="">
+                <div>
                     <ShowForPermission>
-                        <Link href={'/admin/room/add'}>
+                        <Link href={'/admin/voucher/add'}>
                             <button type="button" className="text-white bg-[#111827] hover:bg-[#1118276b] focus:outline-none focus:ring-4 focus:ring-[#111827] font-medium rounded-xl text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:focus:ring-[#111827]">
-                                Tạo phòng mới <AddIcon />
+                                Thêm voucher mới <AddIcon />
                             </button>
                         </Link>
                     </ShowForPermission>
+                    
                     <div className="inline-block sm:min-w-full w-[900px] shadow-xl rounded-xl h-[600px] relative border">
                         <div className="h-full overflow-y-auto overflow-x-auto pb-[50px]">
                             <table className="table-auto w-full border">
@@ -112,17 +86,16 @@ const ProductsAdmin = (props: Props) => {
                                             #
                                         </th>
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            Name
-                                        </th>
-
-                                        <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            image
+                                            Code
                                         </th>
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            description
+                                            Số lượng
                                         </th>
                                         <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
-                                            Status
+                                            Số tiền giảm
+                                        </th>
+                                        <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
+                                            Hiệu lực
                                         </th>
                                         <ShowForPermission>
                                             <th scope="col" className="text-xs px-5 py-3 bg-white border-b border-gray-200 text-[#333] text-left uppercase">
@@ -131,52 +104,47 @@ const ProductsAdmin = (props: Props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: any, index: any) => (
+                                    {/* cắt mảng => phân trang. */}
+                                    {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: Voucher, index: number) => (
                                         <tr key={item._id} className="cursor-pointer select-none">
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
-                                                    {index + 1}
-                                                </p>
-                                            </td>
-                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                <div className="flex items-center">
-                                                    <div className="ml-3">
-                                                        <p className="text-gray-900 whitespace-no-wrap">
-                                                            {item.name}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            {/* <p className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                <p className="text-gray-900 whitespace-no-wrap">
-                                                    {item.price}
-                                                </p>
-                                            </p> */}
-                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                <div className="w-[50px] h-[50px] rounded-xl overflow-hidden shadow-xl">
-                                                    <img src={item.image[0] ? item?.image[0] : "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80"} className="w-[100px] h-[100px]" alt="" />
-                                                </div>
-                                            </td>
-                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                <p className="text-gray-900 whitespace-no-wrap">
-                                                    {item.description}
+                                                    {index + 1 + page * rowsPerPage}
                                                 </p>
                                             </td>
                                             <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
-                                                    {status(item.status, item._id)}
+                                                    {item.code}
                                                 </p>
                                             </td>
+                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                                                <p className="text-gray-900 whitespace-no-wrap">
+                                                    {item.quantity}
+                                                </p>
+                                            </td>
+                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                                                <p className="text-gray-900 whitespace-no-wrap">
+                                                    {formatCurrency(item.discount)}
+                                                </p>
+                                            </td>
+                                            <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                                                <p className="text-gray-900 whitespace-no-wrap">
+                                                    <>
+                                                        {formatDate(item.activeTime)} - {formatDate(item.expriedTime)}
+                                                    </>
+                                                </p>
+                                            </td>
+                                            
                                             <ShowForPermission>
                                                 <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                                                    <Link href={`/admin/room/${item.slug}`}>
-                                                        <Tooltip title={`Chỉnh sửa ${item.name}`}>
+                                                    <Link href={`/admin/voucher/${item._id}`}>
+                                                        <Tooltip title={`Chỉnh sửa ${item.code}`}>
                                                             <Button className='text-[#111827]' variant="text" startIcon={<EditIcon />}>
                                                                 Edit
                                                             </Button>
                                                         </Tooltip>
                                                     </Link>
-                                                    <Tooltip title={`Xóa ${item.name}`}>
+                                                    <Tooltip title={`Xóa ${item.code}`}>
                                                         <Button onClick={() => { remove(item._id) }} className='text-[red]' variant="text" startIcon={<DeleteIcon />}>
                                                             Delete
                                                         </Button>
@@ -190,12 +158,11 @@ const ProductsAdmin = (props: Props) => {
                         </div>
                         <div className="absolute bottom-0 bg-white w-full border-t border">
                             <TablePagination
-                                rowsPerPageOptions={[]}
                                 component="div"
                                 count={data.length}
-                                rowsPerPage={rowsPerPage}
                                 page={page}
                                 onPageChange={handleChangePage}
+                                rowsPerPage={rowsPerPage}
                                 onRowsPerPageChange={handleChangeRowsPerPage}
                             />
                         </div>
@@ -207,8 +174,8 @@ const ProductsAdmin = (props: Props) => {
 }
 
 
-ProductsAdmin.Layout = DashboardLayout
-export default ProductsAdmin
+VoucherManagement.Layout = DashboardLayout;
+export default VoucherManagement;
 
 
 

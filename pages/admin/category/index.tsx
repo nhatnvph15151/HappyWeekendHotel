@@ -15,7 +15,7 @@ function CategoryAdmin() {
     const e = useCategory();
 
     const [rows, setRows] = React.useState([{ _id: 1, name: null }]);
-    const refDetail = React.useRef();
+    const refDetail = React.useRef<any>();
 
     React.useEffect(() => {
         if (e.data) {
@@ -67,24 +67,6 @@ function CategoryAdmin() {
         () => [
             { field: '_id', type: 'string', width: 150, headerName: "#" },
             { field: 'name', type: 'number' },
-            {
-                field: 'dayprice',
-                type: 'number',
-                width: 150,
-            },
-            {
-                field: 'image',
-                type: 'string',
-                width: 350,
-                renderCell: (params: any) => {
-                    return <img src={params.value} alt={"anh"} />
-                }
-            },
-            {
-                field: 'dayprice',
-                type: 'number',
-                width: 150,
-            },
             {
                 field: 'actions',
                 type: 'actions',

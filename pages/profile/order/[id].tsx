@@ -7,10 +7,10 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.css";
 import { Button } from 'primereact/button'
 import React, { useEffect, useState } from 'react'
-import { DetailOrderType } from '../../../types/detailorder'
 import { update } from '../../../api/order';
+import { update as updateVoucher } from '../../../api/voucher';
 import { remove } from '../../../api/bookedDate';
-import { getOnefac, listfac } from '../../../api/facilities';
+import { getOnefac } from '../../../api/facilities';
 import { API_URL } from '../../../constants';
 import ProfileLayout from '../../../components/Layout/ProfileLayout';
 
@@ -24,24 +24,19 @@ const DtailOrderHistory = (props: Props) => {
     const { id } = router.query
     useEffect(() => {
         const getUser = JSON.parse(localStorage.getItem('user') as string)
-        console.log(getUser)
         setUser(getUser)
         const get = async () => {
             const { data } = await axios.get(`${API_URL}/order/${id}`)
             setorder(data)
-            console.log(orders?.room[0]._id)
-            console.log(data)
         }
 
         get()
-
     }, [id])
     useEffect(() => {
         const abc = async () => {
             await getOnefac(orders?.room[0]._id).then((res: any) => {
                 setfacilities(res)
             })
-            console.log(facilities)
         }
         abc()
     }, [orders?.room[0]._id])
@@ -59,7 +54,7 @@ const DtailOrderHistory = (props: Props) => {
             return <span className='ml-[15px] bg-red-600 rounded-full py-[5px] px-[10px] bg-sky-500 text-center text-white font-medium'>Hủy Phòng</span>
         }
     }
-    const onsubmit = () => {
+    const onsubmit = async () => {
         const newdata: any = {
             statusorder: 4,
             _id: id,
@@ -72,10 +67,16 @@ const DtailOrderHistory = (props: Props) => {
             room: orders?.room[0]._id,
             user: orders?.order.user
         }
-        console.log(newdata)
-        update(newdata).then((res: any) => {
-            console.log(res?.status)
-            console.log(res?.statusorder)
+
+        // tăng số lượng voucher khi hủy phòng.
+        if (orders.order.voucher) {
+            await updateVoucher({
+                ...orders.order.voucher,
+                quantity: orders.order.voucher.quantity + 1
+            });
+        }
+
+        await update(newdata).then((res: any) => {
             if (res?.statusorder == 4 || res?.statusorder == 3) {
                 remove(res?.status).then(() => {
                     router.push('/profile/order')
@@ -83,7 +84,6 @@ const DtailOrderHistory = (props: Props) => {
             } else {
                 router.push('/profile/order')
             }
-
         })
     }
 
@@ -92,7 +92,6 @@ const DtailOrderHistory = (props: Props) => {
         const tempCurrency = +currency >= 0 ? currency : 0;
         return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(tempCurrency)
     };
-    console.log(orders?.room[0].image)
     return (
         <div>
             <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">

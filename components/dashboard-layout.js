@@ -25,7 +25,7 @@ export const DashboardLayout = (props) => {
   return (
     <PrivateRouter acceptRole={[RECEPTIONIST_ROLE]}>
       <ThemeProvider theme={theme}>
-        <DashboardLayoutRoot>
+        <DashboardLayoutRoot className='bg-[#eee]'>
           <Box
             sx={{
               display: 'flex',

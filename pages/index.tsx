@@ -2,8 +2,6 @@ import type { NextPage } from 'next'
 import React, { useEffect, useRef, useState } from "react"
 import DatePicker from '../components/DatePicker'
 import SimpleSwiper from '../components/Slide'
-import BackToTop from '../components/BackToTop'
-import HomePageLayout from '../components/Layout/HomePageLayout'
 import ActionAreaCard from '../components/Card'
 import useProducts from '../hook/use-product'
 import Link from 'next/link'
@@ -15,12 +13,13 @@ import {
   DateTimePicker
 } from "@material-ui/pickers";
 import DateFnsUtils from "@material-ui/pickers/adapter/date-fns"; // choose your lib
-import { InputAdornment } from '@mui/material'
+import { InputAdornment, Skeleton } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DialogSearch from '../components/search'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs, { Dayjs } from 'dayjs'
+import SiteLayout from '../components/Layout'
 
 const Home: NextPage = () => {
   const date = new Date()
@@ -33,6 +32,31 @@ const Home: NextPage = () => {
 
   const open = (item: any) => {
     dialogRef.current.openSearchResult(item)
+  }
+
+  const skeletonLoadingRoom = () => {
+    return (
+      <div className='flex justify-between'>
+        <div className="">
+          <Skeleton variant="rounded" width={350} height={100} />
+          <Skeleton variant="text" width={350} height={30} />
+          <Skeleton variant="text" width={350} height={30} />
+          <Skeleton variant="text" width={350} height={30} />
+        </div>
+        <div className="">
+          <Skeleton variant="rounded" width={350} height={100} />
+          <Skeleton variant="text" width={350} height={30} />
+          <Skeleton variant="text" width={350} height={30} />
+          <Skeleton variant="text" width={350} height={30} />
+        </div>
+        <div className="">
+          <Skeleton variant="rounded" width={350} height={100} />
+          <Skeleton variant="text" width={350} height={30} />
+          <Skeleton variant="text" width={350} height={30} />
+          <Skeleton variant="text" width={350} height={30} />
+        </div>
+      </div>
+    )
   }
   const DateRangerPicker = () => {
     return (
@@ -98,6 +122,8 @@ const Home: NextPage = () => {
         <div className="flex justify-center h-[286px] bg-[url('https://res.cloudinary.com/dkhutgvlb/image/upload/v1669818180/33_1654843382_62a2e7f6b03fb_brxw7x.png')] bg-no-repeat bg-cover">
           <h1 className='text-5xl text-center font-semibold text-white mt-5 w-[65%]'>Đặt phòng nhà nghỉ nhanh - tiện lợi</h1>
         </div>
+
+        {/* search */}
         <div className={`${visible ? "visible scale-100 opacity-100" : "invisible scale-50 opacity-0"} duration-300 translate-x-[-50%] translate-y-[-80%] absolute top-[100%] left-[50%] w-[80%] mx-auto bg-white shadow-xl rounded-xl p-4`}>
           <div className="flex justify-center">
             <button className={`${indexTab == 3 ? 'text-[red] border-b border-[red]' : 'border-b border-[white]'} duration-150 hover:text-[red] flex flex-col items-center px-4`} onClick={() => { setIndexTab(3) }}>
@@ -134,14 +160,18 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
+
+      {/* list room */}
       <div className="w-[80%] mx-auto pt-2">
         {/* <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1> */}
-        <>
-          <SimpleSwiper
-            newsList={room.data}
-          />
-        </>
+        {room.data ? <SimpleSwiper
+          newsList={room.data}
+        />
+          : skeletonLoadingRoom()
+        }
       </div>
+
+      {/* list news */}
       <div className="bg-[#eee] py-8">
         <div className="w-[80%] mx-auto">
           <div className="flex justify-between items-center">
@@ -186,10 +216,9 @@ const Home: NextPage = () => {
         </div>
       </div>
       <DialogSearch ref={dialogRef} />
-      <BackToTop visible={visible} />
     </div>
   )
 }
 
-Home.Layout = HomePageLayout
+Home.Layout = SiteLayout
 export default Home

@@ -53,16 +53,17 @@ const Signup = (props: Props) => {
     }
 
     return (
-        <div className=' h-[auto]'>
-            <Link href={'/'}><button className='relative top-[50px] left-[100px] border bg-[#fac26f] hover:bg-[#fed496] px-6 py-2 rounded-full text-white'>Trở về</button></Link>
-            <div className='flex items-center h-[auto] justify-center'>
-                <div className="w-[70%] h-[100%] py-[20px] shadow-2xl rounded-xl mx-auto container flex justify-between">
-                    <div className='maskgroup relative  w-[366px] h-[unset] shadow-2xl shadow-[#ffd79a] bg-[#fed496] overflow-hidden rounded-[30px] '>
+        <div className='overflow-hidden mb:h-[100vh] mbs:h-[110vh]'>
+            <Link href={'/'}><button className='relative mbs:hidden mb:block top-[50px] left-[100px] border bg-[#fac26f] hover:bg-[#fed496] px-6 py-2 rounded-full text-white'>Trở về</button></Link>
+            <div className='flex items-center mb:h-[auto]  justify-center mbs:h-[inherit]'>
+                <div className="mb:w-[70%] mbs:mx-[20px] py-[10px] mbs:w-[100%] h-[fit-content]  shadow-2xl rounded-xl mx-auto  flex justify-between items-center">
+                    <div className='maskgroup relative mbs:hidden mb:block  w-[366px] h-[600px] shadow-2xl shadow-[#ffd79a] bg-[#fed496] overflow-hidden rounded-[30px] '>
                         <div className="a bg-[#efce90] h-[70%] rounded-bl-[108px]"><h2 className='pt-[300px] font-bold text-[50px] leading-[53px] pl-[15px] text-white'>Happy <p className='pl-[20px]'>Weekend</p></h2></div>
                         <div className="b absolute top-[-50px] right-[-60px] w-[196px] h-[187px] bg-[#fbf1cf] overflow-hidden rounded-tl-[200px] rounded-bl-[200px]">a</div>
                         <div className="c absolute bottom-[-50px] left-[-20px] w-[196px] h-[187px] rounded-tr-[108px] rounded-br-[20px]  bg-[#fbf1cf]  ">b</div>
                     </div>
-                    <div className='form mx-[auto]  w-[50%]'>
+                    <div className='form mx-[auto] mb:w-[50%] mbs:w-[90%]'>
+                        <Link className='text-right' href={'/'}><span className='flex justify-end'><button className='mbs:block mb:hidden border bg-[#fac26f] hover:bg-[#fed496] px-6 py-2 rounded-full text-white text-end'>Trở về</button></span></Link>
                         <h3 className='text-5xl font-bold '>Sign Up</h3>
                         <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
                             <input type="hidden" name="remember" defaultValue="true" />

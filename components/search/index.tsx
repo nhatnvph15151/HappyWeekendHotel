@@ -14,6 +14,12 @@ import formatISO from 'date-fns/formatISO'
 import dayjs from 'dayjs';
 import { API_URL } from '../../constants';
 
+// function convert(str) {
+//     var date = new Date(str),
+//       mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+//       day = ("0" + date.getDate()).slice(-2);
+//     return [date.getFullYear(), mnth, day].join("/");
+//   }
 function DialogSearch(props: any, ref: any) {
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false)
@@ -24,8 +30,10 @@ function DialogSearch(props: any, ref: any) {
         openSearchResult: (prop: any) => {
             setLoading(true)
             const searchRooms = async () => {
-                const checkIn = dayjs(prop[0]).toISOString()
-                const checkOut = prop[1] ? dayjs(prop[1]).toISOString() : null
+                var checkIn = dayjs(prop[0]).toISOString()
+                // checkIn = convert(checkIn);
+                var checkOut = prop[1] ? dayjs(prop[1]).toISOString() : null
+                // checkOut = convert(checkOut);
                 console.log(checkIn, checkOut);
                 await fetch(`${API_URL}/room?dateFrom=${checkIn}&dateTo=${checkOut}`)
                     .then((res) => res.json())

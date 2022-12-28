@@ -6,8 +6,8 @@ export const creatOrder = (item:OrderType)=>{
     const url = 'order'
     return instance.post(url,item)
 }
-export const sendMail = (item:OrderType)=>{
-    const url = 'order'
+export const sendMail = (item:any)=>{
+    const url = 'sendMail'
     return instance.post(url,item)
 }
 

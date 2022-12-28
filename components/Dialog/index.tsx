@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { creatOrder } from "../../api/order";
+import { creatOrder, sendMail } from "../../api/order";
 import Swal from 'sweetalert2'
 import { creat } from "../../api/bookedDate";
 import { useRouter } from "next/router";
@@ -34,6 +34,9 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
     }
   }))
   console.log(data);
+ 
+     
+  
   const order = async () => {
     console.log(data);
     await creat(datebooks)
@@ -60,7 +63,7 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
           await creatOrder(newdata)
         }
         await disabledDateBooked();
-
+     
         // giảm số lượng voucher, lưu id user sử dụng voucher.
         if (data.user && data.voucher) {
           const users = [...data.voucher.users, data.user];

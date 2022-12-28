@@ -2,7 +2,7 @@
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { update } from '../../../api/order'
+import { sendMail, update } from '../../../api/order'
 import { update as updateVoucher } from '../../../api/voucher'
 import { DashboardLayout } from '../../../components/dashboard-layout'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -16,6 +16,7 @@ type Form = {
 const DetailOrder = (props: Props) => {
     const [order, setorder] = useState<any>()
     const [facilities, setfacilities] = useState<any>([])
+
     const { register, handleSubmit, formState: { errors } } = useForm<Form>()
     const router = useRouter()
     const { id } = router.query
@@ -27,6 +28,7 @@ const DetailOrder = (props: Props) => {
         }
         get()
     }, [id])
+    
     useEffect(() => {
         const get = async () => {
             await getOnefac(order?.room[0]._id).then((res: any) => {
@@ -37,6 +39,7 @@ const DetailOrder = (props: Props) => {
         }
         get()
     }, [order?.room[0]._id])
+
     const statuss = (value: number) => {
         if (value == 0) {
             return <span className='rounded-full py-[5px] px-[10px] bg-sky-400 text-center text-white font-medium'>Chờ Xác Nhận</span>
@@ -96,12 +99,27 @@ const DetailOrder = (props: Props) => {
             });
         }
 
+
         await update(newdata).then((res: any) => {
             if (res?.statusorder == 4 || res?.statusorder == 3) {
                 remove(res?.status).then(() => {
                     router.push('/admin/order')
                 })
-            } else {
+            }else if(res.statusorder == 1){
+                const datamail: any = {
+                    name: order?.order.name,
+                    email: order?.order.email,
+                    phone: order?.order.phone,
+                    total: order?.order.total,
+                    checkins: order?.order.checkins,
+                    checkouts: order?.order.checkouts,
+                    room: order?.room[0].name,
+                    user: order?.order.user
+                }
+                sendMail(datamail)
+                console.log(sendMail);
+                
+            }else {
                 router.push('/admin/order')
             }
         })

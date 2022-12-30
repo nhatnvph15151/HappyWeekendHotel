@@ -1,4 +1,5 @@
 import { ProductType } from "../types/products";
+import { RoomType } from "../types/room";
 import instance from "./instance";
 
 
@@ -26,7 +27,7 @@ export const update = (product: ProductType) => {
     return instance.put(url, product)
 }
 
-export const searchRoom = () => {
-    const url = `room/`;
-    return instance.get(url)
+export const searchRoom = (data: { checkInDate: string, checkOutDate: string }): Promise<RoomType[]> => {
+    const url = `rooms/search`;
+    return instance.post(url, data);
 }

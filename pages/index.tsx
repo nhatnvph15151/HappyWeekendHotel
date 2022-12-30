@@ -16,8 +16,13 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import { useRouter } from "next/router";
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
 
 const Home = () => {
+  const router = useRouter();
+
   const defaultSelectedDate = useMemo(() => {
     const currentDate = new Date();
     const futureDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
@@ -84,13 +89,56 @@ const Home = () => {
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // tìm kiếm theo giờ
-    if (indexTab === 1) {
-      console.log("checkin", new Date(dateTimeStart as any));
-      console.log("checkout", hours);
-    } else {
-      console.log(selectedDate);
+    if (!selectedDate[0] || !selectedDate[1]) {
+      toastr.info("Vui lòng chọn thời gian trả phòng!");
+      return;
     }
+
+    let query = {};
+
+    // tìm kiếm theo giờ.
+    if (indexTab === 1) {
+      const timeCheckin = new Date(dateTimeStart as any);
+
+      query = {
+        checkin: new Date(
+          timeCheckin.getFullYear(),
+          timeCheckin.getMonth(),
+          timeCheckin.getDate(),
+          timeCheckin.getHours(),
+          timeCheckin.getMinutes(),
+          timeCheckin.getSeconds(),
+        ).toISOString(),
+        checkout: new Date(
+          timeCheckin.getFullYear(),
+          timeCheckin.getMonth(),
+          timeCheckin.getDate(),
+          timeCheckin.getHours() + hours,
+          timeCheckin.getMinutes(),
+          timeCheckin.getSeconds(),
+        ).toISOString(),
+      };
+    } else {
+      const [checkin, checkout] = selectedDate;
+      const dateCheckin = new Date(checkin);
+      const dateCheckout = new Date(checkout);
+
+      // tìm kiếm phòng qua đêm, theo ngày mặc định thời gian checkin là 14h và checkout là 12h trưa hôm sau.
+      query = {
+        checkin: new Date(dateCheckin.getFullYear(), dateCheckin.getMonth(), dateCheckin.getDate(), 14).toISOString(),
+        checkout: new Date(
+          dateCheckout.getFullYear(),
+          dateCheckout.getMonth(),
+          dateCheckout.getDate(),
+          12,
+        ).toISOString(),
+      };
+    }
+
+    router.push({
+      pathname: "search",
+      query,
+    });
   };
 
   const DateRangerPicker = () => {
@@ -130,6 +178,7 @@ const Home = () => {
                     </InputAdornment>
                   ),
                 }}
+                error={!selectedDate[1]}
                 helperText=""
               />
             </>

@@ -5,7 +5,8 @@ import { TasksProgress } from '../../components/dashboard/tasks-progress';
 import { TotalCustomers } from '../../components/dashboard/total-customers';
 import { TotalProfit } from '../../components/dashboard/total-profit';
 import { DashboardLayout } from '../../components/dashboard-layout';
-import { Bar } from "react-chartjs-2"
+import LinearProgress from '@mui/material/LinearProgress';
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   BarElement,
@@ -29,9 +30,11 @@ ChartJS.register(
 )
 function Page() {
   const [date, setDate] = useState("")
+  const [loading, setLoading] = useState(false)
   const [dataDashBoard, setDataDashBoard] = useState([])
   const [totalUser, setTotalUser] = useState([])
   const [revenueByMonth, setRevenueByMonth] = useState<any>({})
+  const [revenueByRoom, setRevenueByRoom] = useState<any>([])
   const defaultCondition = {
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear()
@@ -64,12 +67,16 @@ function Page() {
   }, [condition])
 
   const load = async () => {
-    const { data } = await axios.post("http://localhost:4000/api/revenue", condition);
+    setLoading(true)
+    const revenue = await axios.post("http://localhost:4000/api/revenue", condition);
     const user = await axios.get("http://localhost:4000/api/users");
-    const revenue = await axios.post("http://localhost:4000/api/revenueByMonth");
-    setRevenueByMonth(revenue.data)
-    setDataDashBoard(data);
-    setTotalUser(user.data.length)
+    const revenueByMonth = await axios.post("http://localhost:4000/api/revenueByMonth");
+    const revenueByRoom = await axios.post("http://localhost:4000/api/revenueByRoom");
+    setRevenueByMonth(revenueByMonth.data);
+    setRevenueByRoom(revenueByRoom.data);
+    setDataDashBoard(revenue.data);
+    setTotalUser(user.data.length);
+    setLoading(false)
   }
 
   const prepareToPreview = () => {
@@ -146,7 +153,38 @@ function Page() {
       },
     }]
   }
-
+  const dataRevenueByRoom = {
+    labels: revenueByRoom.map((item:any)=>item._id),
+    datasets: [{
+      data: revenueByRoom.map((item:any)=>item.total),
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(255, 205, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(201, 203, 207, 0.2)'
+      ],
+      borderColor: [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(54, 162, 235)',
+        'rgb(153, 102, 255)',
+        'rgb(201, 203, 207)'
+      ],
+      borderWidth: 1,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      },
+    }]
+  }
   const options = {
     responsive: true,
     plugins: {
@@ -159,8 +197,50 @@ function Page() {
       }
     }
   };
+  const options2 = {
+    indexAxis: 'y' as const,
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: "Danh sách phòng có công suất sử dụng cao"
+      }
+    }
+  };
+  const optionsHighRevenue = {
+    indexAxis: 'y' as const,
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: "Danh sách phòng có doanh thu cao"
+      }
+    }
+  };
+
+  const optionsUserHighRevenue = {
+    indexAxis: 'y' as const,
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: "Danh sách khách hàng thân thiết"
+      }
+    }
+  };
+  
   return (
     <div className='px-2'>
+      {loading ? <LinearProgress className='fixed top-[65px] z-50 w-full'/> : <></>}
       <Head>
         <title>
           Dashboard
@@ -179,7 +259,7 @@ function Page() {
             </svg>
           </p>
           <p className='text-2xl'>{numberWithCommas(dataDashBoard.reduce((pre, cur: any) => {
-            return pre + cur.total
+            return pre + cur.total || 0
           }, 0))} VND</p>
           <span>Doanh thu</span>
 
@@ -259,6 +339,22 @@ function Page() {
       </div>
       <div className='m-4 p-2 bg-white rounded-xl shadow-xl'>
         <Bar data={data} options={options} className='w-[100%]' />
+      </div>
+      <div className="flex">
+        <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
+          <Bar data={dataRevenueByRoom} options={options2} className='w-[100%]' />
+        </div>
+        <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
+          <Bar data={data} options={optionsHighRevenue} className='w-[100%]' />
+        </div>
+      </div>
+      <div className="flex">
+        <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
+          <Bar data={data} options={optionsUserHighRevenue} className='w-[100%]' />
+        </div>
+        <div className='m-4 p-2 bg-white rounded-xl shadow-xl basis-1/2'>
+          <Bar data={data} options={optionsHighRevenue} className='w-[100%]' />
+        </div>
       </div>
     </div>
   )

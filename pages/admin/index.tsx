@@ -154,7 +154,7 @@ function Page() {
     }]
   }
   const dataRevenueByRoom = {
-    labels: revenueByRoom.map((item:any)=>item._id),
+    labels: revenueByRoom.map((item:any)=>item.name),
     datasets: [{
       data: revenueByRoom.map((item:any)=>item.total),
       backgroundColor: [

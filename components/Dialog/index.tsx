@@ -7,6 +7,7 @@ import { Button, Dialog, DialogActions, DialogTitle, IconButton } from "@mui/mat
 import CloseIcon from '@mui/icons-material/Close';
 import { bangking } from "../../api/banking";
 import { update } from "../../api/voucher";
+import dayjs from "dayjs";
 
 type PostProps = {
 
@@ -15,15 +16,7 @@ type PostProps = {
 const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
   const [displayBasic2, setDisplayBasic2] = useState<any>(false);
   const router = useRouter()
-  const dateToString =
-    ("0" + (data.checkins?.getUTCDate() + 1)).slice(-2) + "/" +
-    ("0" + (data.checkins?.getUTCMonth() + 1)).slice(-2) + "/" +
-    data.checkins?.getUTCFullYear()
-
-  const dateFromString =
-    ("0" + (data.checkouts?.getUTCDate() + 1)).slice(-2) + "/" +
-    ("0" + (data.checkouts?.getUTCMonth() + 1)).slice(-2) + "/" +
-    data.checkouts?.getUTCFullYear()
+  
   const handleClose = () => {
     setDisplayBasic2(false)
   }
@@ -33,10 +26,7 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
       setDisplayBasic2(true)
     }
   }))
-  console.log(data);
  
-     
-  
   const order = async () => {
     console.log(data);
     await creat(datebooks)
@@ -143,11 +133,11 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
                 </tr>
                 <tr className="bg-[#F5FAFF] ">
                   <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Check In</label> </td>
-                  <td className="py-[5px] pl-[42px] text-[#424241]"> {dateToString} </td>
+                  <td className="py-[5px] pl-[42px] text-[#424241]"> {dayjs(datebooks.dateFrom).format("HH:mm DD/MM/YYYY")} </td>
                 </tr>
                 <tr className="bg-[#ffffff]">
                   <td className="py-[10px] pl-[20px]"><label htmlFor="" className="font-medium text-[#A7A7A7]">Check Out</label> </td>
-                  <td className="py-[5px] pl-[42px] text-[#424241]">{dateFromString}</td>
+                  <td className="py-[5px] pl-[42px] text-[#424241]">{dayjs(datebooks.dateTo).format("HH:mm DD/MM/YYYY")}</td>
                 </tr>
               </tbody>
             </table>
@@ -173,7 +163,7 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
                     // router.push('/payment')
                     order()
                     bangking({
-                      "total": data.total - data.voucher.discount >= 0 ? data.total - data.voucher.discount : 0,
+                      "total": data.total,
                       "orderDescription": "",
                       "orderType": "billpayment",
                       "language": "vn",

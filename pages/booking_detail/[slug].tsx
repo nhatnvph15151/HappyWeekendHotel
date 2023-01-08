@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { FormEvent, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import toastr from "toastr";
 import 'toastr/build/toastr.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -30,7 +30,8 @@ import DialogConfirm from '../../components/Dialog'
 import { DateTimePicker, LocalizationProvider } from '@material-ui/pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs, { Dayjs } from 'dayjs'
-import { Tab, Tabs, TextField, Typography } from '@mui/material'
+import { Tab, Tabs, Typography } from '@mui/material'
+import TextField from "@material-ui/core/TextField";
 import BedtimeIcon from '@mui/icons-material/Bedtime';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -43,6 +44,10 @@ import useComment from '../../hook/use-comment'
 import { CommentType, CommentType2 } from '../../types/comment'
 import { getVoucherByCode } from '../../api/voucher';
 import { Voucher } from '../../types/voucher';
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 type ProductProps = {
     product: ProductType
@@ -95,8 +100,6 @@ const BookingDetail = () => {
     const { data: product } = useProducts(slug)
     const { data: comments, addComment, removeComment } = useComment(product?._id);
 
-    const [values, setValues] =
-        React.useState<Dayjs | null>(null);
     const [value, setValue] = React.useState(0);
     const [date, setDate] = React.useState<any>([])//date range pciker
     const [datebook, setdatebook] = React.useState({})
@@ -133,6 +136,15 @@ const BookingDetail = () => {
     const [errVoucher, setErrVoucher] = useState<string>();
 
     const [voucherData, setVoucherData] = useState<Voucher | null>(null);
+
+    // thời gian nhận phòng theo giờ
+    const [dateTimeStart, setDateTimeStart] = useState<Dayjs | null>(() => {
+        const currentDate = new Date();
+        const futureDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1, 6, 30);
+
+        return dayjs(futureDate.toISOString());
+    });
+    const [hours, setHours] = useState<number>(2);
 
     useEffect(() => {
         const getfacilities = async () => {
@@ -247,6 +259,7 @@ const BookingDetail = () => {
 
     const getDate = (dateData: any) => { //date range pciker
         setDate(dateData);
+        console.log("dateData", dateData);
     }
     const on = async () => { }
 
@@ -262,6 +275,17 @@ const BookingDetail = () => {
     }
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        if (newValue === 2) {
+            setDateTimeStart(() => {
+                const currentDate = new Date();
+                const futureDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1, 6, 30);
+
+                return dayjs(futureDate.toISOString());
+            });
+            setHours(2);
+            settotaldate(2);
+        }
+        
         setValue(newValue);
     };
 
@@ -276,21 +300,54 @@ const BookingDetail = () => {
         const user = JSON.parse(localStorage.getItem('user') as string)?._id
         const total = chaprice * totaldate
 
-        const neworder: any = {
+        let neworder: any = {
             ...data,
             user: user,
             room: product._id,
             statusorder: "0",
             total: total,
             status: status,
-            checkins: date[0],
-            checkouts: date[1],
             voucher: tempVoucher
         }
-        const dateBooked: any = {
-            dateFrom: date[0],
-            dateTo: date[1],
+
+        let dateBooked: any = {
             room: product._id
+        }
+
+        // đặt phòng theo giờ.
+        if (value === 2) {
+            const dateFrom = dayjs(dateTimeStart).toISOString();
+            const dateTo = dayjs(dateTimeStart).add(hours, "hours").toISOString();
+            dateBooked = {
+                ...dateBooked,
+                dateFrom,
+                dateTo
+            };
+
+            neworder = {
+                ...neworder,
+                checkins: dateFrom,
+                checkouts: dateTo
+            }
+        } else {
+            const [ a, b ] = date;
+
+            // thời gian checkin là 14h và checkout là 12h trưa hôm sau
+            // nếu đặt phòng theo ngày và qua đêm
+            const dateFrom = dayjs(a).hour(14).minute(0).second(0).millisecond(0).toISOString();
+            const dateTo = dayjs(b).hour(12).minute(0).second(0).millisecond(0).toISOString();
+
+            dateBooked = {
+                ...dateBooked,
+                dateFrom,
+                dateTo
+            };
+
+            neworder = {
+                ...neworder,
+                checkins: dateFrom,
+                checkouts: dateTo
+            }
         }
 
         setdatebook(dateBooked)
@@ -370,6 +427,52 @@ const BookingDetail = () => {
         const tempCurrency = +currency >= 0 ? currency : 0;
         return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(tempCurrency)
     };
+
+    const DateTimePickers = () => {
+        return (
+          <div className='d-flex'>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                disablePast
+                label="Nhận phòng"
+                inputFormat="HH:mm, DD [tháng] MM"
+                renderInput={(params) => <TextField {...params} size="small" helperText="" />}
+                value={dateTimeStart}
+                onChange={(newValue) => {
+                  setDateTimeStart(newValue);
+                }}
+              />
+            </LocalizationProvider>
+    
+            <div className="inline-block min-w-[150px] pl-4">
+              <FormControl className='w-full'>
+                <InputLabel id="demo-simple-select-label">Số giờ sử dụng</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={hours as any}
+                  label="Age"
+                  onChange={(e: any) => {
+                    setHours(+e.target.value);
+                    settotaldate(+e.target.value);
+                  }}
+                >
+                  <MenuItem value={1}>1 giờ</MenuItem>
+                  <MenuItem value={2}>2 giờ</MenuItem>
+                  <MenuItem value={3}>3 giờ</MenuItem>
+                  <MenuItem value={4}>4 giờ</MenuItem>
+                  <MenuItem value={5}>5 giờ</MenuItem>
+                  <MenuItem value={6}>6 giờ</MenuItem>
+                  <MenuItem value={7}>7 giờ</MenuItem>
+                  <MenuItem value={8}>8 giờ</MenuItem>
+                  <MenuItem value={9}>9 giờ</MenuItem>
+                  <MenuItem value={10}>10 giờ</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          </div>
+        );
+      };
 
     return (
         <div className='w-[80%] mx-auto py-2'>
@@ -681,7 +784,7 @@ const BookingDetail = () => {
                                             </Box>
                                             <div className='flex mt-[10px] font-medium text-gray-500'>
                                                 Giá phòng: {formatCurrency(chaprice)}
-                                                <div className='ml-[40px]'>Số ngày ở: {totaldate}</div>
+                                                {value !== 2 && <div className='ml-[40px]'>Số ngày ở: {totaldate}</div>}
                                             </div>
 
                                             <div className='mt-[10px] font-medium text-gray-500'>
@@ -699,30 +802,16 @@ const BookingDetail = () => {
                                             <div className='mt-[10px] font-bold text-[18px] text-orange-500'>
                                                 Tổng: {totaldate ? formatCurrency((chaprice * totaldate) - (+`${!errVoucher?.trim().length && voucherData ? voucherData?.discount : 0}`)) : formatCurrency(0)}
                                             </div>
-                                            <TabPanel value={value} index={2}>
-                                                <div className='mt-6'>
-                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                        <DateTimePicker
-                                                            renderInput={(props) => <TextField helperText="" {...props} />}
-                                                            label="DateTimePicker"
-                                                            value={'2022-11-18T08:20:01.000Z'}
-                                                            onChange={(newValues: any) => {
-                                                                setValues(newValues)
-                                                                setDate([
-                                                                    newValues.$d,
-                                                                    addDays(new Date(newValues.$d), 1)
-                                                                ])
-                                                            }}
-                                                        />
-                                                    </LocalizationProvider>
 
-                                                </div>
+                                            {/* giá theo giờ */}
+                                            <TabPanel value={value} index={2}>
+                                                <DateTimePickers />
                                             </TabPanel>
                                             <TabPanel value={value} index={0}>
-                                                <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} id={product?._id ? product._id : ''} />
+                                                <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} />
                                             </TabPanel>
                                             <TabPanel value={value} index={1}>
-                                                <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} id={product?._id ? product._id : ''} />
+                                                <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} />
                                             </TabPanel>
 
                                         </Box>

@@ -4,6 +4,7 @@ import { DashboardLayout } from '../../../components/dashboard-layout'
 import OrderHook from '../../../hook/use-order'
 import { OrderType } from '../../../types/order'
 import { Button, TablePagination, Tooltip } from '@mui/material'
+import dayjs from 'dayjs'
 type Props = {}
 
 const index = (props: Props) => {
@@ -36,14 +37,6 @@ const index = (props: Props) => {
         }
     }
 
-    const formatDate = (date: any) => {
-        const abc = new Date(date)
-        const dateformat =
-            ("0" + (abc?.getUTCDate() + 1)).slice(-2) + "/" +
-            ("0" + (abc?.getUTCMonth() + 1)).slice(-2) + "/" +
-            abc?.getUTCFullYear()
-        return dateformat
-    }
     return (
         <div>
             <table className="min-w-full leading-normal scroll">
@@ -76,7 +69,7 @@ const index = (props: Props) => {
                 </thead>
                 <tbody>
                     {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item: any, index: number) => (
-                        <tr >
+                        <tr key={index}>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p className="text-gray-900 whitespace-no-wrap">
                                     {index + 1}
@@ -112,7 +105,7 @@ const index = (props: Props) => {
                             </td>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <p className="text-gray-900 whitespace-no-wrap">
-                                    {formatDate(item.checkins)}
+                                    {dayjs(item.checkins).format("HH:mm DD/MM/YYYY")}
                                 </p>
                             </td>
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">

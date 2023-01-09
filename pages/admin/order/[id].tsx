@@ -9,6 +9,7 @@ import { remove } from "../../../api/bookedDate";
 import { getOnefac } from "../../../api/facilities";
 import { DashboardLayout } from "../../../components/dashboard-layout";
 import { API_URL } from "../../../constants";
+import dayjs from "dayjs";
 type Props = {};
 type Form = {
   statusorder: number;
@@ -181,15 +182,15 @@ const DetailOrder = (props: Props) => {
               <div>
                 <span className="text-[18px] font-medium">Thời gian CkeckIn</span> :
                 <div className="ml-[20px] mt-[20px]">
-                  <span>Giờ:</span> {order?.order.checkins?.slice(11, 16)} <br />
-                  <span>Ngày:</span> {order?.order.checkins?.slice(0, 10)}
+                  <span>Giờ:</span> {dayjs(order?.order.checkins).format("HH:mm")} <br />
+                  <span>Ngày:</span> {dayjs(order?.order.checkins).format("DD/MM/YYYY")}
                 </div>
               </div>
               <div className="ml-[30px]">
                 <span className="text-[18px] font-medium">Thời gian CkeckOut :</span>
                 <div className="ml-[20px] mt-[20px]">
-                  <span>Giờ:</span> {order?.order.checkouts?.slice(11, 16)} <br />
-                  <span>Ngày:</span> {order?.order.checkouts?.slice(0, 10)}
+                  <span>Giờ:</span> {dayjs(order?.order.checkouts).format("HH:mm")} <br />
+                  <span>Ngày:</span> {dayjs(order?.order.checkouts).format("DD/MM/YYYY")}
                 </div>
               </div>
               <div className="ml-[30px]">

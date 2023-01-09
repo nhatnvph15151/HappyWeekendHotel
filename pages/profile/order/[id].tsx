@@ -13,6 +13,7 @@ import { remove } from "../../../api/bookedDate";
 import { getOnefac } from "../../../api/facilities";
 import { API_URL } from "../../../constants";
 import ProfileLayout from "../../../components/Layout/ProfileLayout";
+import dayjs from "dayjs";
 
 type Props = {};
 
@@ -247,10 +248,10 @@ const DtailOrderHistory = (props: Props) => {
               <div className="py-[30px] w-[500px] h-[100%] px-[40px] border-solid border-2 border-indigo-600 rounded-xl">
                 <h1 className="text-center text-[20px] font-bold mb-[25px]">Thông tin </h1>
                 <p className="text-[17px] font-medium">
-                  Check In <span className="float-right">{orders?.order.checkins?.slice(0, 10)}</span>
+                  Check In <span className="float-right">{dayjs(orders?.order.checkins).format("HH:mm DD/MM/YYYY")}</span>
                 </p>
                 <p className="py-[10px] text-[17px] font-medium">
-                  Check out <span className="float-right">{orders?.order.checkouts?.slice(0, 10)}</span>
+                  Check out <span className="float-right">{dayjs(orders?.order.checkouts).format("HH:mm DD/MM/YYYY")}</span>
                 </p>
                 <p className="py-[10px] text-[17px] font-medium">
                   Tạm tính <span className="float-right">{formatCurrency(orders?.order.total)}</span>

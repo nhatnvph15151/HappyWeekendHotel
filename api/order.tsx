@@ -32,3 +32,9 @@ export const checkUserBookRoom = (data: { user: string; room?: string }): Promis
   const url = "order/checkUserBookRoom";
   return instance.post(url, data);
 };
+
+// kiểm tra trạng thái phòng trước khi đặt phòng.
+export const checkStatusRoom = (data: { checkin: Date, checkout: Date, room: string }): Promise<{isRoomEmpty: boolean}> => {
+  const url = "order/checkStatusRoom";
+  return instance.post(url, data);
+}

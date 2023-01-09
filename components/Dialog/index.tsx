@@ -1,13 +1,15 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { Dialog, DialogActions, DialogTitle, IconButton } from "@mui/material";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { creatOrder } from "../../api/order";
+import { checkStatusRoom, creatOrder } from "../../api/order";
 import Swal from "sweetalert2";
 import { update } from "../../api/voucher";
 import { creat } from "../../api/bookedDate";
 import { useRouter } from "next/router";
 import { bangking } from "../../api/banking";
 import dayjs from "dayjs";
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
 
 const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
   const [displayBasic2, setDisplayBasic2] = useState<any>(false);
@@ -63,6 +65,18 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
         });
       });
   }
+
+  const handleCheckRoom = async () => {
+    // kiểm tra phòng đang có khách không.
+    const { isRoomEmpty } = await checkStatusRoom({
+      checkin: data.checkins,
+      checkout: data.checkouts,
+      room: data.room,
+    });
+    
+    return isRoomEmpty;
+  }
+
   //format tiền.
   const formatCurrency = (currency: any) => {
     const money = +currency >= 0 ? currency : 0;
@@ -183,25 +197,39 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
           <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
             <div className="flex">
               <div className="mr-[20px]">
-                <button className="px-4 py-2 rounded-md shadow-xl bg-[green] text-white" onClick={() => order()}>
+                <button className="px-4 py-2 rounded-md shadow-xl bg-[green] text-white" onClick={async () => {
+                  const isRoomEmpty = await handleCheckRoom();
+                  if (isRoomEmpty) {
+                    order()
+                  } else {
+                    toastr.info("Phòng bạn đang chọn hiện tại đang có khách, vui lòng thử chọn lại");
+                  }
+                }}>
                   Thanh toán trực tiếp
                 </button>
               </div>
               <div>
                 <button
                   className="px-4 py-2 rounded-md shadow-xl bg-[orange] text-white"
-                  onClick={() => {
-                    // router.push('/payment')
-                    order();
-                    bangking({
-                      total: data.total,
-                      orderDescription: "",
-                      orderType: "billpayment",
-                      language: "vn",
-                      bankCode: "",
-                    }).then((res: any) => {
-                      router.push(`${res.redirect}`);
-                    });
+                  onClick={async () => {
+                    const isRoomEmpty = await handleCheckRoom();
+
+                    if (isRoomEmpty) {
+                      // router.push('/payment')
+                      await order();
+                      bangking({
+                        total: data.total,
+                        orderDescription: "",
+                        orderType: "billpayment",
+                        language: "vn",
+                        bankCode: "",
+                      }).then((res: any) => {
+                        router.push(`${res.redirect}`);
+                      });
+                    } else {
+                      toastr.info("Phòng bạn đang chọn hiện tại đang có khách, vui lòng thử chọn lại");
+                    }
+                    
                   }}
                 >
                   Thanh toán trực tuyến

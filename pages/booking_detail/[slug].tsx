@@ -356,6 +356,7 @@ const BookingDetail = () => {
     setdataorder(neworder);
     openDialogConfirm();
     handleClose();
+    setValue(0);
   };
 
   // validate voucher

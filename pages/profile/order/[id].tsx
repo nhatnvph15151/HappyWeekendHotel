@@ -30,7 +30,7 @@ const DtailOrderHistory = (props: Props) => {
       const { data } = await axios.get(`${API_URL}/order/${id}`);
       setorder(data);
     };
- 
+
     get();
   }, [id]);
   useEffect(() => {
@@ -75,7 +75,7 @@ const DtailOrderHistory = (props: Props) => {
       );
     }
   };
-  
+
   // format tiền.
   const formatCurrency = (currency: number) => {
     const tempCurrency = +currency >= 0 ? currency : 0;
@@ -113,7 +113,21 @@ const DtailOrderHistory = (props: Props) => {
       }
     });
   };
- 
+  const methodPay = (key: string) => {
+    if (key == "0") {
+      return <div>
+        Phương thức:  <span>Thanh toán trực tiếp</span>
+      </div>
+    } else if (key == "1") {
+      return <div>
+        Phương thức: <span>Thanh toán trực tuyến</span>. <br /> <span>Chưa thanh toán</span>
+      </div>
+    } else if (key == "2") {
+      return <div>
+        Phương thức: <span>Thanh toán trực tuyến</span>. <br /> <span>Đã thanh toán</span>
+      </div>
+    }
+  }
   return (
     <div>
       <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
@@ -211,7 +225,7 @@ const DtailOrderHistory = (props: Props) => {
           <div className="flex flex-row justify-between mb-[32px]">
             <h2 className="text-[40px] font-bold">Phòng Đặt của tôi</h2>
           </div>
-    
+
           <div>
             <div className="flex">
               <div className="mr-[50px] w-[600px]">
@@ -271,6 +285,9 @@ const DtailOrderHistory = (props: Props) => {
                   </span>
                 </p>
                 <p className="py-[30px] text-[17px] font-medium">Trạng thái {statuss(orders?.order.statusorder)}</p>
+                <div>
+                  {methodPay(orders?.order.methodpay)}
+                </div>
                 <div className="flex mt-[30px]">
                   <div>
                     <Button

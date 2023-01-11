@@ -414,8 +414,8 @@ const BookingDetail = () => {
                     <h1 className='text-[35px] font-medium text-[#FFA500]'>Giá Phòng</h1>
                     <div className='flex mt-[30px] mbs:mt-[10px] mb:mt-[30px] mbs:flex-col mb:flex-row'>
                         {
-                            product?.price?.map((item: any) => (
-                                <div className='mb:px-[30px] mbs:px-[0px]'>
+                            product?.price?.map((item: any, index: any) => (
+                                <div key={index} className='mb:px-[30px] mbs:px-[0px]'>
                                     <span className='font-medium text-[20px] text-red-500'>{item.title}:</span>
                                     <span className='ml-[10px] text-[18px] text-red-500'>{new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(item.value)}</span>
                                 </div>
@@ -426,8 +426,8 @@ const BookingDetail = () => {
                 <div className='mt-[50px] mbs:mt-[20px] mb:mt-[50px]'>
                     <h1 className='text-[35px] font-medium text-[#FFA500]'>Tiện Ích</h1>
                     <div className='grid mb:grid-cols-3 mb:gap-10 mbs:gap-4 mb:mb-[50px] mbs:mb-[10px] mbs:grid-cols-1 '>
-                        {facilities.map((item: any) => (
-                            <div className='flex mb:ml-[70px] mb:mt-[30px] mbs:ml-[0px] mbs:mt-[10px]'>
+                        {facilities.map((item: any, index: any) => (
+                            <div key={index} className='flex mb:ml-[70px] mb:mt-[30px] mbs:ml-[0px] mbs:mt-[10px]'>
                                 <img width={45} className='mr-[20px] sepia mbs:w-[30px] mb:w-[45px]' src={`${item.image}`} alt="" />
                                 <p className='self-center text-[18px] text-gray-500 font-medium'>{item.name}</p>
                             </div>

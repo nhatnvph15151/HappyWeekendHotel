@@ -33,10 +33,7 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
       setDisplayBasic2(true)
     }
   }))
-  console.log(data);
  
-     
-  
   const order = async () => {
     console.log(data);
     await creat(datebooks)

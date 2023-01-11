@@ -32,10 +32,9 @@ export default function BasicDateRangePicker({ id, getDate, settotaldate }: prop
     const time = Math.abs(datetwo - dateone)
     const days = Math.ceil(time / (1000 * 60 * 60 * 24))
     settotaldate(days)
-    // console.log(datetwo)
-    const getBookedDates = () => {
+    const getBookedDates = (date: any = null) => {
         dataDate?.forEach((item: any) => {
-            if (item.room == id) {
+            if (item.room == id ) {
                 const startDate = new Date(item.dateFrom).getTime()
                 const endDate = new Date(item.dateTo).getTime()
                 const rangeDate = ((((endDate - startDate) / 1000) / 60) / 60) / 24
@@ -45,18 +44,43 @@ export default function BasicDateRangePicker({ id, getDate, settotaldate }: prop
                 }
                 bookedDates.push(startDate, endDate)
             }
+            // else if (selectedDate[0]) {
+            //     if (item.room == id ) {
+            //         const startDate = new Date(item.dateFrom).getTime()
+            //         const endDate = new Date(item.dateTo).getTime()
+            //         const rangeDate = ((((endDate - startDate) / 1000) / 60) / 60) / 24
+            //         let rangeDateValue = startDate;
+            //         for (let i = 0; i < rangeDate; i++) {
+            //             bookedDates.push(rangeDateValue += 86400000)
+            //         }
+            //         bookedDates.push(startDate, endDate)
+            //     }
+            // }
             else return bookedDates
         })
+
     }
-    getBookedDates()
+    getBookedDates();
 
     const disableBookedDays = (date: any) => {
         const convertedIntoDateObject = bookedDates.map((bookedDate) => {
+            // console.log(new Date(bookedDate));
             return new Date(bookedDate).getTime();
         });
-        //  return true
+
         return date.getTime() === 0 || date.getTime() === 6 || convertedIntoDateObject.includes(date.getTime());
     };
+
+    // const disabledDate = (date: any) => {
+    //     let _disabledDate = disableBookedDays(date);
+    //     let disable = _disabledDate;
+    //     if (selectedDate[0] && _disabledDate) {
+    //         console.log(_disabledDate);
+    //         // debugger
+    //         disable = true;
+    //     }
+    //     return _disabledDate;
+    // }
     return (
         <LocalizationProvider dateAdapter={DateFnsUtils}>
             <DateRangePicker

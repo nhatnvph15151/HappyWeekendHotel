@@ -257,7 +257,7 @@ const BookingDetail = () => {
     setDate(dateData);
     console.log("dateData", dateData);
   };
-  const on = async () => {};
+  const on = async () => { };
 
   const openDialogConfirm = () => {
     dialogConfirmRef.current.open("hi");
@@ -310,6 +310,7 @@ const BookingDetail = () => {
       total: total,
       status: status,
       voucher: tempVoucher,
+      methodpay: "0"
     };
 
     let dateBooked: any = {
@@ -398,7 +399,7 @@ const BookingDetail = () => {
         if (!isBooked) {
           setErrVoucher("Bạn không đủ điều kiện sử dụng Voucher");
           isValid = false;
-        } else {  
+        } else {
           setErrVoucher("");
           isValid = true;
         };
@@ -486,9 +487,8 @@ const BookingDetail = () => {
               <h1 className="text-[#FFA500] mb:text-4xl mbs:text-2xl font-semibold">{product?.name}</h1>
 
               <button
-                className={`bg-[orange] px-4 py-2 rounded-md duration-300 ${
-                  open ? "invisible translate-y-[-20px] opacity-0" : "visible translate-y-0 opacity-100"
-                }`}
+                className={`bg-[orange] px-4 py-2 rounded-md duration-300 ${open ? "invisible translate-y-[-20px] opacity-0" : "visible translate-y-0 opacity-100"
+                  }`}
                 onClick={handleClickOpen}
               >
                 Đặt phòng
@@ -909,9 +909,9 @@ const BookingDetail = () => {
                         Tổng:{" "}
                         {totaldate
                           ? formatCurrency(
-                              chaprice * totaldate -
-                                +`${!errVoucher?.trim().length && voucherData ? voucherData?.discount : 0}`,
-                            )
+                            chaprice * totaldate -
+                            +`${!errVoucher?.trim().length && voucherData ? voucherData?.discount : 0}`,
+                          )
                           : formatCurrency(0)}
                       </div>
 

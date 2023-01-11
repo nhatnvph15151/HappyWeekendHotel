@@ -14,6 +14,7 @@ import "toastr/build/toastr.min.css";
 const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
   const [displayBasic2, setDisplayBasic2] = useState<any>(false);
   const router = useRouter();
+  console.log(data);
 
   const handleClose = () => {
     setDisplayBasic2(false);
@@ -27,7 +28,7 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
 
   const order = async () => {
     await creat(datebooks)
-      .then(async(res: any) => {
+      .then(async (res: any) => {
         const newdataOrder: any = {
           status: res._id,
           name: data.name,
@@ -38,7 +39,8 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
           checkouts: data.checkouts,
           room: data.room,
           statusorder: data.statusorder,
-          user: data.user
+          user: data.user,
+          methodpay: data.methodpay
         };
         // check nếu user áp voucher
         if (data && data.voucher) {
@@ -47,11 +49,63 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
         await creatOrder(newdataOrder);
         // giảm số lượng voucher, lưu id user nếu user sử dụng voucher.
         if (data.voucher && data.user) {
-          const users = [ ...data.voucher.users, data.user ];
+          const users = [...data.voucher.users, data.user];
           const voucherData = {
-              ...data.voucher,
-              quantity: data.voucher.quantity - 1 >= 0 ? data.voucher.quantity - 1 : 0,
-              users,
+            ...data.voucher,
+            quantity: data.voucher.quantity - 1 >= 0 ? data.voucher.quantity - 1 : 0,
+            users,
+          }
+          await update(voucherData);
+        };
+        Swal.fire("Đặt phòng thành công", "Thông tin chi tiết sẽ được gửi tới email của bạn.", "success");
+        handleClose()
+      })
+      .catch(() => {
+        Swal.fire({
+          title: "Có lỗi gì đó.",
+          icon: "error",
+        });
+      });
+  }
+
+
+  const orderTT = async () => {
+    await creat(datebooks)
+      .then(async (res: any) => {
+        const newdataOrder: any = {
+          status: res._id,
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          total: data.total,
+          checkins: data.checkins,
+          checkouts: data.checkouts,
+          room: data.room,
+          statusorder: data.statusorder,
+          user: data.user,
+          methodpay: "1"
+        };
+        // check nếu user áp voucher
+        if (data && data.voucher) {
+          newdataOrder.voucher = data.voucher._id;
+        };
+        await creatOrder(newdataOrder).then((responsive: any) => {
+          bangking({
+            'id_order': responsive._id,
+            "total": responsive.total,
+            "orderDescription": "",
+            "orderType": "billpayment",
+            "language": "vn",
+            "bankCode": ""
+          }).then((res: any) => { router.push(`${res.redirect}`) })
+        });
+        // giảm số lượng voucher, lưu id user nếu user sử dụng voucher.
+        if (data.voucher && data.user) {
+          const users = [...data.voucher.users, data.user];
+          const voucherData = {
+            ...data.voucher,
+            quantity: data.voucher.quantity - 1 >= 0 ? data.voucher.quantity - 1 : 0,
+            users,
           }
           await update(voucherData);
         };
@@ -73,7 +127,7 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
       checkout: data.checkouts,
       room: data.room,
     });
-    
+
     return isRoomEmpty;
   }
 
@@ -151,7 +205,7 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
                       {data.voucher.code} (-{formatCurrency(data.voucher.discount)})
                     </td>
                   </tr >
-                 )}
+                )}
                 <tr className=" bg-[#ffffff]">
                   <td className="py-[10px] pl-[20px]">
                     <label htmlFor="" className="font-medium text-[#A7A7A7]">
@@ -215,21 +269,11 @@ const DialogConfirm = ({ data, datebooks, room }: any, ref: any) => {
                     const isRoomEmpty = await handleCheckRoom();
 
                     if (isRoomEmpty) {
-                      // router.push('/payment')
-                      await order();
-                      bangking({
-                        total: data.total,
-                        orderDescription: "",
-                        orderType: "billpayment",
-                        language: "vn",
-                        bankCode: "",
-                      }).then((res: any) => {
-                        router.push(`${res.redirect}`);
-                      });
+                      orderTT()
                     } else {
                       toastr.info("Phòng bạn đang chọn hiện tại đang có khách, vui lòng thử chọn lại");
                     }
-                    
+
                   }}
                 >
                   Thanh toán trực tuyến

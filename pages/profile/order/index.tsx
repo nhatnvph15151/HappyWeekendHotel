@@ -52,8 +52,8 @@ const Orderlisst = (props: Props) => {
     }
     return (
         <div className=''>
-            <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
-                <div className="account_sidebar flex flex-col w-[370px] h-fit border  border-gray-20 rounded-3xl p-[24px] pb-[70px] mr-[32px]">
+            <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] mb:flex  mbs:inline ">
+                <div className="account_sidebar flex flex-col w-[370px] h-fit border  border-gray-20 rounded-3xl p-[24px] pb-[70px] mr-[32px] mb: mbs:mx-auto">
                     <div className="account_info px-[16px] py-[24px]">
                         <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user?.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
                         <div className='text-center font-medium text-2xl'>{user?.phone}</div>
@@ -86,7 +86,7 @@ const Orderlisst = (props: Props) => {
                             Đăng Xuất</span></a></div>
 
                 </div>
-                <div className="profile_account relative w-[768px]">
+                <div className="profile_account relative  mx-auto">
                     <div className="flex flex-row justify-between mb-[32px]">
                         <h2 className='text-[40px] font-bold'>Phòng Đặt của tôi</h2>
                     </div>
@@ -129,12 +129,12 @@ const Orderlisst = (props: Props) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm mb: mbs:hidden">
                                             <p className="text-gray-900 whitespace-no-wrap">
                                                 <img width={100} src={`${item?.room?.image?.[0]}`} alt="" />
                                             </p>
                                         </td>
-                                        <td className=" py-5 border-b border-gray-200 bg-white text-sm">
+                                        <td className=" py-5 border-b border-gray-200 bg-white text-sm mb: mbs:hidden">
                                             <p className="text-gray-900 whitespace-no-wrap">
                                                 {item.room?.description}
                                             </p>
@@ -154,10 +154,10 @@ const Orderlisst = (props: Props) => {
                             </tbody>
                         </table>
                     </div>
-
+                    </div>
                 </div>
             </div>
-        </div>
+       
     )
 }
 

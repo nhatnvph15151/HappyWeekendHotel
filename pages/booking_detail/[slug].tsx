@@ -255,7 +255,6 @@ const BookingDetail = () => {
   const getDate = (dateData: any) => {
     //date range pciker
     setDate(dateData);
-    console.log("dateData", dateData);
   };
   const on = async () => { };
 
@@ -358,6 +357,7 @@ const BookingDetail = () => {
     openDialogConfirm();
     handleClose();
     setValue(0);
+    setchaprice(product.price[0].value);
   };
 
   // validate voucher
@@ -920,10 +920,10 @@ const BookingDetail = () => {
                         <DateTimePickers />
                       </TabPanel>
                       <TabPanel value={value} index={0}>
-                        <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} />
+                        <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} id={product?._id ? product._id : ''} />
                       </TabPanel>
                       <TabPanel value={value} index={1}>
-                        <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} />
+                        <BasicDateRangePicker settotaldate={settotaldate} getDate={getDate} id={product?._id ? product._id : ''} />
                       </TabPanel>
                     </Box>
 

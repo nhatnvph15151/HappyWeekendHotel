@@ -56,7 +56,7 @@ const RoomLike = (props: Props) => {
     }
     return (
         <div className=''>
-            <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
+            <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] mb:flex mbs:inline">
                 <div className="account_sidebar flex flex-col w-[370px] h-fit border  border-gray-20 rounded-3xl p-[24px] pb-[70px] mr-[32px]">
                     <div className="account_info px-[16px] py-[24px]">
                         <div className='contents'><img width={50} className="rounded-full mx-auto h-[100px] w-[100px] object-cover border-current" src={user?.avatar || "https://go2joy.vn/images/icons/user-placeholder.svg"} alt="" /></div>
@@ -90,13 +90,13 @@ const RoomLike = (props: Props) => {
                             Đăng Xuất</span></a></div>
 
                 </div>
-                <div className="profile_account relative w-[768px]">
+                <div className="profile_account relative w-[768px] mb:w-[768px] mbs:w-[370px]">
                     <div className="flex flex-row justify-between mb-[32px]">
                         <h2 className='text-[40px] font-bold'>Phòng yêu thích</h2>
                     </div>
                     <div className={styles.content_left1}>
-                        <div className='grid grid-cols-2 items-center'>
-                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                        <div className='grid grid-cols-2 items-center mb:grid   items-center mbs:inline'>
+                            <div className='card w-[90%] m-[0px] pb-[15px] '>
                                 <div>
                                     <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
                                 </div>
@@ -108,7 +108,7 @@ const RoomLike = (props: Props) => {
                                     <button className='underline font-medium hover:text-[#636366]'> Bỏ thích</button>
                                 </div>
                             </div>
-                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                            <div className='card w-[90%] m-[0px] pb-[15px] '>
                                 <div>
                                     <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
                                 </div>
@@ -120,7 +120,7 @@ const RoomLike = (props: Props) => {
                                     <button className='underline font-medium hover:text-[#636366]'> Bỏ thích</button>
                                 </div>
                             </div>
-                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                            <div className='card w-[90%] m-[0px] pb-[15px] '>
                                 <div>
                                     <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
                                 </div>
@@ -132,7 +132,7 @@ const RoomLike = (props: Props) => {
                                     <button className='underline font-medium hover:text-[#636366]'> Bỏ thích</button>
                                 </div>
                             </div>
-                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                            <div className='card w-[90%] m-[0px] pb-[15px] '>
                                 <div>
                                     <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
                                 </div>
@@ -144,7 +144,7 @@ const RoomLike = (props: Props) => {
                                     <button className='underline font-medium hover:text-[#636366]'> Bỏ thích</button>
                                 </div>
                             </div>
-                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                            <div className='card w-[90%] m-[0px] pb-[15px] '>
                                 <div>
                                     <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
                                 </div>
@@ -156,7 +156,7 @@ const RoomLike = (props: Props) => {
                                     <button className='underline font-medium hover:text-[#636366]'> Bỏ thích</button>
                                 </div>
                             </div>
-                            <div className='card w-[90%] m-[0px] pb-[15px]'>
+                            <div className='card w-[90%] m-[0px] pb-[15px] '>
                                 <div>
                                     <img className='rounded-2xl w-[100%]' src="https://s3.go2joy.vn/1000w/hotel/4059/118_1623550819_60c56b63bbc75.jpg" alt="" />
                                 </div>

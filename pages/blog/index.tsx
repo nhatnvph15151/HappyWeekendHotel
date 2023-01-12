@@ -98,11 +98,11 @@ const BlogPage = (props: Props) => {
                 <title>Bài viết</title>
             </Head>
             <div className='w-[80%] mx-auto py-2'>
-                <div className="blog-img__total flex gap-1">
+                <div className="blog-img__total flex gap-1 mb:flex mbs:block">
                     {/* check xem có data chưa. */}
                     {data5Blog && data5Blog[0] && (
                         <Link href={`/blog/${data5Blog[0].slug}`}>
-                            <div className="w-[50%] relative cursor-pointer">
+                            <div className="w-[50%] relative cursor-pointer mb:w-[50%] mbs:w-[100%]">
                                 <div className='absolute bottom-0 left-0 right-0 text-white font-semibold leading-tight p-3'>
                                     <h2 className='limit-2 text-lg'>{data5Blog[0].title}</h2>
                                 </div>
@@ -111,7 +111,7 @@ const BlogPage = (props: Props) => {
                         </Link>
                     )}
 
-                    <div className="grid w-[50%] grid-cols-2 gap-1">
+                    <div className="grid w-[50%] grid-cols-2 gap-1 mb:w-[50%] mbs:w-[100%]">
                         {data5Blog?.slice(1).map((blog, index) => (
                             <Link key={index} href={`/blog/${blog.slug}`}>
                                 <div className="relative cursor-pointer">
@@ -125,7 +125,7 @@ const BlogPage = (props: Props) => {
                     </div>
                 </div>
                 <div className="mt-[50px] flex items-start mb-10">
-                    <div className="w-[75%] pr-5">
+                    <div className="w-[75%] pr-5 mb:w-[75%] mbs:w-[100%] ">
                         {categoryWithBlog?.map((item, index) => {
                             if (item.blogs.length) {
                                 return (
@@ -138,8 +138,8 @@ const BlogPage = (props: Props) => {
                                                 <div className="absolute top-0 left-0 bottom-0 right-[700px] bg-[#FFA500]"></div>
                                             </div>
                                         </div>
-                                        <div className="flex gap-5">
-                                            <div className="mt-[30px] w-[55%]">
+                                        <div className="flex gap-5 mb:flex mbs:block">
+                                            <div className="mt-[30px] w-[55%] mb:w-[55%] mbs:w-[100%]">
                                                 <Link href={`/blog/${item.blogs[0].slug}`}>
                                                     <div className="cursor-pointer">
                                                         <img src={item.blogs[0].image} className='w-full h-[400px] object-cover' alt={item.blogs[0].title} />
@@ -164,7 +164,7 @@ const BlogPage = (props: Props) => {
                                                 </div>
                                             </div>
                                             
-                                            <div className="mt-[22px] w-[45%]">
+                                            <div className="mt-[22px] w-[45%] mb:w-[45%] mbs:w-[100%]">
                                                 <div className="grid grid-cols-1 divide-y">
                                                     {item.blogs.slice(1, 5).map((blog, index) => (
                                                         <div className="flex gap-3 py-2" key={index}>
@@ -190,7 +190,7 @@ const BlogPage = (props: Props) => {
                         })}
                     </div>
 
-                    <div className="sticky top-[100px] w-[25%] pl-2">
+                    <div className="sticky top-[100px] w-[25%] pl-2 mb:block mbs:hidden">
                         <BlogSidebar />
                     </div>
                 </div>

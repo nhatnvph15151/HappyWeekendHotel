@@ -80,7 +80,7 @@ const BlogDetail = (props: Props) => {
       </Head>
 
       <div className='w-[80%] mx-auto py-2'>
-        <div className="blog-img__total flex items-center gap-3">
+        <div className="blog-img__total flex items-center gap-3 mb:flex mbs:block py-2">
           <Link href="/">
             <span className='hover:text-[#FFA500] cursor-pointer'>Trang chủ</span>
           </Link>
@@ -100,7 +100,7 @@ const BlogDetail = (props: Props) => {
         </div>
 
         <div className="mt-[20px] flex items-start mb-10">
-          <div className="w-[75%] pr-5">
+          <div className="w-[75%] pr-5 mb:w-[75%] mbs:w-[100%]">
             <div>
               <h2 className='text-2xl font-semibold text-[#FFA500]'>{blogDetail.title}</h2>
               <div className="flex gap-5 mt-[5px]">
@@ -119,7 +119,7 @@ const BlogDetail = (props: Props) => {
             </div>
           </div>
 
-          <div className="sticky top-[100px] w-[25%] pl-2">
+          <div className="sticky top-[100px] w-[25%] pl-2 sticky top-[100px] w-[25%] pl-2 mb:block mbs:hidden">
             <BlogSidebar />
           </div>
         </div>

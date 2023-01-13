@@ -130,7 +130,7 @@ const DtailOrderHistory = (props: Props) => {
   }
   return (
     <div>
-      <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px] ">
+      <div className="account_body container mx-auto justify-center my-[40px] flex flex-row px-[96px]   ">
         <div className="account_sidebar flex flex-col w-[370px] h-fit border  border-gray-20 rounded-3xl p-[24px] pb-[70px] mr-[32px]">
           <div className="account_info px-[16px] py-[24px]">
             <div className="contents">

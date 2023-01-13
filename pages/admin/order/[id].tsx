@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { sendMail, update } from "../../../api/order";
 import React, { useEffect, useState } from "react";
-import { update as updateVoucher } from "../../../api/voucher";
+import { sendMailVoucher, update as updateVoucher } from "../../../api/voucher";
 import { remove } from "../../../api/bookedDate";
 import { getOnefac } from "../../../api/facilities";
 import { DashboardLayout } from "../../../components/dashboard-layout";
@@ -136,6 +136,12 @@ const DetailOrder = (props: Props) => {
         quantity: order.order.voucher.quantity + 1,
       });
     }
+
+    // gửi mail ds voucher cho user nếu cập nhật trạng thái đã trả phòng.
+    if (data.statusorder == 3 && order?.order.user) {
+      await sendMailVoucher({ user: order?.order.user });
+    }
+
     await update(newdata).then((res: any) => {
       if (res?.statusorder == 4 || res?.statusorder == 3) {
         remove(res?.status).then(() => {

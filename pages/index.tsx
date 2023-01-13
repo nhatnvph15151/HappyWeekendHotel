@@ -355,14 +355,23 @@ const Home = () => {
         {/* <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1> */}
         {room.data ? <SimpleSwiper newsList={room.data} /> : skeletonLoadingRoom()}
       </div>
-
+        <div className="mb:w-[80%] mbs:w-[95%] mx-auto pt-2">
+          <p className="text-2xl text-amber-400">Trải nghiệm cùng HappyWeekendHotel</p>
+          <div className="flex justify-between">
+        <a href="#" className="relative"><img className="w-[550px]" src="https://s3.go2joy.vn/1000w/hotel/171_1656566391_62bd327718636.jpg" alt="" /></a>
+       
+            <a href="#" className="relative"><img className="w-[550px]" src="https://s3.go2joy.vn/1000w/hotel/171_1656573947_62bd4ffb3b750.jpg" alt="" /></a>
+        
+        </div> 
+        </div>
       {/* list news */}
-      <div className="bg-[#eee] py-8">
+      <div className="py-8">
         <div className="w-[80%] mx-auto">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-semibold text-[orange] pb-4">Tin Tức</h1>
-            <h1 className="text-normal font-semibold text-[orange] pb-4 group hover:opacity-50 duration-300 flex items-center cursor-pointer">
-              <Link href="/blog">Xem thêm</Link>
+          <div className="flex justify-between items-center ">
+            <h1 className=" relative "><img className="rounded-lg" src="https://s3.go2joy.vn/1000w/cover_photo/33_14148447441.jpg" alt="" /></h1>
+            <h1 className="absolute pb-20 ml-[40px] text-white text-2xl mb:pb-20 ml-[40px] mbs:pb-10 ml-[20px]">Những điều thú vị có thể bạn chưa biết</h1>
+            <h1 className="text-normal font-semibold text-[orange] py-2 mx-auto group hover:opacity-50 duration-300 flex items-center cursor-pointer absolute ml-[40px] bg-slate-200 w-[100px] rounded-lg mbs: mb:mt-[60px] ml-[20px] w-[100px] h-[30px]">
+            <Link href="/blog">Xem thêm</Link>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

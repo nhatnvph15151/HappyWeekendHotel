@@ -18,6 +18,7 @@ export default function ActionAreaCard({ newsList }: props) {
                 <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
                   <div className='h-[200px] overflow-hidden'>
                     <img className="rounded-t-lg " src={item.image ? item.image[0] : ''} alt="" />
+                    
                   </div>
                   <div className="p-3">
                     <div className="flex justify-between items-start h-[60px]">

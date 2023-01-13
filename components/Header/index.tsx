@@ -257,11 +257,11 @@ const Header = (props: Props) => {
 
   return (
     <header className='shadow-xl sticky top-0 bg-[#fff] z-50 '>
-      <div className="w-[80%] mx-auto py-2 ">
-        <div className="flex justify-between items-center my-2">
+      <div className="w-[80%] mx-auto py-2 mb:w-[80%] mbs:[100%] ">
+        <div className="flex justify-between items-center my-2 mb:flex mbs:block ">
           <div className="flex">
             <Link href="/" >
-              <img className='w-[70px] cursor-pointer' src="https://res.cloudinary.com/djsbi0bma/image/upload/v1644211111/samples/cloudinary-icon.png" alt="" />
+              <img className='w-[100px] cursor-pointer' src="https://res.cloudinary.com/fptpolytechnic/image/upload/v1673543047/samples/325042297_711092773955485_5422088835829082377_n_ejizf3.png" alt="" />
             </Link>
             {/* <Button
               id="basic-button"

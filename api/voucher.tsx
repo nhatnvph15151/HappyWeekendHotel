@@ -30,3 +30,9 @@ export const update = (voucher: Voucher) => {
   const url = `voucher/${voucher._id}/edit`;
   return instance.put(url, voucher);
 };
+
+// gửi mail voucher.
+export const sendMailVoucher = (data: { user: string }) => {
+  const url = "voucher/sendMail";
+  return instance.post(url, data);
+}

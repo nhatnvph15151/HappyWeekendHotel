@@ -263,7 +263,7 @@ const Header = (props: Props) => {
             <Link href="/" >
               <img className='w-[100px] cursor-pointer' src="https://res.cloudinary.com/fptpolytechnic/image/upload/v1673543047/samples/325042297_711092773955485_5422088835829082377_n_ejizf3.png" alt="" />
             </Link>
-            <Button
+            {/* <Button
               id="basic-button"
               aria-controls={open2 ? 'basic-menu' : undefined}
               aria-haspopup="true"
@@ -275,7 +275,7 @@ const Header = (props: Props) => {
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 pl-[5px]">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
               </svg>
-            </Button>
+            </Button> */}
             <Menu
               className='w-[100%]'
               id="basic-menu"

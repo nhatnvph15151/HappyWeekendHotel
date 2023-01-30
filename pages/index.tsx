@@ -352,7 +352,7 @@ const Home = () => {
         </form>
       </div>
       <div className="mb:w-[80%] mbs:w-[95%] mx-auto pt-2">
-        {/* <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1> */}
+        <h1 className='text-3xl font-semibold text-[orange] py-6'>NHÀ NGHỈ GIÁ TỐT</h1>
         {room.data ? <SimpleSwiper newsList={room.data} /> : skeletonLoadingRoom()}
       </div>
         <div className="mb:w-[80%] mbs:w-[95%] mx-auto pt-2">
